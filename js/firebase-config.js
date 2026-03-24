@@ -59,7 +59,7 @@
 ============================================= */
 
 const FIREBASE_CONFIG = {
-  apiKey:            "AIzaSyAO2lcRfzatY1RoFzzz_SOYwUZir6xsdCA",
+  apiKey:            "AIzaSyCGbjT6QZjYqFndmehungLGottxK1ApAxA",
   authDomain:        "maringlobal-scholars.firebaseapp.com",
   projectId:         "maringlobal-scholars",
   storageBucket:     "maringlobal-scholars.firebasestorage.app",
