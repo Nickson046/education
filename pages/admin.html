@@ -141,7 +141,7 @@
         <div class="nav-item" onclick="showPanel('settings', this)"><span class="icon">⚙️</span> Settings</div>
       </nav>
       <div class="sidebar-footer">
-        <div style="font-size:0.78rem;color:rgba(255,255,255,0.4);margin-bottom:0.75rem;" id="adminEmail">admin@maringlobal.com</div>
+        <div style="font-size:0.78rem;color:rgba(255,255,255,0.4);margin-bottom:0.75rem;" id="adminEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c5a4a1a8acab85a8a4b7acaba2a9aaa7a4a9eba6aaa8">[email&#160;protected]</a></div>
         <button class="logout-btn" onclick="doLogout()">Sign Out</button>
       </div>
     </aside>
@@ -219,7 +219,7 @@
         <div class="panel" id="panel-settings">
           <div class="table-card" style="padding:2rem;">
             <h3 style="margin-bottom:1.5rem;font-size:1rem;color:var(--navy);">Firebase Configuration</h3>
-            <p style="color:#666;font-size:0.875rem;margin-bottom:1.5rem;">Update your Firebase project credentials. These are saved in <code>js/firebase-config.js</code>.</p>
+            <p style="color:#666;font-size:0.875rem;margin-bottom:1.5rem;">Update your Firebase project credentials. These are saved in <code>../js/firebase-config.js</code>.</p>
             <div class="form-group"><label>Project ID</label><input type="text" id="cfg-projectId" placeholder="your-project-id" /></div>
             <div class="form-group"><label>API Key</label><input type="text" id="cfg-apiKey" placeholder="AIzaSy..." /></div>
             <div class="form-group"><label>App ID</label><input type="text" id="cfg-appId" placeholder="1:123456:web:abc123" /></div>
@@ -296,10 +296,11 @@
 
   <div class="toast" id="adminToast"></div>
 
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="../js/firebase-config.js"></script>
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+    import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
     let auth, db;
     const cfg = window.FIREBASE_CONFIG;
@@ -589,13 +590,3 @@
       addBtn.style.display = ['posts','testimonials'].includes(name) ? 'inline-flex' : 'none';
       addBtn.textContent = name === 'posts' ? '+ New Post' : '+ Add Testimonial';
     }
-
-    function adminToast(msg) {
-      const t = document.getElementById('adminToast');
-      t.textContent = msg;
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 3000);
-    }
-  </script>
-</body>
-</html>

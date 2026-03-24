@@ -187,11 +187,12 @@
   </div>
 
   <div id="footer-placeholder"></div>
+  <script src="../js/firebase-config.js"></script>
   <script src="../js/components.js"></script>
   <script src="../js/main.js"></script>
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
     // Firebase config — replace with actual values from firebase-config.js
     const firebaseConfig = window.FIREBASE_CONFIG || null;

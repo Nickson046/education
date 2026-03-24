@@ -1,84 +1,72 @@
-/**
- * firebase-config.js
- * 
- * MarinGlobal Scholars — Firebase Configuration
- * 
- * SETUP INSTRUCTIONS:
- * 1. Go to https://console.firebase.google.com/
- * 2. Create a new project named "maringlobal-scholars"
- * 3. Add a Web App to the project
- * 4. Copy your config values below
- * 5. Enable Firestore Database in the Firebase console
- * 6. Enable Email/Password Authentication
- * 7. Set Firestore rules (see below)
- * 
- * FIRESTORE SECURITY RULES (paste in Firebase console):
- * 
- * rules_version = '2';
- * service cloud.firestore {
- *   match /databases/{database}/documents {
- *     // Public read for published posts and testimonials
- *     match /posts/{postId} {
- *       allow read: if resource.data.published == true;
- *       allow write: if request.auth != null;
- *     }
- *     match /testimonials/{id} {
- *       allow read: if resource.data.published == true;
- *       allow write: if request.auth != null;
- *     }
- *     match /inquiries/{id} {
- *       allow create: if true;
- *       allow read, update, delete: if request.auth != null;
- *     }
- *   }
- * }
- */
+/* =============================================
+   MARINGLOBAL SCHOLARS — Firebase Configuration
+   Firebase JS SDK v12.11.0
+   =============================================
+
+   FIRESTORE SECURITY RULES — paste in Firebase console
+   (Firebase Console → Firestore → Rules tab):
+
+   rules_version = '2';
+   service cloud.firestore {
+     match /databases/{database}/documents {
+       match /posts/{postId} {
+         allow read: if resource.data.published == true;
+         allow write: if request.auth != null;
+       }
+       match /testimonials/{id} {
+         allow read: if resource.data.published == true;
+         allow write: if request.auth != null;
+       }
+       match /inquiries/{id} {
+         allow create: if true;
+         allow read, update, delete: if request.auth != null;
+       }
+     }
+   }
+
+   FIRESTORE COLLECTIONS SCHEMA:
+
+   /posts
+     - title: string
+     - excerpt: string
+     - body: string (HTML allowed)
+     - category: 'visa' | 'admissions' | 'scholarships' | 'life' | 'universities'
+     - author: string
+     - emoji: string
+     - published: boolean
+     - createdAt: timestamp
+     - updatedAt: timestamp
+
+   /testimonials
+     - name: string
+     - initials: string (e.g. "AN")
+     - country: 'latvia' | 'lithuania' | 'estonia'
+     - originCountry: string (e.g. "Tanzania")
+     - field: 'medicine' | 'engineering' | 'business' | 'it' | 'law'
+     - university: string
+     - programme: string
+     - year: string
+     - quote: string
+     - published: boolean
+     - createdAt: timestamp
+
+   /inquiries
+     - firstName, lastName, email, phone
+     - country, destination, field, message
+     - status: 'new' | 'contacted' | 'enrolled' | 'closed'
+     - createdAt: timestamp
+     - notes: string (admin only)
+============================================= */
 
 const FIREBASE_CONFIG = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey:            "AIzaSyAO2lcRfzatY1RoFzzz_SOYwUZir6xsdCA",
+  authDomain:        "maringlobal-scholars.firebaseapp.com",
+  projectId:         "maringlobal-scholars",
+  storageBucket:     "maringlobal-scholars.firebasestorage.app",
+  messagingSenderId: "604840566992",
+  appId:             "1:604840566992:web:70c1d0f0e94a73d595fed5",
+  measurementId:     "G-5J89LNVCB9"
 };
 
-// Make config globally available
+// Make config globally available to admin.html, blog.html, and any other page
 window.FIREBASE_CONFIG = FIREBASE_CONFIG;
-
-/**
- * FIRESTORE COLLECTIONS:
- * 
- * /posts
- *   - id: auto
- *   - title: string
- *   - excerpt: string
- *   - body: string (HTML allowed)
- *   - category: 'visa' | 'admissions' | 'scholarships' | 'life' | 'universities'
- *   - author: string
- *   - emoji: string (single emoji for card display)
- *   - published: boolean
- *   - createdAt: timestamp
- *   - updatedAt: timestamp
- * 
- * /testimonials
- *   - id: auto
- *   - name: string
- *   - initials: string (e.g. "AN")
- *   - country: 'latvia' | 'lithuania' | 'estonia'
- *   - originCountry: string (e.g. "Tanzania")
- *   - field: 'medicine' | 'engineering' | 'business' | 'it' | 'law'
- *   - university: string
- *   - programme: string
- *   - year: string
- *   - quote: string
- *   - published: boolean
- *   - createdAt: timestamp
- * 
- * /inquiries
- *   - firstName, lastName, email, phone
- *   - country, destination, field, message
- *   - status: 'new' | 'contacted' | 'enrolled' | 'closed'
- *   - createdAt: timestamp
- *   - notes: string (admin only)
- */
