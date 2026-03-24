@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page Not Found — MarinGlobal Scholars</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    html, body { height: 100%; }
+    .notfound-wrap {
+      min-height: 100vh;
+      background: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .notfound-wrap::before {
+      content: '404';
+      position: absolute;
+      font-family: var(--font-display);
+      font-size: clamp(14rem, 30vw, 24rem);
+      font-weight: 700;
+      color: rgba(255,255,255,0.03);
+      line-height: 1;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      user-select: none;
+    }
+    .notfound-orb {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(201,168,76,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .notfound-orb--1 { width: 500px; height: 500px; top: -150px; right: -100px; }
+    .notfound-orb--2 { width: 400px; height: 400px; bottom: -100px; left: -100px; }
+
+    .notfound-content { position: relative; max-width: 540px; }
+    .notfound-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      display: block;
+      margin-bottom: 1.5rem;
+    }
+    .notfound-content h1 {
+      font-family: var(--font-display);
+      color: var(--cream);
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      margin-bottom: 1rem;
+      line-height: 1.1;
+    }
+    .notfound-content p {
+      color: rgba(248,244,238,0.6);
+      font-size: 1rem;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+    .notfound-links {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 3rem;
+    }
+    .notfound-links a {
+      padding: 0.8rem 1.8rem;
+      border-radius: 4px;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+      text-decoration: none;
+    }
+    .link-gold { background: var(--gold); color: var(--navy); }
+    .link-gold:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .link-outline { border: 1.5px solid rgba(255,255,255,0.25); color: rgba(255,255,255,0.75); }
+    .link-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+    .quick-links-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    .ql-item {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: 8px;
+      padding: 0.9rem;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .ql-item:hover { background: rgba(201,168,76,0.1); border-color: rgba(201,168,76,0.4); }
+    .ql-item .ql-icon { font-size: 1.3rem; margin-bottom: 0.4rem; }
+    .ql-item .ql-label { font-size: 0.78rem; color: rgba(255,255,255,0.6); font-family: var(--font-mono); display: block; }
+    .ql-divider {
+      width: 40px; height: 1px;
+      background: rgba(201,168,76,0.3);
+      margin: 2rem auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="notfound-wrap">
+    <div class="notfound-orb notfound-orb--1"></div>
+    <div class="notfound-orb notfound-orb--2"></div>
+
+    <div class="notfound-content">
+      <span class="notfound-eyebrow">Error 404</span>
+      <h1>This Page<br>Doesn't Exist</h1>
+      <p>The page you're looking for may have been moved, renamed, or doesn't exist. Let's get you back on track.</p>
+
+      <div class="notfound-links">
+        <a href="index.html" class="link-gold">← Back to Home</a>
+        <a href="pages/contact.html" class="link-outline">Contact Us</a>
+      </div>
+
+      <div class="ql-divider"></div>
+      <p style="color:rgba(255,255,255,0.3);font-size:.78rem;font-family:var(--font-mono);letter-spacing:.1em;text-transform:uppercase;margin-bottom:1rem;">Or go directly to</p>
+
+      <div class="quick-links-grid">
+        <a href="pages/programs.html" class="ql-item">
+          <div class="ql-icon">🎓</div>
+          <span class="ql-label">Programs</span>
+        </a>
+        <a href="pages/scholarships.html" class="ql-item">
+          <div class="ql-icon">💰</div>
+          <span class="ql-label">Scholarships</span>
+        </a>
+        <a href="pages/how-it-works.html" class="ql-item">
+          <div class="ql-icon">🗺️</div>
+          <span class="ql-label">How It Works</span>
+        </a>
+        <a href="pages/about.html" class="ql-item">
+          <div class="ql-icon">👥</div>
+          <span class="ql-label">About Us</span>
+        </a>
+        <a href="pages/faq.html" class="ql-item">
+          <div class="ql-icon">❓</div>
+          <span class="ql-label">FAQ</span>
+        </a>
+        <a href="pages/blog.html" class="ql-item">
+          <div class="ql-icon">📖</div>
+          <span class="ql-label">Resources</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <script src="js/cookie-consent.js"></script>
+</body>
+</html>

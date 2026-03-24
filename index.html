@@ -7,6 +7,15 @@
   <meta name="description" content="MarinGlobal Scholars helps East African students access top European universities in Latvia, Lithuania, and Estonia. Expert visa guidance, scholarships, and application support.">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/home.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27><circle cx=%2750%27 cy=%2750%27 r=%2750%27 fill=%27%23C9A84C%27/><polygon points=%2750,18 72,30 72,54 50,66 28,54 28,30%27 fill=%27none%27 stroke=%27%230D1B3E%27 stroke-width=%274%27/><polygon points=%2750,28 64,36 64,52 50,60 36,52 36,36%27 fill=%27%230D1B3E%27 opacity=%270.55%27/></svg>">
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="MarinGlobal Scholars — Study in Europe from East Africa" />
+  <meta property="og:description" content="Helping East African students access top universities in Latvia, Lithuania and Estonia. Expert visa guidance, scholarships, and full application support." />
+  <meta property="og:image" content="https://maringlobalscholars.com/og-image.jpg" />
+  <meta property="og:url" content="https://maringlobalscholars.com" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="MarinGlobal Scholars" />
+  <meta name="twitter:description" content="Your European university journey starts here." />
 </head>
 <body>
 
@@ -15,9 +24,32 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero-bg">
+      <!-- ════════════════════════════════════════════
+           BACKGROUND IMAGES — ADD YOUR OWN PHOTOS
+           Place images in education/images/ folder.
+           Ideal size: 1920×1080px, landscape.
+           Suggested shots: campus buildings, students
+           studying, European city skylines at dusk.
+           ════════════════════════════════════════════ -->
+      <div class="hero-slide hero-slide--1 active"></div>
+      <div class="hero-slide hero-slide--2"></div>
+      <div class="hero-slide hero-slide--3"></div>
+      <div class="hero-slide hero-slide--4"></div>
+
+      <!-- Fallback shown only when images haven't loaded -->
+      <div class="hero-slide hero-slide--fallback" id="hero-fallback"></div>
+
       <div class="hero-orb hero-orb--1"></div>
       <div class="hero-orb hero-orb--2"></div>
       <div class="hero-grid-lines"></div>
+    </div>
+
+    <!-- Slideshow navigation dots -->
+    <div class="hero-slide-dots">
+      <button class="hero-slide-dot active" onclick="goToSlide(0)"></button>
+      <button class="hero-slide-dot" onclick="goToSlide(1)"></button>
+      <button class="hero-slide-dot" onclick="goToSlide(2)"></button>
+      <button class="hero-slide-dot" onclick="goToSlide(3)"></button>
     </div>
 
     <div class="container hero-content">
@@ -29,8 +61,8 @@
         <h1>Your European <em>University Journey</em> Starts Here</h1>
         <p class="hero-lead">MarinGlobal Scholars connects ambitious East African students with top universities across Latvia, Lithuania, and Estonia — with full support from application to arrival.</p>
         <div class="hero-actions">
-          <a href="programs.html" class="btn btn-primary">Explore Programs →</a>
-          <a href="contact.html" class="btn btn-ghost">Book Free Consultation</a>
+          <a href="pages/programs.html" class="btn btn-primary">Explore Programs →</a>
+          <a href="pages/contact.html" class="btn btn-ghost">Book Free Consultation</a>
         </div>
         <div class="hero-countries">
           <span class="flag-pill">🇱🇻 Latvia</span>
@@ -160,7 +192,7 @@
           <h2>Study at Europe's<br><em>Finest Institutions</em></h2>
           <span class="gold-rule"></span>
         </div>
-        <a href="programs.html" class="btn btn-outline">View All Programs →</a>
+        <a href="pages/programs.html" class="btn btn-outline">View All Programs →</a>
       </div>
 
       <div class="uni-tab-nav">
@@ -172,7 +204,7 @@
       <div id="panel-latvia" class="uni-panel">
         <div class="uni-grid">
           <div class="uni-card card">
-            <div class="uni-card-header" style="background:linear-gradient(135deg,#0D1B3E 0%,#1a3070 100%)">
+            <div class="uni-card-header uni-card-header--rtu">
               <div class="uni-logo-placeholder">RTU</div>
               <span class="badge badge-gold">Top Ranked</span>
             </div>
@@ -184,7 +216,7 @@
                 <span class="badge badge-navy">Master's</span>
                 <span class="badge badge-green">English Programs</span>
               </div>
-              <a href="programs.html" class="btn btn-outline" style="width:100%;justify-content:center;font-size:.85rem">Learn More</a>
+              <a href="pages/programs.html" class="btn btn-outline" style="width:100%;justify-content:center;font-size:.85rem">Learn More</a>
             </div>
           </div>
           <div class="uni-card card">
@@ -200,11 +232,11 @@
                 <span class="badge badge-navy">Master's</span>
                 <span class="badge badge-navy">PhD</span>
               </div>
-              <a href="programs.html" class="btn btn-outline" style="width:100%;justify-content:center;font-size:.85rem">Learn More</a>
+              <a href="pages/programs.html" class="btn btn-outline" style="width:100%;justify-content:center;font-size:.85rem">Learn More</a>
             </div>
           </div>
           <div class="uni-card card">
-            <div class="uni-card-header" style="background:linear-gradient(135deg,#1a5276 0%,#2471a3 100%)">
+            <div class="uni-card-header uni-card-header--rsu">
               <div class="uni-logo-placeholder">RSU</div>
               <span class="badge badge-gold">Medical</span>
             </div>
@@ -215,7 +247,7 @@
                 <span class="badge badge-navy">MD Program</span>
                 <span class="badge badge-green">English Programs</span>
               </div>
-              <a href="programs.html" class="btn btn-outline" style="width:100%;justify-content:center;font-size:.85rem">Learn More</a>
+              <a href="pages/programs.html" class="btn btn-outline" style="width:100%;justify-content:center;font-size:.85rem">Learn More</a>
             </div>
           </div>
         </div>
@@ -236,11 +268,11 @@
                 <span class="badge badge-navy">Master's</span>
                 <span class="badge badge-green">English Programs</span>
               </div>
-              <a href="programs.html" class="btn btn-outline" style="width:100%;justify-content:center;font-size:.85rem">Learn More</a>
+              <a href="pages/programs.html" class="btn btn-outline" style="width:100%;justify-content:center;font-size:.85rem">Learn More</a>
             </div>
           </div>
           <div class="uni-card card">
-            <div class="uni-card-header" style="background:linear-gradient(135deg,#4A235A 0%,#7D3C98 100%)">
+            <div class="uni-card-header uni-card-header--ktu">
               <div class="uni-logo-placeholder">KTU</div>
               <span class="badge badge-gold">Tech</span>
             </div>
@@ -252,11 +284,11 @@
                 <span class="badge badge-navy">Master's</span>
                 <span class="badge badge-green">English Programs</span>
               </div>
-              <a href="programs.html" class="btn btn-outline" style="width:100%;justify-content:center;font-size:.85rem">Learn More</a>
+              <a href="pages/programs.html" class="btn btn-outline" style="width:100%;justify-content:center;font-size:.85rem">Learn More</a>
             </div>
           </div>
           <div class="uni-card card">
-            <div class="uni-card-header" style="background:linear-gradient(135deg,#1C3A5E 0%,#2874A6 100%)">
+            <div class="uni-card-header uni-card-header--lsmu">
               <div class="uni-logo-placeholder">LSMU</div>
               <span class="badge badge-gold">Medical</span>
             </div>
@@ -267,7 +299,7 @@
                 <span class="badge badge-navy">MD Program</span>
                 <span class="badge badge-green">English Programs</span>
               </div>
-              <a href="programs.html" class="btn btn-outline" style="width:100%;justify-content:center;font-size:.85rem">Learn More</a>
+              <a href="pages/programs.html" class="btn btn-outline" style="width:100%;justify-content:center;font-size:.85rem">Learn More</a>
             </div>
           </div>
         </div>
@@ -276,7 +308,7 @@
       <div id="panel-estonia" class="uni-panel" style="display:none">
         <div class="uni-grid">
           <div class="uni-card card">
-            <div class="uni-card-header" style="background:linear-gradient(135deg,#003366 0%,#004E98 100%)">
+            <div class="uni-card-header uni-card-header--ut">
               <div class="uni-logo-placeholder">UT</div>
               <span class="badge badge-gold">#1 Estonia</span>
             </div>
@@ -288,11 +320,11 @@
                 <span class="badge badge-navy">Master's</span>
                 <span class="badge badge-green">English Programs</span>
               </div>
-              <a href="programs.html" class="btn btn-outline" style="width:100%;justify-content:center;font-size:.85rem">Learn More</a>
+              <a href="pages/programs.html" class="btn btn-outline" style="width:100%;justify-content:center;font-size:.85rem">Learn More</a>
             </div>
           </div>
           <div class="uni-card card">
-            <div class="uni-card-header" style="background:linear-gradient(135deg,#1B2A47 0%,#2C4370 100%)">
+            <div class="uni-card-header uni-card-header--taltech">
               <div class="uni-logo-placeholder">TalTech</div>
               <span class="badge badge-gold">Digital Hub</span>
             </div>
@@ -304,11 +336,11 @@
                 <span class="badge badge-navy">Master's</span>
                 <span class="badge badge-green">English Programs</span>
               </div>
-              <a href="programs.html" class="btn btn-outline" style="width:100%;justify-content:center;font-size:.85rem">Learn More</a>
+              <a href="pages/programs.html" class="btn btn-outline" style="width:100%;justify-content:center;font-size:.85rem">Learn More</a>
             </div>
           </div>
           <div class="uni-card card">
-            <div class="uni-card-header" style="background:linear-gradient(135deg,#5D4037 0%,#8D6E63 100%)">
+            <div class="uni-card-header uni-card-header--tlu">
               <div class="uni-logo-placeholder">TLU</div>
               <span class="badge badge-gold">Arts</span>
             </div>
@@ -320,7 +352,7 @@
                 <span class="badge badge-navy">Master's</span>
                 <span class="badge badge-green">English Programs</span>
               </div>
-              <a href="programs.html" class="btn btn-outline" style="width:100%;justify-content:center;font-size:.85rem">Learn More</a>
+              <a href="pages/programs.html" class="btn btn-outline" style="width:100%;justify-content:center;font-size:.85rem">Learn More</a>
             </div>
           </div>
         </div>
@@ -363,7 +395,7 @@
         </div>
       </div>
       <div class="text-center" style="margin-top:3rem">
-        <a href="how-it-works.html" class="btn btn-white">See Full Process →</a>
+        <a href="pages/how-it-works.html" class="btn btn-white">See Full Process →</a>
       </div>
     </div>
   </section>
@@ -428,7 +460,7 @@
       </div>
 
       <div class="text-center" style="margin-top:2rem">
-        <a href="testimonials.html" class="btn btn-outline">Read More Stories →</a>
+        <a href="pages/testimonials.html" class="btn btn-outline">Read More Stories →</a>
       </div>
     </div>
   </section>
@@ -441,7 +473,7 @@
           <span class="eyebrow">Funding Your Education</span>
           <h2>Don't Let Cost Stop You</h2>
           <p>We connect students with scholarships, merit grants, and government-funded programs. Many of our students receive significant financial support.</p>
-          <a href="scholarships.html" class="btn btn-primary" style="margin-top:1.5rem">Explore Scholarships →</a>
+          <a href="pages/scholarships.html" class="btn btn-primary" style="margin-top:1.5rem">Explore Scholarships →</a>
         </div>
         <div class="scholarship-cards-preview">
           <div class="mini-scholarship-card">
@@ -478,8 +510,8 @@
       <span class="gold-rule gold-rule--center"></span>
       <p style="max-width:480px;margin:0 auto 2.5rem;color:rgba(255,255,255,.65)">Book your free consultation today. Our advisors are ready to assess your profile and chart your path to a European degree.</p>
       <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
-        <a href="contact.html" class="btn btn-primary">Book Free Consultation</a>
-        <a href="programs.html" class="btn btn-ghost">Browse Programs</a>
+        <a href="pages/contact.html" class="btn btn-primary">Book Free Consultation</a>
+        <a href="pages/programs.html" class="btn btn-ghost">Browse Programs</a>
       </div>
     </div>
   </section>
@@ -489,6 +521,35 @@
   <script src="js/components.js"></script>
   <script src="js/main.js"></script>
   <script>
+    /* ── Hero Background Slideshow ── */
+    let heroIndex = 0;
+    const heroSlides = document.querySelectorAll('.hero-slide:not(.hero-slide--fallback)');
+    const heroDots   = document.querySelectorAll('.hero-slide-dot');
+    const fallback   = document.getElementById('hero-fallback');
+
+    function goToSlide(n) {
+      heroSlides[heroIndex].classList.remove('active');
+      heroDots[heroIndex].classList.remove('active');
+      heroIndex = (n + heroSlides.length) % heroSlides.length;
+      heroSlides[heroIndex].classList.add('active');
+      heroDots[heroIndex].classList.add('active');
+    }
+
+    // Check if images actually loaded — show fallback if none did
+    function checkImages() {
+      let anyLoaded = false;
+      heroSlides.forEach(slide => {
+        const style = window.getComputedStyle(slide);
+        if (style.backgroundImage && style.backgroundImage !== 'none') anyLoaded = true;
+      });
+      if (!anyLoaded) fallback.style.zIndex = '0';
+    }
+    setTimeout(checkImages, 1500);
+
+    // Auto-advance every 5 seconds
+    setInterval(() => goToSlide(heroIndex + 1), 5000);
+
+    /* ── Testimonial Slider ── */
     let currentSlide = 0;
     const track = () => document.getElementById('testimonials-track');
 
@@ -520,5 +581,6 @@
       width:'40px', height:'1px', background:'rgba(201,168,76,.4)'
     });
   </script>
+  <script src="js/cookie-consent.js"></script>
 </body>
 </html>

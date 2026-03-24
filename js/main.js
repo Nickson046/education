@@ -83,3 +83,67 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
 });
+
+/* ── Page Transition Loader ── */
+(function() {
+  // Inject progress bar styles
+  const s = document.createElement('style');
+  s.textContent = `
+    #mg-loader {
+      position: fixed; top: 0; left: 0; right: 0;
+      height: 3px; z-index: 99999;
+      background: linear-gradient(90deg, #C9A84C, #E8C97A, #C9A84C);
+      background-size: 200% 100%;
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s ease;
+      animation: loaderShimmer 1.5s linear infinite;
+    }
+    @keyframes loaderShimmer {
+      0%   { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+    #mg-loader.loading { transform: scaleX(0.7); }
+    #mg-loader.done    { transform: scaleX(1); opacity: 0; transition: transform 0.2s ease, opacity 0.3s ease 0.1s; }
+  `;
+  document.head.appendChild(s);
+
+  const bar = document.createElement('div');
+  bar.id = 'mg-loader';
+  document.body.appendChild(bar);
+
+  // Show on navigation clicks
+  document.addEventListener('click', (e) => {
+    const link = e.target.closest('a[href]');
+    if (!link) return;
+    const href = link.getAttribute('href');
+    // Only trigger for internal page links
+    if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto') || href.startsWith('tel')) return;
+    bar.classList.remove('done');
+    bar.classList.add('loading');
+  });
+
+  // Complete on page load
+  window.addEventListener('load', () => {
+    bar.classList.remove('loading');
+    bar.classList.add('done');
+    setTimeout(() => { bar.classList.remove('done'); }, 500);
+  });
+})();
+
+/* ── Smooth scroll for anchor links ── */
+document.addEventListener('click', (e) => {
+  const link = e.target.closest('a[href^="#"]');
+  if (!link) return;
+  const target = document.querySelector(link.getAttribute('href'));
+  if (target) {
+    e.preventDefault();
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+});
+
+/* ── Back to top on logo click when already at top ── */
+document.addEventListener('click', (e) => {
+  if (e.target.closest('.logo') && window.scrollY < 100) {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+});
