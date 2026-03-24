@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About Us — MarinGlobal Scholars</title>
+  <meta name="description" content="Learn about MarinGlobal Scholars — our mission, team, and partnerships with leading European universities.">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .mission-split{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+    @media(max-width:768px){.mission-split{grid-template-columns:1fr}}
+    .mission-visual{position:relative;height:420px}
+    .mission-block{position:absolute;background:var(--white);border-radius:var(--radius-lg);box-shadow:var(--shadow-lg);padding:2rem}
+    .mission-block--main{top:0;left:0;right:0;bottom:80px;background:linear-gradient(145deg,var(--navy) 0%,#1a3a7a 100%);display:flex;align-items:center;justify-content:center;border-radius:var(--radius-lg)}
+    .mission-block--overlay{bottom:0;right:0;left:40px;padding:1.5rem;z-index:2}
+    .mission-block--overlay strong{display:block;font-family:var(--font-display);font-size:1.6rem;color:var(--navy)}
+    .mission-block--overlay p{font-size:.85rem;margin:0}
+    .big-quote{font-family:var(--font-display);font-size:clamp(1.4rem,3vw,2rem);font-style:italic;color:rgba(255,255,255,.85);text-align:center;padding:2rem;line-height:1.5}
+    .team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+    @media(max-width:900px){.team-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:600px){.team-grid{grid-template-columns:1fr}}
+    .team-card{background:var(--white);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow);text-align:center;transition:var(--transition)}
+    .team-card:hover{transform:translateY(-6px);box-shadow:var(--shadow-lg)}
+    .team-avatar{height:200px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:3.5rem;font-weight:700;color:var(--white)}
+    .team-body{padding:1.5rem}
+    .team-body h4{margin-bottom:.2rem}
+    .team-body .role{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:.5rem}
+    .team-body p{font-size:.88rem}
+    .partner-logos{display:grid;grid-template-columns:repeat(6,1fr);gap:1.5rem;align-items:center}
+    @media(max-width:900px){.partner-logos{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:500px){.partner-logos{grid-template-columns:repeat(2,1fr)}}
+    .partner-logo-item{background:var(--white);border:1px solid rgba(0,0,0,.07);border-radius:var(--radius-lg);padding:1.2rem;text-align:center;transition:var(--transition);box-shadow:0 2px 12px rgba(0,0,0,.05)}
+    .partner-logo-item:hover{border-color:var(--border);box-shadow:var(--shadow)}
+    .partner-logo-item .logo-abbr{font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--navy)}
+    .partner-logo-item p{font-size:.7rem;color:var(--muted);margin:.3rem 0 0}
+    .values-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem}
+    @media(max-width:900px){.values-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:500px){.values-grid{grid-template-columns:1fr}}
+    .value-card{padding:2rem 1.5rem;border-radius:var(--radius-lg);border:1px solid rgba(201,168,76,.15);background:rgba(201,168,76,.04)}
+    .value-icon{font-size:2rem;margin-bottom:1rem}
+    .value-card h4{margin-bottom:.5rem}
+    .timeline{position:relative;padding-left:2rem}
+    .timeline::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--border)}
+    .timeline-item{position:relative;padding:0 0 2.5rem 2rem}
+    .timeline-dot{position:absolute;left:-2.55rem;top:.3rem;width:14px;height:14px;border-radius:50%;background:var(--gold);border:2px solid var(--white);box-shadow:0 0 0 2px var(--gold)}
+    .timeline-year{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.15em;color:var(--gold);text-transform:uppercase;margin-bottom:.3rem}
+    .timeline-item h4{margin-bottom:.3rem;font-size:1.1rem}
+    .timeline-item p{font-size:.9rem}
+  </style>
+</head>
+<body>
+
+  <div id="nav-placeholder"></div>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="container page-hero-content">
+      <div class="breadcrumb">
+        <a href="index.html">Home</a> › <span>About Us</span>
+      </div>
+      <span class="eyebrow">Our Story</span>
+      <h1>Bridging Ambition<br>and Opportunity</h1>
+      <span class="gold-rule"></span>
+      <p>Founded with a single conviction: every talented East African student deserves access to world-class European education, regardless of where they start.</p>
+    </div>
+  </section>
+
+  <!-- MISSION -->
+  <section class="section">
+    <div class="container">
+      <div class="mission-split">
+        <div data-reveal>
+          <span class="eyebrow">Our Mission</span>
+          <h2>Education That <em>Changes Lives</em></h2>
+          <span class="gold-rule"></span>
+          <p>MarinGlobal Scholars was born from a recognition that navigating European university admissions from East Africa is unnecessarily complex. Bureaucratic barriers, language confusion, and lack of guidance prevent many outstanding students from accessing the education they deserve.</p>
+          <p style="margin-top:1rem">We exist to change that — providing expert, end-to-end support that transforms European education from a distant dream into an achievable reality.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:2rem">
+            <div style="padding:1.2rem;background:var(--cream);border-radius:var(--radius-lg);border-left:3px solid var(--gold)">
+              <strong style="color:var(--navy);display:block;font-size:1.1rem">Our Vision</strong>
+              <p style="font-size:.88rem;margin:.3rem 0 0">To be East Africa's most trusted gateway to European higher education.</p>
+            </div>
+            <div style="padding:1.2rem;background:var(--cream);border-radius:var(--radius-lg);border-left:3px solid var(--success)">
+              <strong style="color:var(--navy);display:block;font-size:1.1rem">Our Promise</strong>
+              <p style="font-size:.88rem;margin:.3rem 0 0">Honest guidance, genuine care, and measurable results for every student.</p>
+            </div>
+          </div>
+        </div>
+        <div class="mission-visual" data-reveal>
+          <div class="mission-block mission-block--main">
+            <div class="big-quote">"The world is changed by those who dare to seek knowledge beyond borders."</div>
+          </div>
+          <div class="mission-block mission-block--overlay">
+            <strong>350+</strong>
+            <p>Students successfully placed in European universities since founding</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section class="section section--cream">
+    <div class="container">
+      <div class="text-center" data-reveal>
+        <span class="eyebrow">What Guides Us</span>
+        <h2>Our Core Values</h2>
+        <span class="gold-rule gold-rule--center"></span>
+      </div>
+      <div class="values-grid" style="margin-top:3rem" data-reveal-stagger>
+        <div class="value-card">
+          <div class="value-icon">🧭</div>
+          <h4>Integrity</h4>
+          <p>We give honest assessments — even when it's not what students want to hear. Trust is the foundation of everything we do.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">🌱</div>
+          <h4>Student-First</h4>
+          <p>Every decision we make is filtered through one question: is this truly in the student's best interest?</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">⚡</div>
+          <h4>Excellence</h4>
+          <p>We hold ourselves to the same standard we help students achieve — rigorous, thorough, and always improving.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">🤲</div>
+          <h4>Community</h4>
+          <p>Our alumni network is a living resource — students supporting students across borders and generations.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section class="section">
+    <div class="container">
+      <div class="text-center" data-reveal>
+        <span class="eyebrow">The People Behind It</span>
+        <h2>Meet Our Team</h2>
+        <span class="gold-rule gold-rule--center"></span>
+        <p style="max-width:480px;margin:0 auto">Experienced professionals who have studied, worked, and built careers across Africa and Europe.</p>
+      </div>
+      <div class="team-grid" style="margin-top:3.5rem" data-reveal-stagger>
+        <div class="team-card">
+          <div class="team-avatar" style="background:linear-gradient(135deg,var(--navy),#2C5282)">MK</div>
+          <div class="team-body">
+            <span class="role">Founder & CEO</span>
+            <h4>Marin Kowalczyk</h4>
+            <p>Former EU education consultant with 12 years helping African students navigate Baltic universities. Alumni of Riga Technical University.</p>
+          </div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar" style="background:linear-gradient(135deg,var(--gold),#D4A017)">AO</div>
+          <div class="team-body">
+            <span class="role">Head of Admissions</span>
+            <h4>Aisha Okonkwo</h4>
+            <p>10 years in international student recruitment. Previously worked at University of Latvia admissions office. Expert in English-taught programs.</p>
+          </div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar" style="background:linear-gradient(135deg,var(--success),#1A7A5E)">DM</div>
+          <div class="team-body">
+            <span class="role">Visa Specialist</span>
+            <h4>David Mwenda</h4>
+            <p>Certified immigration consultant specializing in Schengen student visas. Has successfully guided over 200 students through the visa process.</p>
+          </div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar" style="background:linear-gradient(135deg,#7B1FA2,#4A148C)">FJ</div>
+          <div class="team-body">
+            <span class="role">Scholarship Advisor</span>
+            <h4>Fatou Jallow</h4>
+            <p>Former Erasmus+ program coordinator. Expert in identifying and applying for scholarships and grants for African students in Europe.</p>
+          </div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar" style="background:linear-gradient(135deg,#1565C0,#0D47A1)">TN</div>
+          <div class="team-body">
+            <span class="role">Lithuania Liaison</span>
+            <h4>Tomas Norkus</h4>
+            <p>Based in Vilnius. Our in-country contact for Lithuanian universities, housing support, and student integration programs.</p>
+          </div>
+        </div>
+        <div class="team-card">
+          <div class="team-avatar" style="background:linear-gradient(135deg,#C0392B,#922B21)">EL</div>
+          <div class="team-body">
+            <span class="role">Estonia Liaison</span>
+            <h4>Eva Lepp</h4>
+            <p>Tallinn-based coordinator supporting students at Estonian universities. Specialist in Estonia's digital-first education ecosystem.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OUR STORY / TIMELINE -->
+  <section class="section section--cream">
+    <div class="container">
+      <div class="grid-2" style="gap:5rem;align-items:start">
+        <div data-reveal>
+          <span class="eyebrow">Our Journey</span>
+          <h2>How We Got Here</h2>
+          <span class="gold-rule"></span>
+          <p>What started as one person's frustration watching talented friends fail to navigate EU university applications has grown into East Africa's leading Baltic study-abroad consultancy.</p>
+        </div>
+        <div class="timeline" data-reveal>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">2018</div>
+            <h4>Founded in Nairobi</h4>
+            <p>MarinGlobal Scholars established with a focus on Latvia, helping the first cohort of 12 students.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">2019</div>
+            <h4>Expanded to Lithuania</h4>
+            <p>Added Lithuanian university partnerships, with Vilnius University becoming a flagship partner.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">2021</div>
+            <h4>Estonia Partnership</h4>
+            <p>Formalized partnerships with University of Tartu and TalTech, completing the Baltic trio.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">2023</div>
+            <h4>100th Student Placed</h4>
+            <p>Celebrated a milestone — 100 students successfully enrolled in European universities.</p>
+          </div>
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-year">2025</div>
+            <h4>350+ Students & Growing</h4>
+            <p>Now serving students across Kenya, Tanzania, Uganda, Ethiopia, Ghana, and Nigeria.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARTNER UNIVERSITIES -->
+  <section class="section">
+    <div class="container">
+      <div class="text-center" data-reveal>
+        <span class="eyebrow">Our Network</span>
+        <h2>Partner Institutions</h2>
+        <span class="gold-rule gold-rule--center"></span>
+        <p style="max-width:480px;margin:0 auto">Formal partnerships with 18 leading universities across Latvia, Lithuania, and Estonia.</p>
+      </div>
+      <div class="partner-logos" style="margin-top:3rem" data-reveal-stagger>
+        <div class="partner-logo-item"><div class="logo-abbr">RTU</div><p>Riga Tech. University</p></div>
+        <div class="partner-logo-item"><div class="logo-abbr">UL</div><p>Univ. of Latvia</p></div>
+        <div class="partner-logo-item"><div class="logo-abbr">RSU</div><p>Riga Stradiņš Univ.</p></div>
+        <div class="partner-logo-item"><div class="logo-abbr">VU</div><p>Vilnius University</p></div>
+        <div class="partner-logo-item"><div class="logo-abbr">KTU</div><p>Kaunas Univ. of Tech</p></div>
+        <div class="partner-logo-item"><div class="logo-abbr">LSMU</div><p>Lithuanian Univ. Health Sciences</p></div>
+        <div class="partner-logo-item"><div class="logo-abbr">UT</div><p>Univ. of Tartu</p></div>
+        <div class="partner-logo-item"><div class="logo-abbr">TalTech</div><p>Tallinn Univ. of Tech</p></div>
+        <div class="partner-logo-item"><div class="logo-abbr">TLU</div><p>Tallinn University</p></div>
+        <div class="partner-logo-item"><div class="logo-abbr">LU</div><p>Latvia University of Life Sciences</p></div>
+        <div class="partner-logo-item"><div class="logo-abbr">VDU</div><p>Vytautas Magnus Univ.</p></div>
+        <div class="partner-logo-item"><div class="logo-abbr">EMÜ</div><p>Estonian Univ. of Life Sciences</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section section--navy">
+    <div class="container text-center" data-reveal>
+      <span class="eyebrow">Work With Us</span>
+      <h2>Ready to Begin?</h2>
+      <span class="gold-rule gold-rule--center"></span>
+      <p style="max-width:480px;margin:0 auto 2.5rem;color:rgba(255,255,255,.65)">Join hundreds of East African students who trusted MarinGlobal Scholars to guide them to Europe.</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+        <a href="contact.html" class="btn btn-primary">Book a Consultation</a>
+        <a href="programs.html" class="btn btn-ghost">Explore Programs</a>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="../js/components.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

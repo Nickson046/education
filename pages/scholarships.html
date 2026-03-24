@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scholarships & Funding — MarinGlobal Scholars</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .schol-hero {
+      background: var(--navy);
+      padding: 140px 0 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .schol-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 60px,
+        rgba(201,168,76,0.03) 60px,
+        rgba(201,168,76,0.03) 61px
+      );
+    }
+    .schol-hero .label { color: var(--gold); font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1rem; }
+    .schol-hero h1 { color: var(--cream); font-family: var(--font-serif); font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 1rem; position: relative; }
+    .schol-hero p { color: rgba(248,244,238,0.7); font-size: 1.1rem; max-width: 560px; margin: 0 auto; position: relative; }
+
+    .schol-intro { background: var(--gold); padding: 2rem 0; text-align: center; }
+    .schol-intro p { color: var(--navy); font-weight: 500; font-size: 1.05rem; }
+    .schol-intro strong { font-weight: 700; }
+
+    .schol-section { padding: 80px 0; background: var(--cream); }
+    .schol-section + .schol-section { padding-top: 0; }
+
+    .section-header { margin-bottom: 2.5rem; }
+    .section-header .label { color: var(--gold); font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 0.4rem; }
+    .section-header h2 { font-family: var(--font-serif); color: var(--navy); font-size: 2.2rem; }
+    .section-header p { color: #666; max-width: 600px; margin-top: 0.5rem; line-height: 1.7; }
+
+    .schol-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+
+    .schol-card { background: white; border-radius: 16px; padding: 2rem; box-shadow: 0 2px 16px rgba(0,0,0,0.06); position: relative; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; }
+    .schol-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.12); }
+    .schol-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--gold); }
+    .schol-card.green::before { background: #2d7a45; }
+    .schol-card.blue::before { background: #1a4a9a; }
+    .schol-card.purple::before { background: #6a2d9a; }
+
+    .schol-type { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: #999; margin-bottom: 0.5rem; }
+    .schol-name { font-family: var(--font-serif); font-size: 1.4rem; color: var(--navy); margin-bottom: 0.25rem; }
+    .schol-org { font-size: 0.82rem; color: var(--gold); margin-bottom: 1.2rem; }
+
+    .schol-amount { background: #faf6ee; border-radius: 8px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; display: flex; justify-content: space-between; align-items: center; }
+    .schol-amount .amt { font-family: var(--font-serif); font-size: 1.6rem; color: var(--navy); font-weight: 700; }
+    .schol-amount .per { font-size: 0.78rem; color: #888; }
+
+    .schol-details { display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 1.2rem; }
+    .schol-detail { display: flex; gap: 0.75rem; align-items: flex-start; }
+    .schol-detail .dk { font-size: 0.78rem; font-weight: 600; color: var(--navy); min-width: 80px; }
+    .schol-detail .dv { font-size: 0.82rem; color: #555; line-height: 1.4; }
+
+    .deadline-badge { display: inline-flex; align-items: center; gap: 0.4rem; background: #fff3e0; color: #e65100; font-size: 0.75rem; padding: 0.3rem 0.75rem; border-radius: 50px; font-family: var(--font-mono); margin-bottom: 1rem; }
+    .deadline-badge.open { background: #e8f5e9; color: #2d7a45; }
+
+    .schol-card .learn-more { color: var(--navy); font-size: 0.85rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; }
+    .schol-card .learn-more:hover { color: var(--gold); }
+
+    .funding-tips { background: var(--navy); padding: 60px 0; }
+    .tips-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2.5rem; }
+    .tip-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(201,168,76,0.2); border-radius: 12px; padding: 1.8rem; }
+    .tip-num { font-family: var(--font-serif); font-size: 3rem; color: rgba(201,168,76,0.3); line-height: 1; margin-bottom: 0.75rem; }
+    .tip-card h4 { color: var(--gold); font-family: var(--font-serif); font-size: 1.1rem; margin-bottom: 0.5rem; }
+    .tip-card p { color: rgba(248,244,238,0.65); font-size: 0.875rem; line-height: 1.7; }
+    .funding-tips .section-header h2 { color: var(--cream); }
+    .funding-tips .section-header p { color: rgba(248,244,238,0.65); }
+    .funding-tips .section-header .label { color: var(--gold); }
+
+    .cta-banner { background: var(--gold); padding: 60px 0; text-align: center; }
+    .cta-banner h2 { font-family: var(--font-serif); color: var(--navy); font-size: 2.2rem; margin-bottom: 0.5rem; }
+    .cta-banner p { color: rgba(13,27,62,0.75); margin-bottom: 2rem; }
+    .btn-navy { display: inline-block; background: var(--navy); color: var(--gold); padding: 0.9rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 600; transition: all 0.3s; }
+    .btn-navy:hover { background: #162a5a; transform: translateY(-2px); }
+
+    @media (max-width: 768px) {
+      .schol-grid { grid-template-columns: 1fr; }
+      .tips-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div id="nav-placeholder"></div>
+
+  <section class="schol-hero">
+    <div class="container">
+      <p class="label">Funding Your Future</p>
+      <h1>Scholarships &<br>Financial Aid</h1>
+      <p>Studying in Europe is more affordable than you think. Discover the grants and scholarships available to East African students.</p>
+    </div>
+  </section>
+
+  <div class="schol-intro">
+    <div class="container">
+      <p>In 2024, MarinGlobal students secured a combined total of <strong>over €340,000</strong> in scholarships and financial aid.</p>
+    </div>
+  </div>
+
+  <section class="schol-section">
+    <div class="container">
+      <div class="section-header" data-reveal>
+        <p class="label">Government & Institutional</p>
+        <h2>Government Scholarships</h2>
+        <p>State-funded scholarships offered by Baltic governments to international students, including dedicated quotas for African applicants.</p>
+      </div>
+      <div class="schol-grid" data-reveal-stagger>
+
+        <div class="schol-card">
+          <p class="schol-type">Government Scholarship</p>
+          <h3 class="schol-name">Latvian State Scholarship</h3>
+          <p class="schol-org">Ministry of Education and Science of Latvia</p>
+          <div class="schol-amount"><span class="amt">€140/mo</span><span class="per">monthly stipend<br>+ tuition waiver</span></div>
+          <div class="schol-details">
+            <div class="schol-detail"><span class="dk">Eligibility</span><span class="dv">Undergraduate & graduate students; strong academic record required</span></div>
+            <div class="schol-detail"><span class="dk">Duration</span><span class="dv">Full programme length</span></div>
+            <div class="schol-detail"><span class="dk">Countries</span><span class="dv">Open to all African nations</span></div>
+          </div>
+          <span class="deadline-badge open">⬤ Applications Open</span>
+          <br><a href="contact.html" class="learn-more">Apply via MarinGlobal →</a>
+        </div>
+
+        <div class="schol-card green">
+          <p class="schol-type">Government Scholarship</p>
+          <h3 class="schol-name">Lithuanian Government Scholarship</h3>
+          <p class="schol-org">Lithuanian Academy of Sciences</p>
+          <div class="schol-amount"><span class="amt">€320/mo</span><span class="per">monthly stipend<br>for master's students</span></div>
+          <div class="schol-details">
+            <div class="schol-detail"><span class="dk">Eligibility</span><span class="dv">Master's and PhD students; GPA 3.5/4.0 equivalent</span></div>
+            <div class="schol-detail"><span class="dk">Duration</span><span class="dv">1–2 years</span></div>
+            <div class="schol-detail"><span class="dk">Fields</span><span class="dv">STEM, Medicine, Business priority</span></div>
+          </div>
+          <span class="deadline-badge">⬤ Deadline: March 15</span>
+          <br><a href="contact.html" class="learn-more">Apply via MarinGlobal →</a>
+        </div>
+
+        <div class="schol-card blue">
+          <p class="schol-type">Government Scholarship</p>
+          <h3 class="schol-name">Study in Estonia Programme</h3>
+          <p class="schol-org">Education Estonia / Archimedes Foundation</p>
+          <div class="schol-amount"><span class="amt">50%</span><span class="per">tuition reduction<br>for top applicants</span></div>
+          <div class="schol-details">
+            <div class="schol-detail"><span class="dk">Eligibility</span><span class="dv">Top 20% of applicant pool; English B2+</span></div>
+            <div class="schol-detail"><span class="dk">Duration</span><span class="dv">Full programme</span></div>
+            <div class="schol-detail"><span class="dk">Intake</span><span class="dv">September only</span></div>
+          </div>
+          <span class="deadline-badge open">⬤ Applications Open</span>
+          <br><a href="contact.html" class="learn-more">Apply via MarinGlobal →</a>
+        </div>
+
+        <div class="schol-card purple">
+          <p class="schol-type">EU Mobility Programme</p>
+          <h3 class="schol-name">Erasmus+ International Mobility</h3>
+          <p class="schol-org">European Commission</p>
+          <div class="schol-amount"><span class="amt">€700/mo</span><span class="per">monthly stipend<br>+ travel allowance</span></div>
+          <div class="schol-details">
+            <div class="schol-detail"><span class="dk">Eligibility</span><span class="dv">Students enrolled at partner institutions; varies by programme</span></div>
+            <div class="schol-detail"><span class="dk">Duration</span><span class="dv">3–12 months exchange</span></div>
+            <div class="schol-detail"><span class="dk">Note</span><span class="dv">Available via specific university partnerships</span></div>
+          </div>
+          <span class="deadline-badge">⬤ Deadline: February 1</span>
+          <br><a href="contact.html" class="learn-more">Check Eligibility →</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="schol-section" style="background: white; padding: 60px 0 80px;">
+    <div class="container">
+      <div class="section-header" data-reveal>
+        <p class="label">University Awards</p>
+        <h2>Merit Scholarships</h2>
+        <p>Direct awards from our partner universities based on academic excellence and application strength.</p>
+      </div>
+      <div class="schol-grid" data-reveal-stagger>
+
+        <div class="schol-card">
+          <p class="schol-type">University Merit Award</p>
+          <h3 class="schol-name">RTU Excellence Scholarship</h3>
+          <p class="schol-org">Riga Technical University, Latvia</p>
+          <div class="schol-amount"><span class="amt">25–50%</span><span class="per">tuition reduction<br>renewable annually</span></div>
+          <div class="schol-details">
+            <div class="schol-detail"><span class="dk">Eligibility</span><span class="dv">A-grade secondary school leavers; engineering/IT programmes</span></div>
+            <div class="schol-detail"><span class="dk">Renewal</span><span class="dv">Subject to GPA ≥3.5/4.0 each year</span></div>
+          </div>
+          <span class="deadline-badge open">⬤ Apply with Admission</span>
+          <br><a href="programs.html?country=latvia" class="learn-more">View RTU programmes →</a>
+        </div>
+
+        <div class="schol-card green">
+          <p class="schol-type">University Merit Award</p>
+          <h3 class="schol-name">LSMU Global Health Bursary</h3>
+          <p class="schol-org">Lithuanian University of Health Sciences</p>
+          <div class="schol-amount"><span class="amt">€1,500</span><span class="per">one-time bursary<br>per academic year</span></div>
+          <div class="schol-details">
+            <div class="schol-detail"><span class="dk">Eligibility</span><span class="dv">Medicine students from low- and middle-income countries</span></div>
+            <div class="schol-detail"><span class="dk">Application</span><span class="dv">Separate application, March deadline</span></div>
+          </div>
+          <span class="deadline-badge">⬤ Deadline: March 30</span>
+          <br><a href="programs.html?country=lithuania" class="learn-more">View LSMU programmes →</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <section class="funding-tips">
+    <div class="container">
+      <div class="section-header" data-reveal>
+        <p class="label">Strategy</p>
+        <h2>How to Maximise Your Funding</h2>
+        <p>Our scholarship advisors have helped students secure tens of thousands of euros in combined awards. Here's what works.</p>
+      </div>
+      <div class="tips-grid" data-reveal-stagger>
+        <div class="tip-card">
+          <div class="tip-num">01</div>
+          <h4>Apply Early & Apply Wide</h4>
+          <p>Many scholarships operate on a rolling basis. Applying 6–8 months ahead of your intake significantly improves your odds of securing funding.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-num">02</div>
+          <h4>Stack Multiple Awards</h4>
+          <p>Government grants, university merit scholarships, and private bursaries can often be combined. Some of our students cover 80%+ of their costs this way.</p>
+        </div>
+        <div class="tip-card">
+          <div class="tip-num">03</div>
+          <h4>Craft a Compelling Statement</h4>
+          <p>Scholarship committees want to see your story, your goals, and your community impact. Our team reviews and refines every personal statement.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta-banner">
+    <div class="container">
+      <h2>Not Sure Which Scholarships You Qualify For?</h2>
+      <p>Book a free funding assessment with one of our scholarship advisors.</p>
+      <a href="contact.html" class="btn-navy">Get a Free Scholarship Assessment →</a>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+  <script src="../js/components.js"></script>
+  <script src="../js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FAQ — MarinGlobal Scholars</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .faq-hero {
+      background: var(--navy);
+      padding: 140px 0 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .faq-hero::after {
+      content: 'FAQ';
+      position: absolute;
+      font-family: var(--font-serif);
+      font-size: 20rem;
+      color: rgba(255,255,255,0.02);
+      bottom: -40px; right: -20px;
+      pointer-events: none;
+      line-height: 1;
+    }
+    .faq-hero .label { color: var(--gold); font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1rem; }
+    .faq-hero h1 { color: var(--cream); font-family: var(--font-serif); font-size: clamp(2.5rem, 5vw, 4rem); margin-bottom: 1rem; }
+    .faq-hero p { color: rgba(248,244,238,0.7); font-size: 1.05rem; max-width: 500px; margin: 0 auto; }
+
+    .faq-search-bar { background: white; border-bottom: 1px solid #e8e3db; padding: 1.5rem 0; }
+    .search-input-wrap { max-width: 520px; margin: 0 auto; position: relative; }
+    .search-input-wrap svg { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; fill: #999; pointer-events: none; }
+    .search-input-wrap input { width: 100%; padding: 0.75rem 1rem 0.75rem 2.8rem; border: 1.5px solid #e0dcd5; border-radius: 50px; font-family: var(--font-sans); font-size: 0.9rem; outline: none; transition: border-color 0.2s; box-sizing: border-box; }
+    .search-input-wrap input:focus { border-color: var(--gold); }
+
+    .faq-section { padding: 80px 0; background: var(--cream); }
+    .faq-layout { display: grid; grid-template-columns: 240px 1fr; gap: 60px; align-items: start; }
+
+    .faq-nav { position: sticky; top: 90px; }
+    .faq-nav h3 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em; font-family: var(--font-mono); color: #999; margin-bottom: 0.75rem; }
+    .faq-nav-link { display: block; padding: 0.5rem 0.75rem; border-radius: 6px; color: #666; font-size: 0.875rem; text-decoration: none; transition: all 0.2s; margin-bottom: 0.25rem; cursor: pointer; }
+    .faq-nav-link:hover, .faq-nav-link.active { background: var(--navy); color: var(--gold); }
+
+    .faq-group { margin-bottom: 3rem; scroll-margin-top: 100px; }
+    .faq-group-title { font-family: var(--font-serif); font-size: 1.6rem; color: var(--navy); margin-bottom: 1.2rem; padding-bottom: 0.75rem; border-bottom: 2px solid var(--gold); }
+
+    .faq-item { background: white; border-radius: 10px; margin-bottom: 0.75rem; overflow: hidden; box-shadow: 0 1px 8px rgba(0,0,0,0.05); }
+    .faq-item.hidden { display: none; }
+    .faq-question { padding: 1.2rem 1.5rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+    .faq-question span { font-weight: 500; color: var(--navy); font-size: 0.95rem; line-height: 1.4; }
+    .faq-icon { width: 24px; height: 24px; border-radius: 50%; background: #f0ece5; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s, transform 0.3s; }
+    .faq-icon svg { width: 12px; height: 12px; fill: var(--navy); transition: transform 0.3s; }
+    .faq-item.open .faq-icon { background: var(--navy); }
+    .faq-item.open .faq-icon svg { fill: var(--gold); transform: rotate(45deg); }
+    .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.35s ease; }
+    .faq-answer-inner { padding: 0 1.5rem 1.2rem; color: #555; font-size: 0.9rem; line-height: 1.75; }
+    .faq-answer-inner a { color: var(--navy); text-decoration: underline; }
+    .faq-answer-inner ul { margin: 0.75rem 0; padding-left: 1.5rem; }
+    .faq-answer-inner li { margin-bottom: 0.4rem; }
+
+    .no-results { text-align: center; padding: 3rem; color: #999; font-size: 0.9rem; display: none; }
+
+    .still-have-q { background: var(--navy); border-radius: 16px; padding: 2.5rem; text-align: center; margin-top: 3rem; }
+    .still-have-q h3 { font-family: var(--font-serif); color: var(--cream); font-size: 1.6rem; margin-bottom: 0.5rem; }
+    .still-have-q p { color: rgba(248,244,238,0.65); margin-bottom: 1.5rem; }
+    .still-have-q .btn-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-gold { background: var(--gold); color: var(--navy); padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; }
+    .btn-outline-cream { border: 1.5px solid rgba(248,244,238,0.4); color: var(--cream); padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+    .btn-gold:hover { filter: brightness(1.1); }
+    .btn-outline-cream:hover { background: rgba(248,244,238,0.1); }
+
+    @media (max-width: 768px) {
+      .faq-layout { grid-template-columns: 1fr; }
+      .faq-nav { position: static; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+      .faq-nav h3 { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="nav-placeholder"></div>
+
+  <section class="faq-hero">
+    <div class="container">
+      <p class="label">Frequently Asked Questions</p>
+      <h1>Everything You Need<br>to Know</h1>
+      <p>Find answers to the most common questions from our prospective students.</p>
+    </div>
+  </section>
+
+  <div class="faq-search-bar">
+    <div class="container">
+      <div class="search-input-wrap">
+        <svg viewBox="0 0 24 24"><path d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z" stroke="#999" stroke-width="2" fill="none" stroke-linecap="round"/></svg>
+        <input type="text" id="faqSearch" placeholder="Search questions…" />
+      </div>
+    </div>
+  </div>
+
+  <section class="faq-section">
+    <div class="container">
+      <div class="faq-layout">
+        <nav class="faq-nav">
+          <h3>Categories</h3>
+          <a class="faq-nav-link active" onclick="scrollToGroup('admissions')">Admissions</a>
+          <a class="faq-nav-link" onclick="scrollToGroup('visa')">Visa & Immigration</a>
+          <a class="faq-nav-link" onclick="scrollToGroup('scholarships')">Scholarships</a>
+          <a class="faq-nav-link" onclick="scrollToGroup('costs')">Costs & Finances</a>
+          <a class="faq-nav-link" onclick="scrollToGroup('life')">Student Life</a>
+          <a class="faq-nav-link" onclick="scrollToGroup('services')">Our Services</a>
+        </nav>
+
+        <div>
+          <div id="no-results" class="no-results">No matching questions found. <a href="contact.html">Ask us directly →</a></div>
+
+          <!-- ADMISSIONS -->
+          <div class="faq-group" id="admissions">
+            <h2 class="faq-group-title">Admissions</h2>
+
+            <div class="faq-item">
+              <div class="faq-question"><span>What academic qualifications do I need to apply?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+              <div class="faq-answer"><div class="faq-answer-inner">Requirements vary by university and programme, but in general you'll need:<ul><li>A secondary school certificate (Form 6 / A-Levels or equivalent) for undergraduate programmes</li><li>A bachelor's degree for master's programmes</li><li>English proficiency (IELTS 6.0+ or equivalent) for English-taught programmes</li><li>Some medical programmes require chemistry and biology at A-Level</li></ul>Our advisors will review your specific qualifications in your free consultation.</div></div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question"><span>When are the application deadlines?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+              <div class="faq-answer"><div class="faq-answer-inner">Most Baltic universities have two intakes: September (main) and February (limited programmes). Key deadlines:<ul><li><strong>September intake:</strong> Applications open January–May, deadline typically June 1–July 1</li><li><strong>February intake:</strong> Applications October–November</li></ul>We recommend applying at least 6 months before your intended start date to allow time for document preparation and visa processing.</div></div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question"><span>Is English enough or do I need to learn Latvian/Lithuanian/Estonian?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+              <div class="faq-answer"><div class="faq-answer-inner">All our partner universities offer full degree programmes taught entirely in English — no knowledge of Baltic languages is required. Some universities offer optional local-language courses which can be helpful for daily life, but these are never mandatory.</div></div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question"><span>Can I apply to multiple universities at once?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+              <div class="faq-answer"><div class="faq-answer-inner">Yes, and we encourage it. Most of our packages include applications to 3–5 universities, increasing your chances of acceptance. We help you build a balanced list of reach, match, and safety schools across Latvia, Lithuania, and Estonia.</div></div>
+            </div>
+          </div>
+
+          <!-- VISA -->
+          <div class="faq-group" id="visa">
+            <h2 class="faq-group-title">Visa & Immigration</h2>
+
+            <div class="faq-item">
+              <div class="faq-question"><span>What visa do I need to study in the Baltic states?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+              <div class="faq-answer"><div class="faq-answer-inner">You will need a national long-stay visa (Type D) followed by a temporary residence permit for students. The process involves:<ul><li>Submitting your visa application at the relevant embassy</li><li>Providing proof of university acceptance</li><li>Showing sufficient financial means (typically €3,000–€5,000)</li><li>Health insurance coverage</li></ul>Our visa specialists manage the entire process and prepare you thoroughly for your interview.</div></div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question"><span>How long does the visa process take?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+              <div class="faq-answer"><div class="faq-answer-inner">Processing times typically range from 4–10 weeks. We recommend beginning your visa application at least 3 months before your programme start date. Our 94% visa approval rate reflects our thorough preparation process.</div></div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question"><span>Can I bring my family with me?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+              <div class="faq-answer"><div class="faq-answer-inner">Yes, after completing your first year and obtaining your residence permit, you may apply for family reunification. Your spouse and dependent children under 18 may join you. They will need their own residence permits and must demonstrate sufficient financial support. Speak to our visa team for details.</div></div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question"><span>What happens to my visa after I graduate?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+              <div class="faq-answer"><div class="faq-answer-inner">All three Baltic states offer post-graduation job seeker visas. In Estonia you can stay for 9 months to find work; Latvia and Lithuania offer similar provisions. Upon finding employment, you can convert to a work permit. EU residency becomes an option after 5 years of legal residence.</div></div>
+            </div>
+          </div>
+
+          <!-- SCHOLARSHIPS -->
+          <div class="faq-group" id="scholarships">
+            <h2 class="faq-group-title">Scholarships & Financial Aid</h2>
+
+            <div class="faq-item">
+              <div class="faq-question"><span>What scholarships are available for African students?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+              <div class="faq-answer"><div class="faq-answer-inner">Several scholarship sources are available:<ul><li><strong>University merit scholarships</strong> — 10–50% tuition reduction for strong academic performance</li><li><strong>Baltic government scholarships</strong> — offered by the Latvian, Lithuanian, and Estonian ministries of education</li><li><strong>Erasmus+ and EU funding</strong> — available for certain programmes</li><li><strong>Private foundations</strong> — we partner with several diaspora-led foundations supporting East African students</li></ul>Visit our <a href="scholarships.html">Scholarships page</a> for full details.</div></div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question"><span>Can I work while studying?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+              <div class="faq-answer"><div class="faq-answer-inner">Yes. EU regulations allow international students to work up to 20 hours per week during term time, and full-time during holidays. Average student wages in the Baltics range from €6–€10 per hour. Many of our students cover a significant portion of their living expenses through part-time work.</div></div>
+            </div>
+          </div>
+
+          <!-- COSTS -->
+          <div class="faq-group" id="costs">
+            <h2 class="faq-group-title">Costs & Finances</h2>
+
+            <div class="faq-item">
+              <div class="faq-question"><span>How much does it cost to study in the Baltics?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+              <div class="faq-answer"><div class="faq-answer-inner">The Baltics are among the most affordable EU study destinations:<ul><li><strong>Tuition fees:</strong> €2,500–€8,000 per year depending on programme and university</li><li><strong>Accommodation:</strong> €200–€450/month (student dorms €120–€250/month)</li><li><strong>Food & living:</strong> €300–€500/month</li><li><strong>Total annual budget:</strong> Approximately €7,000–€14,000 per year</li></ul>This compares very favourably with the UK (€25,000+/year) or Germany (€12,000+/year).</div></div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question"><span>What are MarinGlobal's service fees?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+              <div class="faq-answer"><div class="faq-answer-inner">Our initial consultation is completely free. We offer three service packages (Basic, Standard, and Premium) covering different levels of support from document preparation to full end-to-end management. Package pricing is shared during your consultation as it depends on your specific situation and destination. We never charge hidden fees.</div></div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question"><span>Do you offer payment plans?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+              <div class="faq-answer"><div class="faq-answer-inner">Yes. We understand that our clients are investing in their future, so we offer flexible payment plans for our service fees. University tuition fees are typically paid directly to the university in semesters. We can also connect you with our partner microfinance institutions that offer education loans for African students.</div></div>
+            </div>
+          </div>
+
+          <!-- LIFE -->
+          <div class="faq-group" id="life">
+            <h2 class="faq-group-title">Student Life</h2>
+
+            <div class="faq-item">
+              <div class="faq-question"><span>Is it safe for African students in Latvia, Lithuania and Estonia?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+              <div class="faq-answer"><div class="faq-answer-inner">The Baltic states are generally safe and welcoming. All three capitals have growing international student communities. Like anywhere, it's important to be street-smart, and isolated incidents do occur. Our alumni network and on-ground liaison team provide a strong support community. Most of our students report very positive experiences and feel at home within a few months.</div></div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question"><span>What is the weather like?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+              <div class="faq-answer"><div class="faq-answer-inner">The Baltics have a temperate continental climate. Winters (November–March) are cold, with temperatures ranging from -5°C to -15°C and snowfall. Summers are pleasant (20–25°C). Many African students find the first winter the biggest adjustment — we provide a complete packing guide and seasonal preparation tips to all enrolled students.</div></div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question"><span>Is African/halal food available?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+              <div class="faq-answer"><div class="faq-answer-inner">Yes. Riga, Vilnius, and Tallinn all have African restaurants and halal-certified supermarkets, particularly in areas near university campuses. Most large supermarkets stock international ingredients. Our student communities also organize regular communal cooking events where students share foods from home.</div></div>
+            </div>
+          </div>
+
+          <!-- SERVICES -->
+          <div class="faq-group" id="services">
+            <h2 class="faq-group-title">Our Services</h2>
+
+            <div class="faq-item">
+              <div class="faq-question"><span>What does the full service package include?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+              <div class="faq-answer"><div class="faq-answer-inner">Our Premium package covers everything from start to finish:<ul><li>University selection and application (up to 5 universities)</li><li>Personal statement and CV review</li><li>Document authentication and translation coordination</li><li>Visa application and interview preparation</li><li>Accommodation search and booking assistance</li><li>Airport pickup and first-week orientation</li><li>12 months of on-ground student welfare support</li></ul></div></div>
+            </div>
+
+            <div class="faq-item">
+              <div class="faq-question"><span>Do you guarantee admission?</span><div class="faq-icon"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></div></div>
+              <div class="faq-answer"><div class="faq-answer-inner">No ethical consultancy can guarantee admission — that decision rests entirely with universities. What we guarantee is our best effort: honest assessment of your chances, the strongest possible application, and a strategy that maximises your options. Our admission success rate across all clients is over 88%.</div></div>
+            </div>
+          </div>
+
+          <div class="still-have-q" data-reveal>
+            <h3>Still Have Questions?</h3>
+            <p>Our advisors are available Monday–Saturday to help with anything not covered above.</p>
+            <div class="btn-row">
+              <a href="contact.html" class="btn-gold">Contact Us →</a>
+              <a href="https://wa.me/255000000000" target="_blank" class="btn-outline-cream">WhatsApp Us</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+  <script src="../js/components.js"></script>
+  <script src="../js/main.js"></script>
+  <script>
+    // Accordion
+    document.querySelectorAll('.faq-question').forEach(q => {
+      q.addEventListener('click', () => {
+        const item = q.parentElement;
+        const answer = item.querySelector('.faq-answer');
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item.open').forEach(i => {
+          i.classList.remove('open');
+          i.querySelector('.faq-answer').style.maxHeight = '0';
+        });
+        if (!isOpen) {
+          item.classList.add('open');
+          answer.style.maxHeight = answer.scrollHeight + 'px';
+        }
+      });
+    });
+
+    // Search
+    document.getElementById('faqSearch').addEventListener('input', function() {
+      const q = this.value.toLowerCase();
+      let visible = 0;
+      document.querySelectorAll('.faq-item').forEach(item => {
+        const text = item.textContent.toLowerCase();
+        const show = !q || text.includes(q);
+        item.classList.toggle('hidden', !show);
+        if (show) visible++;
+      });
+      document.getElementById('no-results').style.display = visible === 0 ? 'block' : 'none';
+      document.querySelectorAll('.faq-group').forEach(g => {
+        const anyVisible = [...g.querySelectorAll('.faq-item')].some(i => !i.classList.contains('hidden'));
+        g.style.display = anyVisible ? '' : 'none';
+      });
+    });
+
+    function scrollToGroup(id) {
+      document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+      document.querySelectorAll('.faq-nav-link').forEach(l => l.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+  </script>
+</body>
+</html>

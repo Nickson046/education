@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Programs & Universities — MarinGlobal Scholars</title>
+  <meta name="description" content="Browse partner universities in Latvia, Lithuania, and Estonia. Filter by country, program, and degree level.">
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .filter-bar{background:var(--white);border:1px solid rgba(0,0,0,.08);border-radius:var(--radius-lg);padding:1.5rem 2rem;margin-bottom:3rem;display:flex;gap:1.5rem;flex-wrap:wrap;align-items:center;box-shadow:var(--shadow)}
+    .filter-group{display:flex;flex-direction:column;gap:.4rem;min-width:160px}
+    .filter-group label{font-family:var(--font-mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:var(--muted)}
+    .filter-group select{background:var(--cream);border:1px solid #E0DDD8;border-radius:var(--radius);padding:.55rem 1rem;font-family:var(--font-body);font-size:.9rem;color:var(--charcoal);outline:none;cursor:pointer;transition:border-color .2s}
+    .filter-group select:focus{border-color:var(--gold)}
+    .filter-reset{margin-left:auto;align-self:flex-end}
+    .results-count{font-family:var(--font-mono);font-size:.78rem;letter-spacing:.08em;color:var(--muted);margin-bottom:1.5rem}
+    .results-count span{color:var(--gold);font-weight:700}
+    .programs-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2rem}
+    @media(max-width:1000px){.programs-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:600px){.programs-grid{grid-template-columns:1fr}}
+    .program-card{background:var(--white);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow);border:1px solid rgba(0,0,0,.06);transition:var(--transition)}
+    .program-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-lg)}
+    .program-card[hidden]{display:none}
+    .prog-header{height:160px;display:flex;flex-direction:column;justify-content:space-between;padding:1.5rem;position:relative;overflow:hidden}
+    .prog-header::before{content:'';position:absolute;bottom:-30px;right:-30px;width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,.08)}
+    .prog-abbr{font-family:var(--font-display);font-size:2.5rem;font-weight:700;color:rgba(255,255,255,.9);z-index:1}
+    .prog-country{font-family:var(--font-mono);font-size:.65rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.6);z-index:1}
+    .prog-body{padding:1.5rem}
+    .prog-body h4{margin-bottom:.3rem;font-size:1.05rem}
+    .prog-body .prog-desc{font-size:.85rem;color:var(--muted);margin:.5rem 0 1rem;line-height:1.6}
+    .prog-tags{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.2rem}
+    .prog-meta{display:flex;justify-content:space-between;align-items:center;padding-top:1rem;border-top:1px solid #F0EDE8;font-size:.8rem;color:var(--muted)}
+    .prog-fee strong{color:var(--navy)}
+    .no-results{grid-column:1/-1;text-align:center;padding:4rem 2rem}
+    .no-results h3{color:var(--muted);font-size:1.5rem}
+  </style>
+</head>
+<body>
+
+  <div id="nav-placeholder"></div>
+
+  <section class="page-hero">
+    <div class="container page-hero-content">
+      <div class="breadcrumb"><a href="index.html">Home</a> › <span>Programs</span></div>
+      <span class="eyebrow">Academic Programs</span>
+      <h1>Find Your Perfect<br><em>European Program</em></h1>
+      <span class="gold-rule"></span>
+      <p>Browse our partner universities across Latvia, Lithuania, and Estonia. Filter by country, field of study, or degree level to find the right fit.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+
+      <!-- Filters -->
+      <div class="filter-bar" data-reveal>
+        <div class="filter-group">
+          <label>Country</label>
+          <select id="filter-country" onchange="filterPrograms()">
+            <option value="all">All Countries</option>
+            <option value="latvia">🇱🇻 Latvia</option>
+            <option value="lithuania">🇱🇹 Lithuania</option>
+            <option value="estonia">🇪🇪 Estonia</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Field of Study</label>
+          <select id="filter-field" onchange="filterPrograms()">
+            <option value="all">All Fields</option>
+            <option value="medicine">Medicine & Health</option>
+            <option value="engineering">Engineering & Tech</option>
+            <option value="business">Business & Management</option>
+            <option value="law">Law & Social Sciences</option>
+            <option value="arts">Arts & Humanities</option>
+            <option value="sciences">Natural Sciences</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Degree Level</label>
+          <select id="filter-level" onchange="filterPrograms()">
+            <option value="all">All Levels</option>
+            <option value="bachelor">Bachelor's</option>
+            <option value="master">Master's</option>
+            <option value="phd">PhD / Doctoral</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Language</label>
+          <select id="filter-lang" onchange="filterPrograms()">
+            <option value="all">Any Language</option>
+            <option value="english">English Taught</option>
+          </select>
+        </div>
+        <button class="btn btn-outline filter-reset" onclick="resetFilters()">Reset Filters</button>
+      </div>
+
+      <div class="results-count">Showing <span id="results-count">18</span> programs</div>
+
+      <div class="programs-grid" id="programs-grid">
+
+        <!-- LATVIA -->
+        <div class="program-card" data-country="latvia" data-field="engineering" data-level="bachelor master" data-lang="english">
+          <div class="prog-header" style="background:linear-gradient(135deg,#0D1B3E,#1a3070)">
+            <div class="prog-abbr">RTU</div>
+            <div class="prog-country">🇱🇻 Riga, Latvia</div>
+          </div>
+          <div class="prog-body">
+            <h4>Riga Technical University</h4>
+            <p class="prog-desc">One of the largest technical universities in the Baltic states, offering world-class engineering, IT, architecture, and business programs.</p>
+            <div class="prog-tags">
+              <span class="badge badge-navy">Bachelor's</span>
+              <span class="badge badge-navy">Master's</span>
+              <span class="badge badge-green">English Programs</span>
+            </div>
+            <div class="prog-meta">
+              <div class="prog-fee">Tuition from <strong>€2,500/yr</strong></div>
+              <a href="contact.html" class="btn btn-primary" style="padding:.5rem 1rem;font-size:.8rem">Apply Now</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="program-card" data-country="latvia" data-field="medicine sciences law" data-level="bachelor master phd" data-lang="english">
+          <div class="prog-header" style="background:linear-gradient(135deg,#7B1A1A,#C0392B)">
+            <div class="prog-abbr">UL</div>
+            <div class="prog-country">🇱🇻 Riga, Latvia</div>
+          </div>
+          <div class="prog-body">
+            <h4>University of Latvia</h4>
+            <p class="prog-desc">Latvia's oldest and largest university with strong faculties in medicine, law, natural sciences, and social sciences.</p>
+            <div class="prog-tags">
+              <span class="badge badge-navy">Bachelor's</span>
+              <span class="badge badge-navy">Master's</span>
+              <span class="badge badge-navy">PhD</span>
+            </div>
+            <div class="prog-meta">
+              <div class="prog-fee">Tuition from <strong>€3,200/yr</strong></div>
+              <a href="contact.html" class="btn btn-primary" style="padding:.5rem 1rem;font-size:.8rem">Apply Now</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="program-card" data-country="latvia" data-field="medicine" data-level="bachelor master" data-lang="english">
+          <div class="prog-header" style="background:linear-gradient(135deg,#1a5276,#2471a3)">
+            <div class="prog-abbr">RSU</div>
+            <div class="prog-country">🇱🇻 Riga, Latvia</div>
+          </div>
+          <div class="prog-body">
+            <h4>Rīga Stradiņš University</h4>
+            <p class="prog-desc">The leading medical university in Latvia, renowned for its English-taught Medicine and Dentistry programs attracting international students.</p>
+            <div class="prog-tags">
+              <span class="badge badge-navy">MD Program</span>
+              <span class="badge badge-navy">Master's</span>
+              <span class="badge badge-green">English Programs</span>
+            </div>
+            <div class="prog-meta">
+              <div class="prog-fee">Tuition from <strong>€8,000/yr</strong></div>
+              <a href="contact.html" class="btn btn-primary" style="padding:.5rem 1rem;font-size:.8rem">Apply Now</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="program-card" data-country="latvia" data-field="business arts" data-level="bachelor master" data-lang="english">
+          <div class="prog-header" style="background:linear-gradient(135deg,#1B5E20,#2E7D32)">
+            <div class="prog-abbr">BA</div>
+            <div class="prog-country">🇱🇻 Riga, Latvia</div>
+          </div>
+          <div class="prog-body">
+            <h4>RISEBA University of Applied Sciences</h4>
+            <p class="prog-desc">Specializing in business, media, and architecture. Known for creative programs and strong industry connections in Latvia.</p>
+            <div class="prog-tags">
+              <span class="badge badge-navy">Bachelor's</span>
+              <span class="badge badge-navy">Master's</span>
+              <span class="badge badge-green">English Programs</span>
+            </div>
+            <div class="prog-meta">
+              <div class="prog-fee">Tuition from <strong>€2,200/yr</strong></div>
+              <a href="contact.html" class="btn btn-primary" style="padding:.5rem 1rem;font-size:.8rem">Apply Now</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="program-card" data-country="latvia" data-field="business engineering" data-level="bachelor master" data-lang="english">
+          <div class="prog-header" style="background:linear-gradient(135deg,#4A235A,#6C3483)">
+            <div class="prog-abbr">TSI</div>
+            <div class="prog-country">🇱🇻 Riga, Latvia</div>
+          </div>
+          <div class="prog-body">
+            <h4>Transport and Telecommunication Institute</h4>
+            <p class="prog-desc">Leading institution for transport, logistics, IT, and management programs with strong European employer networks.</p>
+            <div class="prog-tags">
+              <span class="badge badge-navy">Bachelor's</span>
+              <span class="badge badge-navy">Master's</span>
+              <span class="badge badge-green">English Programs</span>
+            </div>
+            <div class="prog-meta">
+              <div class="prog-fee">Tuition from <strong>€1,900/yr</strong></div>
+              <a href="contact.html" class="btn btn-primary" style="padding:.5rem 1rem;font-size:.8rem">Apply Now</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="program-card" data-country="latvia" data-field="sciences engineering" data-level="bachelor master phd" data-lang="english">
+          <div class="prog-header" style="background:linear-gradient(135deg,#795548,#A1887F)">
+            <div class="prog-abbr">LLU</div>
+            <div class="prog-country">🇱🇻 Jelgava, Latvia</div>
+          </div>
+          <div class="prog-body">
+            <h4>Latvia University of Life Sciences and Technologies</h4>
+            <p class="prog-desc">Excellent programs in veterinary medicine, food science, agriculture, and environmental engineering.</p>
+            <div class="prog-tags">
+              <span class="badge badge-navy">Bachelor's</span>
+              <span class="badge badge-navy">Master's</span>
+              <span class="badge badge-navy">PhD</span>
+            </div>
+            <div class="prog-meta">
+              <div class="prog-fee">Tuition from <strong>€2,800/yr</strong></div>
+              <a href="contact.html" class="btn btn-primary" style="padding:.5rem 1rem;font-size:.8rem">Apply Now</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- LITHUANIA -->
+        <div class="program-card" data-country="lithuania" data-field="law sciences arts" data-level="bachelor master phd" data-lang="english">
+          <div class="prog-header" style="background:linear-gradient(135deg,#145A32,#1E8449)">
+            <div class="prog-abbr">VU</div>
+            <div class="prog-country">🇱🇹 Vilnius, Lithuania</div>
+          </div>
+          <div class="prog-body">
+            <h4>Vilnius University</h4>
+            <p class="prog-desc">The oldest and most prestigious university in Lithuania and one of the oldest in Northern Europe, founded in 1579.</p>
+            <div class="prog-tags">
+              <span class="badge badge-navy">Bachelor's</span>
+              <span class="badge badge-navy">Master's</span>
+              <span class="badge badge-navy">PhD</span>
+              <span class="badge badge-green">English Programs</span>
+            </div>
+            <div class="prog-meta">
+              <div class="prog-fee">Tuition from <strong>€2,800/yr</strong></div>
+              <a href="contact.html" class="btn btn-primary" style="padding:.5rem 1rem;font-size:.8rem">Apply Now</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="program-card" data-country="lithuania" data-field="engineering business" data-level="bachelor master phd" data-lang="english">
+          <div class="prog-header" style="background:linear-gradient(135deg,#4A235A,#7D3C98)">
+            <div class="prog-abbr">KTU</div>
+            <div class="prog-country">🇱🇹 Kaunas, Lithuania</div>
+          </div>
+          <div class="prog-body">
+            <h4>Kaunas University of Technology</h4>
+            <p class="prog-desc">Lithuania's largest technical university. Exceptional for engineering, information technology, business, and industrial design programs.</p>
+            <div class="prog-tags">
+              <span class="badge badge-navy">Bachelor's</span>
+              <span class="badge badge-navy">Master's</span>
+              <span class="badge badge-green">English Programs</span>
+            </div>
+            <div class="prog-meta">
+              <div class="prog-fee">Tuition from <strong>€2,500/yr</strong></div>
+              <a href="contact.html" class="btn btn-primary" style="padding:.5rem 1rem;font-size:.8rem">Apply Now</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="program-card" data-country="lithuania" data-field="medicine" data-level="bachelor master" data-lang="english">
+          <div class="prog-header" style="background:linear-gradient(135deg,#1C3A5E,#2874A6)">
+            <div class="prog-abbr">LSMU</div>
+            <div class="prog-country">🇱🇹 Kaunas, Lithuania</div>
+          </div>
+          <div class="prog-body">
+            <h4>Lithuanian University of Health Sciences</h4>
+            <p class="prog-desc">The largest biomedical and health sciences university in the Baltic states. Famous for its English-taught MD and Dentistry programs.</p>
+            <div class="prog-tags">
+              <span class="badge badge-navy">MD Program</span>
+              <span class="badge badge-navy">Master's</span>
+              <span class="badge badge-green">English Programs</span>
+            </div>
+            <div class="prog-meta">
+              <div class="prog-fee">Tuition from <strong>€9,500/yr</strong></div>
+              <a href="contact.html" class="btn btn-primary" style="padding:.5rem 1rem;font-size:.8rem">Apply Now</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="program-card" data-country="lithuania" data-field="business law arts" data-level="bachelor master" data-lang="english">
+          <div class="prog-header" style="background:linear-gradient(135deg,#1A237E,#283593)">
+            <div class="prog-abbr">MRU</div>
+            <div class="prog-country">🇱🇹 Vilnius, Lithuania</div>
+          </div>
+          <div class="prog-body">
+            <h4>Mykolas Romeris University</h4>
+            <p class="prog-desc">Leading in law, public policy, social sciences, and business management. Strong international focus with many English-taught programs.</p>
+            <div class="prog-tags">
+              <span class="badge badge-navy">Bachelor's</span>
+              <span class="badge badge-navy">Master's</span>
+              <span class="badge badge-green">English Programs</span>
+            </div>
+            <div class="prog-meta">
+              <div class="prog-fee">Tuition from <strong>€2,200/yr</strong></div>
+              <a href="contact.html" class="btn btn-primary" style="padding:.5rem 1rem;font-size:.8rem">Apply Now</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="program-card" data-country="lithuania" data-field="business arts sciences" data-level="bachelor master phd" data-lang="english">
+          <div class="prog-header" style="background:linear-gradient(135deg,#37474F,#546E7A)">
+            <div class="prog-abbr">VDU</div>
+            <div class="prog-country">🇱🇹 Kaunas, Lithuania</div>
+          </div>
+          <div class="prog-body">
+            <h4>Vytautas Magnus University</h4>
+            <p class="prog-desc">Liberal arts-focused university renowned for its interdisciplinary approach and rich tradition of academic freedom.</p>
+            <div class="prog-tags">
+              <span class="badge badge-navy">Bachelor's</span>
+              <span class="badge badge-navy">Master's</span>
+              <span class="badge badge-green">English Programs</span>
+            </div>
+            <div class="prog-meta">
+              <div class="prog-fee">Tuition from <strong>€1,900/yr</strong></div>
+              <a href="contact.html" class="btn btn-primary" style="padding:.5rem 1rem;font-size:.8rem">Apply Now</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="program-card" data-country="lithuania" data-field="sciences engineering" data-level="bachelor master" data-lang="english">
+          <div class="prog-header" style="background:linear-gradient(135deg,#880E4F,#AD1457)">
+            <div class="prog-abbr">ASU</div>
+            <div class="prog-country">🇱🇹 Akademija, Lithuania</div>
+          </div>
+          <div class="prog-body">
+            <h4>Aleksandro Stulginskis University</h4>
+            <p class="prog-desc">Strong programs in agricultural engineering, environmental sciences, land management, and rural development.</p>
+            <div class="prog-tags">
+              <span class="badge badge-navy">Bachelor's</span>
+              <span class="badge badge-navy">Master's</span>
+              <span class="badge badge-green">English Programs</span>
+            </div>
+            <div class="prog-meta">
+              <div class="prog-fee">Tuition from <strong>€1,700/yr</strong></div>
+              <a href="contact.html" class="btn btn-primary" style="padding:.5rem 1rem;font-size:.8rem">Apply Now</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- ESTONIA -->
+        <div class="program-card" data-country="estonia" data-field="medicine sciences law arts" data-level="bachelor master phd" data-lang="english">
+          <div class="prog-header" style="background:linear-gradient(135deg,#003366,#004E98)">
+            <div class="prog-abbr">UT</div>
+            <div class="prog-country">🇪🇪 Tartu, Estonia</div>
+          </div>
+          <div class="prog-body">
+            <h4>University of Tartu</h4>
+            <p class="prog-desc">Estonia's leading university and a top research institution in Northern Europe. Exceptional across medicine, sciences, IT, social sciences, and law.</p>
+            <div class="prog-tags">
+              <span class="badge badge-navy">Bachelor's</span>
+              <span class="badge badge-navy">Master's</span>
+              <span class="badge badge-navy">PhD</span>
+              <span class="badge badge-green">English Programs</span>
+            </div>
+            <div class="prog-meta">
+              <div class="prog-fee">Tuition from <strong>€2,900/yr</strong></div>
+              <a href="contact.html" class="btn btn-primary" style="padding:.5rem 1rem;font-size:.8rem">Apply Now</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="program-card" data-country="estonia" data-field="engineering business sciences" data-level="bachelor master phd" data-lang="english">
+          <div class="prog-header" style="background:linear-gradient(135deg,#1B2A47,#2C4370)">
+            <div class="prog-abbr">TalTech</div>
+            <div class="prog-country">🇪🇪 Tallinn, Estonia</div>
+          </div>
+          <div class="prog-body">
+            <h4>Tallinn University of Technology</h4>
+            <p class="prog-desc">Estonia's technical flagship university, renowned for engineering, IT, cybersecurity, and business. Located in Europe's most digitally advanced country.</p>
+            <div class="prog-tags">
+              <span class="badge badge-navy">Bachelor's</span>
+              <span class="badge badge-navy">Master's</span>
+              <span class="badge badge-green">English Programs</span>
+            </div>
+            <div class="prog-meta">
+              <div class="prog-fee">Tuition from <strong>€2,500/yr</strong></div>
+              <a href="contact.html" class="btn btn-primary" style="padding:.5rem 1rem;font-size:.8rem">Apply Now</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="program-card" data-country="estonia" data-field="arts business sciences" data-level="bachelor master phd" data-lang="english">
+          <div class="prog-header" style="background:linear-gradient(135deg,#5D4037,#8D6E63)">
+            <div class="prog-abbr">TLU</div>
+            <div class="prog-country">🇪🇪 Tallinn, Estonia</div>
+          </div>
+          <div class="prog-body">
+            <h4>Tallinn University</h4>
+            <p class="prog-desc">Known for education, media, arts, and digital humanities. A creative and interdisciplinary university in Estonia's vibrant capital.</p>
+            <div class="prog-tags">
+              <span class="badge badge-navy">Bachelor's</span>
+              <span class="badge badge-navy">Master's</span>
+              <span class="badge badge-green">English Programs</span>
+            </div>
+            <div class="prog-meta">
+              <div class="prog-fee">Tuition from <strong>€2,100/yr</strong></div>
+              <a href="contact.html" class="btn btn-primary" style="padding:.5rem 1rem;font-size:.8rem">Apply Now</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="program-card" data-country="estonia" data-field="business law" data-level="bachelor master" data-lang="english">
+          <div class="prog-header" style="background:linear-gradient(135deg,#004D40,#00695C)">
+            <div class="prog-abbr">EBS</div>
+            <div class="prog-country">🇪🇪 Tallinn, Estonia</div>
+          </div>
+          <div class="prog-body">
+            <h4>Estonian Business School</h4>
+            <p class="prog-desc">One of the oldest private universities in Estonia. Specializes in international business, entrepreneurship, and management with strong industry links.</p>
+            <div class="prog-tags">
+              <span class="badge badge-navy">Bachelor's</span>
+              <span class="badge badge-navy">Master's</span>
+              <span class="badge badge-green">English Programs</span>
+            </div>
+            <div class="prog-meta">
+              <div class="prog-fee">Tuition from <strong>€3,500/yr</strong></div>
+              <a href="contact.html" class="btn btn-primary" style="padding:.5rem 1rem;font-size:.8rem">Apply Now</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="program-card" data-country="estonia" data-field="arts" data-level="bachelor master" data-lang="english">
+          <div class="prog-header" style="background:linear-gradient(135deg,#311B92,#4527A0)">
+            <div class="prog-abbr">EKA</div>
+            <div class="prog-country">🇪🇪 Tallinn, Estonia</div>
+          </div>
+          <div class="prog-body">
+            <h4>Estonian Academy of Arts</h4>
+            <p class="prog-desc">The only art academy in Estonia, offering architecture, design, fine arts, and cultural heritage programs in an inspiring creative environment.</p>
+            <div class="prog-tags">
+              <span class="badge badge-navy">Bachelor's</span>
+              <span class="badge badge-navy">Master's</span>
+              <span class="badge badge-green">English Programs</span>
+            </div>
+            <div class="prog-meta">
+              <div class="prog-fee">Tuition from <strong>€2,400/yr</strong></div>
+              <a href="contact.html" class="btn btn-primary" style="padding:.5rem 1rem;font-size:.8rem">Apply Now</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="program-card" data-country="estonia" data-field="sciences engineering" data-level="bachelor master phd" data-lang="english">
+          <div class="prog-header" style="background:linear-gradient(135deg,#1B5E20,#2E7D32)">
+            <div class="prog-abbr">EMÜ</div>
+            <div class="prog-country">🇪🇪 Tartu, Estonia</div>
+          </div>
+          <div class="prog-body">
+            <h4>Estonian University of Life Sciences</h4>
+            <p class="prog-desc">Leading institution for veterinary medicine, agriculture, environmental sciences, and food technology. Strong research programs available.</p>
+            <div class="prog-tags">
+              <span class="badge badge-navy">Bachelor's</span>
+              <span class="badge badge-navy">Master's</span>
+              <span class="badge badge-navy">PhD</span>
+              <span class="badge badge-green">English Programs</span>
+            </div>
+            <div class="prog-meta">
+              <div class="prog-fee">Tuition from <strong>€2,600/yr</strong></div>
+              <a href="contact.html" class="btn btn-primary" style="padding:.5rem 1rem;font-size:.8rem">Apply Now</a>
+            </div>
+          </div>
+        </div>
+
+        <div id="no-results" class="no-results" style="display:none">
+          <h3>No programs match your filters</h3>
+          <p style="margin-top:.5rem">Try adjusting your search criteria or <button onclick="resetFilters()" style="color:var(--gold);font-weight:600;background:none;border:none;cursor:pointer;font-size:1rem">reset all filters</button></p>
+        </div>
+
+      </div><!-- end programs-grid -->
+
+      <div style="text-align:center;margin-top:4rem;padding:3rem;background:var(--cream);border-radius:var(--radius-lg)" data-reveal>
+        <span class="eyebrow">Can't Find What You're Looking For?</span>
+        <h3 style="margin:.5rem 0 1rem">We Partner With More Universities</h3>
+        <p style="max-width:480px;margin:0 auto 2rem">Our full network includes 18+ institutions. Book a consultation and we'll find the perfect match for your academic profile.</p>
+        <a href="contact.html" class="btn btn-primary">Get Personalized Advice →</a>
+      </div>
+    </div>
+  </section>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="../js/components.js"></script>
+  <script src="../js/main.js"></script>
+  <script>
+    function filterPrograms() {
+      const country = document.getElementById('filter-country').value;
+      const field   = document.getElementById('filter-field').value;
+      const level   = document.getElementById('filter-level').value;
+      const lang    = document.getElementById('filter-lang').value;
+
+      const cards = document.querySelectorAll('.program-card[data-country]');
+      let visible = 0;
+
+      cards.forEach(card => {
+        const cCountry = card.dataset.country;
+        const cField   = card.dataset.field;
+        const cLevel   = card.dataset.level;
+        const cLang    = card.dataset.lang || '';
+
+        const matchCountry = country === 'all' || cCountry === country;
+        const matchField   = field === 'all' || cField.includes(field);
+        const matchLevel   = level === 'all' || cLevel.includes(level);
+        const matchLang    = lang === 'all' || cLang === 'english';
+
+        const show = matchCountry && matchField && matchLevel && matchLang;
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+
+      document.getElementById('results-count').textContent = visible;
+      document.getElementById('no-results').style.display = visible === 0 ? 'block' : 'none';
+    }
+
+    function resetFilters() {
+      ['filter-country','filter-field','filter-level','filter-lang'].forEach(id => {
+        document.getElementById(id).value = 'all';
+      });
+      filterPrograms();
+    }
+
+    // Check URL params on load
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('country')) {
+      document.getElementById('filter-country').value = params.get('country');
+      filterPrograms();
+    }
+  </script>
+</body>
+</html>

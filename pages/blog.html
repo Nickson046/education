@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Resources & Blog — MarinGlobal Scholars</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/style.css" />
+  <style>
+    .blog-hero {
+      background: var(--navy);
+      padding: 140px 0 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .blog-hero .inner { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .blog-hero .label { color: var(--gold); font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1rem; }
+    .blog-hero h1 { color: var(--cream); font-family: var(--font-serif); font-size: clamp(2.2rem, 4vw, 3.5rem); margin-bottom: 1rem; }
+    .blog-hero p { color: rgba(248,244,238,0.7); font-size: 1rem; line-height: 1.7; }
+    .featured-post-card { background: rgba(255,255,255,0.06); border: 1px solid rgba(201,168,76,0.25); border-radius: 16px; padding: 2rem; }
+    .featured-badge { display: inline-block; background: var(--gold); color: var(--navy); font-size: 0.7rem; font-weight: 700; padding: 0.25rem 0.7rem; border-radius: 50px; font-family: var(--font-mono); letter-spacing: 0.08em; margin-bottom: 1rem; }
+    .featured-post-card h3 { font-family: var(--font-serif); color: var(--cream); font-size: 1.5rem; margin-bottom: 0.5rem; cursor: pointer; }
+    .featured-post-card h3:hover { color: var(--gold); }
+    .featured-post-card p { color: rgba(248,244,238,0.65); font-size: 0.88rem; line-height: 1.65; margin-bottom: 1.5rem; }
+    .post-meta-row { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+    .category-tag { background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.3); color: var(--gold); font-size: 0.72rem; padding: 0.25rem 0.65rem; border-radius: 50px; font-family: var(--font-mono); }
+    .post-date { color: rgba(248,244,238,0.4); font-size: 0.78rem; font-family: var(--font-mono); }
+
+    .blog-filter-bar { background: white; border-bottom: 1px solid #e8e3db; padding: 1.2rem 0; position: sticky; top: 72px; z-index: 100; }
+    .filter-row { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+    .filter-row .label { font-size: 0.78rem; color: #999; font-family: var(--font-mono); margin-right: 0.25rem; }
+    .cat-pill { padding: 0.35rem 0.9rem; border-radius: 50px; border: 1.5px solid #ddd; font-size: 0.8rem; cursor: pointer; background: white; color: #666; transition: all 0.2s; font-family: var(--font-sans); }
+    .cat-pill.active, .cat-pill:hover { background: var(--navy); border-color: var(--navy); color: var(--gold); }
+
+    .blog-section { padding: 60px 0 80px; background: var(--cream); }
+    .blog-layout { display: grid; grid-template-columns: 1fr 300px; gap: 3rem; align-items: start; }
+    .posts-grid { display: grid; gap: 1.5rem; }
+
+    .post-card { background: white; border-radius: 14px; overflow: hidden; display: grid; grid-template-columns: 200px 1fr; box-shadow: 0 2px 14px rgba(0,0,0,0.06); transition: transform 0.3s, box-shadow 0.3s; }
+    .post-card:hover { transform: translateY(-3px); box-shadow: 0 10px 35px rgba(0,0,0,0.1); }
+    .post-card.hidden { display: none; }
+    .post-thumb { background: var(--navy); min-height: 160px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; flex-shrink: 0; }
+    .post-body { padding: 1.5rem; }
+    .post-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.75rem; }
+    .post-tag { background: #f0ece5; color: #777; font-size: 0.7rem; padding: 0.2rem 0.55rem; border-radius: 50px; font-family: var(--font-mono); }
+    .post-title { font-family: var(--font-serif); font-size: 1.2rem; color: var(--navy); margin-bottom: 0.5rem; cursor: pointer; line-height: 1.3; }
+    .post-title:hover { color: var(--gold); }
+    .post-excerpt { font-size: 0.85rem; color: #666; line-height: 1.6; margin-bottom: 1rem; }
+    .post-footer { display: flex; justify-content: space-between; align-items: center; }
+    .post-author { font-size: 0.78rem; color: #999; }
+    .post-author strong { color: var(--navy); }
+    .read-more { font-size: 0.8rem; color: var(--gold); font-weight: 600; cursor: pointer; }
+
+    /* Loading state */
+    .posts-loading { text-align: center; padding: 3rem; color: #999; }
+    .spinner { width: 32px; height: 32px; border: 3px solid #e0dcd5; border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 1rem; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Sidebar */
+    .sidebar { position: sticky; top: 100px; }
+    .sidebar-widget { background: white; border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: 0 2px 14px rgba(0,0,0,0.05); }
+    .sidebar-widget h4 { font-family: var(--font-serif); color: var(--navy); font-size: 1.1rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #f0ece5; }
+    .sidebar-tag-cloud { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    .sidebar-tag { padding: 0.3rem 0.75rem; border-radius: 50px; border: 1.5px solid #e0dcd5; font-size: 0.78rem; cursor: pointer; transition: all 0.2s; color: #666; }
+    .sidebar-tag:hover { background: var(--navy); border-color: var(--navy); color: var(--gold); }
+    .newsletter-form input { width: 100%; padding: 0.65rem 0.9rem; border: 1.5px solid #e0dcd5; border-radius: 6px; font-family: var(--font-sans); font-size: 0.85rem; margin-bottom: 0.75rem; outline: none; box-sizing: border-box; }
+    .newsletter-form input:focus { border-color: var(--gold); }
+    .newsletter-form button { width: 100%; padding: 0.65rem; background: var(--navy); color: var(--gold); border: none; border-radius: 6px; font-family: var(--font-sans); font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s; }
+    .newsletter-form button:hover { background: #162a5a; }
+
+    /* Modal for blog post */
+    .post-modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; padding: 1rem; }
+    .post-modal-overlay.open { display: flex; }
+    .post-modal { background: white; border-radius: 16px; max-width: 700px; width: 100%; max-height: 85vh; overflow-y: auto; padding: 2.5rem; position: relative; }
+    .modal-close { position: absolute; top: 1.5rem; right: 1.5rem; background: #f0ece5; border: none; border-radius: 50%; width: 36px; height: 36px; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; color: var(--navy); }
+    .modal-close:hover { background: var(--navy); color: var(--gold); }
+    .modal-body h2 { font-family: var(--font-serif); color: var(--navy); font-size: 2rem; margin: 1rem 0 0.5rem; }
+    .modal-body .modal-meta { color: #999; font-size: 0.82rem; font-family: var(--font-mono); margin-bottom: 1.5rem; }
+    .modal-body p { color: #444; line-height: 1.85; margin-bottom: 1rem; font-size: 0.95rem; }
+
+    @media (max-width: 900px) {
+      .blog-hero .inner { grid-template-columns: 1fr; }
+      .blog-layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .post-card { grid-template-columns: 1fr; }
+      .post-thumb { min-height: 120px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="nav-placeholder"></div>
+
+  <section class="blog-hero">
+    <div class="container">
+      <div class="inner">
+        <div>
+          <p class="label">Student Resources</p>
+          <h1>Insights, Guides &<br>Student Stories</h1>
+          <p>Practical advice for every stage of your study-abroad journey — from choosing a university to settling into Baltic life.</p>
+        </div>
+        <div class="featured-post-card" id="featuredCard">
+          <span class="featured-badge">FEATURED</span>
+          <h3 onclick="openModal('featured')">The Complete Baltic Student Visa Guide for 2025</h3>
+          <p>Everything you need to know about the student visa process for Latvia, Lithuania, and Estonia — from the required documents to the interview preparation tips our advisors use.</p>
+          <div class="post-meta-row">
+            <span class="category-tag">Visa & Immigration</span>
+            <span class="post-date">March 2025</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="blog-filter-bar">
+    <div class="container">
+      <div class="filter-row">
+        <span class="label">Category:</span>
+        <button class="cat-pill active" data-cat="all">All Posts</button>
+        <button class="cat-pill" data-cat="visa">Visa & Immigration</button>
+        <button class="cat-pill" data-cat="admissions">Admissions</button>
+        <button class="cat-pill" data-cat="scholarships">Scholarships</button>
+        <button class="cat-pill" data-cat="life">Student Life</button>
+        <button class="cat-pill" data-cat="universities">Universities</button>
+      </div>
+    </div>
+  </div>
+
+  <section class="blog-section">
+    <div class="container">
+      <div class="blog-layout">
+        <div>
+          <div id="postsContainer" class="posts-grid">
+            <!-- Firebase-loaded posts will appear here; static fallbacks shown initially -->
+            <div class="posts-loading" id="postsLoading">
+              <div class="spinner"></div>
+              <p>Loading articles…</p>
+            </div>
+          </div>
+        </div>
+        <aside class="sidebar">
+          <div class="sidebar-widget">
+            <h4>Browse Topics</h4>
+            <div class="sidebar-tag-cloud">
+              <span class="sidebar-tag">Visa</span>
+              <span class="sidebar-tag">Latvia</span>
+              <span class="sidebar-tag">Lithuania</span>
+              <span class="sidebar-tag">Estonia</span>
+              <span class="sidebar-tag">Scholarships</span>
+              <span class="sidebar-tag">Medicine</span>
+              <span class="sidebar-tag">Engineering</span>
+              <span class="sidebar-tag">Housing</span>
+              <span class="sidebar-tag">Cost of Living</span>
+              <span class="sidebar-tag">Student Life</span>
+              <span class="sidebar-tag">Part-time Work</span>
+              <span class="sidebar-tag">Application Tips</span>
+            </div>
+          </div>
+          <div class="sidebar-widget">
+            <h4>Newsletter</h4>
+            <p style="font-size:0.82rem;color:#666;margin-bottom:1rem;">Get scholarship deadlines and student guides delivered monthly.</p>
+            <div class="newsletter-form">
+              <input type="email" placeholder="Your email address" id="sidebarEmail" />
+              <button onclick="handleSidebarNewsletter()">Subscribe →</button>
+            </div>
+          </div>
+          <div class="sidebar-widget">
+            <h4>Quick Links</h4>
+            <div style="display:flex;flex-direction:column;gap:0.5rem;">
+              <a href="how-it-works.html" style="color:var(--navy);font-size:0.85rem;text-decoration:none;">→ How It Works</a>
+              <a href="scholarships.html" style="color:var(--navy);font-size:0.85rem;text-decoration:none;">→ Scholarships Guide</a>
+              <a href="faq.html" style="color:var(--navy);font-size:0.85rem;text-decoration:none;">→ FAQ</a>
+              <a href="contact.html" style="color:var(--navy);font-size:0.85rem;text-decoration:none;">→ Book Consultation</a>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- Post Modal -->
+  <div class="post-modal-overlay" id="postModal" onclick="this.id==='postModal'&&closeModal()">
+    <div class="post-modal">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <div id="footer-placeholder"></div>
+  <script src="../js/components.js"></script>
+  <script src="../js/main.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // Firebase config — replace with actual values from firebase-config.js
+    const firebaseConfig = window.FIREBASE_CONFIG || null;
+
+    const STATIC_POSTS = [
+      { id: 'p1', title: 'The Complete Baltic Student Visa Guide for 2025', excerpt: 'Everything you need to know about the student visa process — from required documents to interview prep tips our advisors use every day.', category: 'visa', emoji: '🛂', author: 'David Mwenda', date: 'March 2025', body: '<p>Applying for a student visa to Latvia, Lithuania, or Estonia is a structured process — but one that many students find intimidating. In this guide, we walk through every step so you arrive at your embassy appointment fully prepared.</p><p><strong>Step 1: Get your acceptance letter.</strong> You cannot apply for a visa without official confirmation of your university place. Once received, this becomes the anchor document for your entire application.</p><p><strong>Step 2: Open a bank account and demonstrate financial means.</strong> You need to show €3,000–€5,000 available (the exact amount depends on your destination country and programme length). Some consulates accept a bank guarantee letter instead of a liquid balance.</p><p><strong>Step 3: Health insurance.</strong> You must hold valid health insurance covering the entire duration of your stay. Many universities offer group policies. Your MarinGlobal advisor will guide you on approved providers.</p><p><strong>Step 4: The interview.</strong> Not all embassies conduct personal interviews, but if yours does, preparation matters. We run mock interview sessions with all our Premium package clients. The key is to speak confidently about your study plan and demonstrate genuine intent to return home after graduation.</p><p>Our 94% visa approval rate reflects years of refining this preparation process. Contact us if you have any questions.</p>' },
+      { id: 'p2', title: '5 Reasons Why Latvia Is East Africa\'s Best Kept Study Secret', excerpt: 'From world-class medical programmes to the most affordable capital city in the EU — why Latvia deserves to be on every student\'s shortlist.', category: 'universities', emoji: '🇱🇻', author: 'Marin Kowalczyk', date: 'February 2025', body: '<p>Latvia rarely makes the top of African students\' lists when dreaming about European education. That\'s a mistake. Here are five reasons it should.</p><p><strong>1. Medicine at a fraction of UK costs.</strong> The University of Latvia and RSU offer English-taught MD programmes recognised across the EU and beyond. Annual tuition starts at €8,000 — roughly a quarter of a comparable UK programme.</p><p><strong>2. Riga is the most liveable small capital in the EU.</strong> Rent, food, and transport cost a fraction of Western European cities. €800/month covers a very comfortable student lifestyle.</p><p><strong>3. It\'s genuinely safe.</strong> Latvia consistently ranks among Europe\'s safest countries. Riga\'s international student community is warm and well-organised.</p><p><strong>4. EU recognition.</strong> Your degree carries full EU accreditation, opening doors to employment across 27 countries.</p><p><strong>5. Growing African community.</strong> Our students describe feeling welcomed and finding community quickly. Riga has halal supermarkets, African restaurants, and active student societies.</p>' },
+      { id: 'p3', title: 'How to Write a Personal Statement That Gets You In', excerpt: 'The personal statement is your first conversation with an admissions committee. Here\'s what the best ones have in common.', category: 'admissions', emoji: '✍️', author: 'Aisha Okonkwo', date: 'January 2025', body: '<p>We review hundreds of personal statements each admissions cycle. After years of this work, patterns become clear — statements that succeed and those that don\'t.</p><p><strong>The biggest mistake: describing your life instead of your motivation.</strong> "I was born in Dar es Salaam and have always been interested in medicine" tells an admissions committee nothing. What changed your perspective? What problem do you want to solve?</p><p><strong>What works: a specific, honest story.</strong> One of our most successful applicants opened with a scene from her mother\'s hospital stay. She described exactly what she observed, what she didn\'t understand, and why that moment crystallised her desire to study medicine. The committee remembered her.</p><p><strong>Structure that works:</strong> (1) The hook — a specific moment or observation. (2) The context — your background and what led you here. (3) The fit — why this programme at this university. (4) The future — what you plan to do with this degree.</p><p>We review and rewrite personal statements as part of our Standard and Premium packages. Book a consultation to get started.</p>' },
+      { id: 'p4', title: 'Surviving Your First Baltic Winter: A Practical Guide', excerpt: 'Nobody tells you about -15°C until you\'re standing in it. Here\'s how to prepare, what to pack, and how to actually enjoy winter.', category: 'life', emoji: '❄️', author: 'Eva Lepp', date: 'December 2024', body: '<p>The first winter is the most talked-about challenge among our students. And yes, it gets cold. January in Riga averages -4°C but can drop to -18°C. Here\'s what actually works.</p><p><strong>What to pack from home:</strong> Your warmest woollen items, thermal base layers if available, and thick socks. Don\'t buy your winter coat at home — Baltic prices are good and sizing is more relevant to the climate.</p><p><strong>Essential purchases on arrival:</strong> Proper winter boots (waterproof, rated to -20°C), a quality down or wool coat, and thermal underlayers. Budget €200–€300 for this. It\'s non-negotiable.</p><p><strong>The mental adjustment:</strong> Winter brings dark evenings by 4pm. This affects mood for many students. Exercise helps enormously. Most Baltic universities have subsidised sports facilities. Socialise actively — isolation is the enemy of a good winter.</p><p><strong>The upside:</strong> Baltic winter is genuinely beautiful. Snow-covered Riga is a postcard. Christmas markets run through December and the cities come alive in ways that summer can\'t match.</p>' },
+      { id: 'p5', title: 'Scholarship Stacking: How Our Students Cover 80% of Costs', excerpt: 'Smart students combine multiple funding sources. Here\'s the exact strategy we use to help clients maximise their financial aid.', category: 'scholarships', emoji: '💰', author: 'Fatou Jallow', date: 'November 2024', body: '<p>Scholarship stacking — combining multiple awards from different sources — is the most effective financial strategy we teach. Here\'s how it works.</p><p><strong>Layer 1: University merit award.</strong> Apply for the highest-academic-tier programme you qualify for. Merit scholarships of 25–50% tuition reduction are available at most partner universities for strong applicants.</p><p><strong>Layer 2: Government scholarship.</strong> Baltic government scholarships offer monthly stipends of €140–€320. They require a separate application and strong supporting documents — we help prepare these.</p><p><strong>Layer 3: Private foundation grants.</strong> Several diaspora-led foundations fund East African students in European universities. These are often small (€500–€1,500/year) but add up and look excellent on your CV.</p><p><strong>Layer 4: Part-time income.</strong> Working 15–20 hours/week is legal and feasible on a student visa. At €7–€9/hour average, this adds €400–€600/month to your budget.</p><p>Combined, our best-funded students cover €8,000–€12,000 per year through these channels. Book a funding assessment to see what\'s available for your specific profile.</p>' },
+      { id: 'p6', title: 'Kaunas vs Vilnius: Which Lithuanian City Should You Choose?', excerpt: 'Lithuania\'s two main university cities have distinct characters. Here\'s how to decide which is right for you.', category: 'life', emoji: '🇱🇹', author: 'Tomas Norkus', date: 'October 2024', body: '<p>Lithuania has two major student cities, and the choice between them shapes your entire experience. Here\'s what you need to know.</p><p><strong>Vilnius</strong> is the capital and largest city. It has the most diverse international community, the most restaurant and nightlife options, and the highest costs. Rent runs €350–€500/month for a room. Vilnius University is here, along with Mykolas Romeris and several business schools. The old town is stunning.</p><p><strong>Kaunas</strong> is Lithuania\'s second city and technical hub. KTU (engineering) and LSMU (medicine) are both here. Costs are 20–30% lower than Vilnius. The student-to-city-resident ratio is higher, meaning the city revolves around student life. Kaunas has a warmer, more community-oriented feel according to most of our alumni.</p><p><strong>Our recommendation:</strong> For engineering and medicine, Kaunas. For business, law, and social sciences, Vilnius. For students who prioritise international social life and are willing to pay for it, Vilnius. For those who want to focus on studies in an affordable, tight-knit community, Kaunas.</p>' },
+    ];
+
+    async function loadPosts() {
+      const container = document.getElementById('postsContainer');
+      const loading = document.getElementById('postsLoading');
+      let posts = STATIC_POSTS;
+
+      // Try to load from Firebase if configured
+      if (firebaseConfig) {
+        try {
+          const app = initializeApp(firebaseConfig);
+          const db = getFirestore(app);
+          const q = query(collection(db, 'posts'), orderBy('createdAt', 'desc'), limit(20));
+          const snapshot = await getDocs(q);
+          if (!snapshot.empty) {
+            posts = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+          }
+        } catch (e) {
+          console.log('Firebase unavailable, using static posts');
+        }
+      }
+
+      loading.style.display = 'none';
+      window._posts = posts;
+      renderPosts(posts);
+    }
+
+    function renderPosts(posts) {
+      const container = document.getElementById('postsContainer');
+      // Remove existing cards
+      container.querySelectorAll('.post-card').forEach(c => c.remove());
+      posts.forEach(post => {
+        const el = document.createElement('div');
+        el.className = 'post-card';
+        el.dataset.cat = post.category;
+        el.innerHTML = `
+          <div class="post-thumb">${post.emoji || '📄'}</div>
+          <div class="post-body">
+            <div class="post-tags"><span class="post-tag">${post.category}</span></div>
+            <h3 class="post-title" onclick="window.openPostById('${post.id}')">${post.title}</h3>
+            <p class="post-excerpt">${post.excerpt}</p>
+            <div class="post-footer">
+              <span class="post-author">By <strong>${post.author}</strong> · ${post.date}</span>
+              <span class="read-more" onclick="window.openPostById('${post.id}')">Read →</span>
+            </div>
+          </div>`;
+        container.appendChild(el);
+      });
+    }
+
+    window.openPostById = function(id) {
+      const post = (window._posts || STATIC_POSTS).find(p => p.id === id);
+      if (!post) return;
+      document.getElementById('modalBody').innerHTML = `
+        <span class="category-tag">${post.category}</span>
+        <h2>${post.title}</h2>
+        <p class="modal-meta">By ${post.author} · ${post.date}</p>
+        ${post.body || '<p>' + post.excerpt + '</p>'}`;
+      document.getElementById('postModal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+    window.openModal = function(type) {
+      window.openPostById('p1');
+    };
+    window.closeModal = function() {
+      document.getElementById('postModal').classList.remove('open');
+      document.body.style.overflow = '';
+    };
+
+    // Category filter
+    document.querySelectorAll('.cat-pill').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        const cat = this.dataset.cat;
+        document.querySelectorAll('.post-card').forEach(card => {
+          card.classList.toggle('hidden', cat !== 'all' && card.dataset.cat !== cat);
+        });
+      });
+    });
+
+    loadPosts();
+  </script>
+  <script>
+    function handleSidebarNewsletter() {
+      const email = document.getElementById('sidebarEmail').value;
+      if (!email.includes('@')) { showToast('Please enter a valid email.'); return; }
+      showToast('You\'re subscribed! Welcome to the list.');
+      document.getElementById('sidebarEmail').value = '';
+    }
+  </script>
+</body>
+</html>
