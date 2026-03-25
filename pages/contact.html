@@ -111,7 +111,7 @@
             </div>
             <div class="info-text">
               <strong>Email Us</strong>
-              <span>info@maringlobalscholars.com<br>info@maringlobalscholars.com</span>
+              <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d0b9beb6bf90bdb1a2b9beb7bcbfb2b1bca3b3b8bfbcb1a2a3feb3bfbd">[email&#160;protected]</a><br><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d9b0b7bfb699b4b8abb0b7beb5b6bbb8b5aabab1b6b5b8abaaf7bab6b4">[email&#160;protected]</a></span>
             </div>
           </div>
 
@@ -264,33 +264,74 @@
       btn.textContent = 'Sending...';
       btn.classList.add('loading');
 
+      const firstName   = this.firstName.value.trim();
+      const lastName    = this.lastName.value.trim();
+      const destination = this.destination.value || 'Europe';
+
       const data = {
-        firstName:   this.firstName.value.trim(),
-        lastName:    this.lastName.value.trim(),
+        firstName,
+        lastName,
         email:       this.email.value.trim(),
         phone:       this.phone.value.trim(),
         country:     this.country.value,
-        destination: this.destination.value,
+        destination,
         field:       this.field.value,
         message:     this.message.value.trim(),
         status:      'new',
-        createdAt:   serverTimestamp ? serverTimestamp() : new Date().toISOString()
+        createdAt:   serverTimestamp()
       };
 
       try {
         if (db) {
           await addDoc(collection(db, 'inquiries'), data);
         }
-        // Success
+
+        // ── WhatsApp Auto-Reply to student ──
+        // Uses wa.me deep link — opens WhatsApp with pre-filled message
+        // Student receives this when they have WhatsApp
+        if (data.phone) {
+          const phone = data.phone.replace(/\D/g, '');
+          const msg = encodeURIComponent(
+            `Hi ${firstName}! 👋\n\nThank you for reaching out to *MarinGlobal Scholars*.\n\nWe've received your inquiry about studying in *${destination}* and one of our advisors will contact you within 24 hours.\n\nIn the meantime, feel free to explore our programs: https://nickson046.github.io/education/pages/programs.html\n\n— MarinGlobal Scholars Team 🌍`
+          );
+          // Store for sending — we open it silently
+          window._pendingWA = { phone, msg };
+        }
+
+        // ── Notify admin via WhatsApp (CallMeBot) ──
+        // SETUP: Register your number at https://www.callmebot.com/blog/free-api-whatsapp-messages/
+        // Then replace YOUR_PHONE and YOUR_API_KEY below
+        const ADMIN_PHONE   = '255000000000'; // ← Replace with your WhatsApp number (with country code, no +)
+        const CALLMEBOT_KEY = 'YOUR_CALLMEBOT_KEY'; // ← Get free key at callmebot.com
+
+        if (CALLMEBOT_KEY !== 'YOUR_CALLMEBOT_KEY') {
+          const adminMsg = encodeURIComponent(
+            `🔔 NEW INQUIRY - MarinGlobal\n\nName: ${firstName} ${lastName}\nEmail: ${data.email}\nPhone: ${data.phone || '—'}\nFrom: ${data.country || '—'}\nDestination: ${destination}\nField: ${data.field || '—'}\n\nMessage: ${data.message.slice(0,200)}`
+          );
+          fetch(`https://api.callmebot.com/whatsapp.php?phone=${ADMIN_PHONE}&text=${adminMsg}&apikey=${CALLMEBOT_KEY}`)
+            .catch(() => {}); // Silent fail — non-critical
+        }
+
+        // Success UI
         btn.textContent = 'Message Sent ✓';
         btn.style.background = '#2d7a45';
-        window.showToast('Thank you! We\'ll be in touch within 24 hours.');
+        window.showToast("Thank you! We'll be in touch within 24 hours.");
         this.reset();
+
+        // Open WhatsApp to send auto-reply to student (opens in new tab)
+        if (window._pendingWA) {
+          setTimeout(() => {
+            window.open(`https://wa.me/${window._pendingWA.phone}?text=${window._pendingWA.msg}`, '_blank');
+            window._pendingWA = null;
+          }, 1500);
+        }
+
         setTimeout(() => {
           btn.textContent = 'Send Message →';
           btn.style.background = '';
           btn.classList.remove('loading');
         }, 3000);
+
       } catch(err) {
         console.error('Submission error:', err);
         btn.textContent = 'Send Message →';
@@ -299,6 +340,7 @@
       }
     });
   </script>
+  <script src="../js/tawkto.js"></script>
   <script src="../js/cookie-consent.js"></script>
 </body>
 </html>
