@@ -3,590 +3,892 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Panel — MarinGlobal Scholars</title>
+  <title>Admin — MarinGlobal Scholars</title>
+
+  <!-- PWA support -->
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="MG Admin" />
+  <meta name="theme-color" content="#0D1B3E" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230D1B3E' rx='20'/><circle cx='50' cy='50' r='32' fill='%23C9A84C'/><polygon points='50,22 68,33 68,55 50,66 32,55 32,33' fill='none' stroke='%230D1B3E' stroke-width='3'/></svg>" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet" />
+
   <style>
     :root {
       --navy: #0D1B3E;
+      --navy2: #162251;
       --gold: #C9A84C;
+      --gold2: #E8C97A;
       --cream: #F8F4EE;
-      --sidebar-width: 240px;
+      --green: #2d7a45;
+      --red: #e53935;
+      --sidebar: 240px;
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'DM Sans', sans-serif; background: #f5f5f7; color: #1a1a2e; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: #f0f2f5; color: #1a1a2e; }
 
-    /* LOGIN */
+    /* ═══════════ LOGIN ═══════════ */
     .login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--navy); }
-    .login-card { background: white; border-radius: 16px; padding: 2.5rem; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
-    .login-logo { font-size: 2rem; margin-bottom: 0.5rem; }
-    .login-card h1 { font-size: 1.3rem; color: var(--navy); margin-bottom: 0.25rem; }
-    .login-card p { font-size: 0.82rem; color: #999; margin-bottom: 2rem; }
-    .login-input { width: 100%; padding: 0.8rem 1rem; border: 1.5px solid #e0dcd5; border-radius: 8px; font-family: inherit; font-size: 0.9rem; margin-bottom: 0.75rem; outline: none; transition: border-color 0.2s; }
+    .login-card { background: white; border-radius: 16px; padding: 2.5rem; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.35); }
+    .login-logo { font-size: 2.5rem; margin-bottom: 0.5rem; }
+    .login-card h1 { font-size: 1.4rem; color: var(--navy); margin-bottom: 0.25rem; }
+    .login-card > p { font-size: 0.82rem; color: #999; margin-bottom: 2rem; }
+    .login-input { width: 100%; padding: 0.8rem 1rem; border: 1.5px solid #e0dcd5; border-radius: 8px; font-family: inherit; font-size: 0.9rem; margin-bottom: 0.75rem; outline: none; transition: border-color 0.2s; display: block; }
     .login-input:focus { border-color: var(--gold); }
-    .login-btn { width: 100%; padding: 0.85rem; background: var(--navy); color: var(--gold); border: none; border-radius: 8px; font-family: inherit; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.2s; }
-    .login-btn:hover { background: #162a5a; }
-    .login-error { color: #e53935; font-size: 0.82rem; margin-top: 0.75rem; min-height: 1.2em; }
+    .login-btn { width: 100%; padding: 0.9rem; background: var(--navy); color: var(--gold); border: none; border-radius: 8px; font-family: inherit; font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.2s; }
+    .login-btn:hover { background: var(--navy2); }
+    .login-error { color: var(--red); font-size: 0.82rem; margin-top: 0.75rem; min-height: 1.2em; }
 
-    /* ADMIN LAYOUT */
+    /* ═══════════ LAYOUT ═══════════ */
     .admin-layout { display: none; min-height: 100vh; }
     .admin-layout.visible { display: flex; }
-    .sidebar { width: var(--sidebar-width); background: var(--navy); flex-shrink: 0; display: flex; flex-direction: column; position: fixed; top: 0; bottom: 0; z-index: 100; }
-    .sidebar-brand { padding: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
-    .sidebar-brand .brand { font-size: 1rem; color: var(--cream); font-weight: 600; }
-    .sidebar-brand .sub { font-size: 0.72rem; color: var(--gold); font-family: 'Space Mono', monospace; margin-top: 0.2rem; }
+
+    /* ═══════════ SIDEBAR ═══════════ */
+    .sidebar { width: var(--sidebar); background: var(--navy); flex-shrink: 0; display: flex; flex-direction: column; position: fixed; top: 0; bottom: 0; z-index: 200; transition: transform 0.3s; }
+    .sidebar-brand { padding: 1.5rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between; }
+    .sidebar-brand .brand { font-size: 1rem; color: var(--cream); font-weight: 700; }
+    .sidebar-brand .sub { font-size: 0.65rem; color: var(--gold); font-family: 'Space Mono', monospace; letter-spacing: 0.1em; margin-top: 0.15rem; }
+    .sidebar-close { display: none; background: none; border: none; color: rgba(255,255,255,0.5); font-size: 1.4rem; cursor: pointer; }
     .sidebar-nav { flex: 1; padding: 1rem 0; overflow-y: auto; }
-    .nav-group-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(255,255,255,0.3); padding: 0.75rem 1.25rem 0.4rem; font-family: 'Space Mono', monospace; }
-    .nav-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 1.25rem; color: rgba(255,255,255,0.65); font-size: 0.875rem; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent; }
+    .nav-label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(255,255,255,0.25); padding: 0.75rem 1.25rem 0.35rem; font-family: 'Space Mono', monospace; }
+    .nav-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 1.25rem; color: rgba(255,255,255,0.6); font-size: 0.875rem; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent; user-select: none; }
     .nav-item:hover { background: rgba(255,255,255,0.06); color: white; }
-    .nav-item.active { background: rgba(201,168,76,0.12); color: var(--gold); border-left-color: var(--gold); }
-    .nav-item .icon { width: 18px; text-align: center; font-size: 1rem; }
+    .nav-item.active { background: rgba(201,168,76,0.12); color: var(--gold); border-left-color: var(--gold); font-weight: 600; }
+    .nav-item .ni { font-size: 1rem; width: 18px; text-align: center; }
     .sidebar-footer { padding: 1.25rem; border-top: 1px solid rgba(255,255,255,0.08); }
-    .logout-btn { width: 100%; padding: 0.6rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); border-radius: 6px; color: rgba(255,255,255,0.65); font-family: inherit; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; }
-    .logout-btn:hover { background: rgba(255,255,255,0.12); color: white; }
+    .admin-email { font-size: 0.75rem; color: rgba(255,255,255,0.35); margin-bottom: 0.6rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .logout-btn { width: 100%; padding: 0.6rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: rgba(255,255,255,0.6); font-family: inherit; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; }
+    .logout-btn:hover { background: rgba(255,0,0,0.15); border-color: rgba(255,0,0,0.3); color: #ff6b6b; }
 
-    /* MAIN CONTENT */
-    .admin-main { margin-left: var(--sidebar-width); flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
-    .admin-topbar { background: white; padding: 1rem 1.5rem; border-bottom: 1px solid #e8e3db; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 50; }
-    .topbar-title { font-size: 1.1rem; font-weight: 600; color: var(--navy); }
-    .topbar-actions { display: flex; gap: 0.75rem; align-items: center; }
-    .btn-primary { background: var(--navy); color: var(--gold); padding: 0.5rem 1.1rem; border-radius: 6px; border: none; font-family: inherit; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-    .btn-primary:hover { background: #162a5a; }
-    .btn-ghost { background: none; border: 1.5px solid #e0dcd5; padding: 0.5rem 1.1rem; border-radius: 6px; font-family: inherit; font-size: 0.85rem; cursor: pointer; color: #666; transition: all 0.2s; }
+    /* ═══════════ MAIN CONTENT ═══════════ */
+    .admin-main { margin-left: var(--sidebar); flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+    .topbar { background: white; padding: 0.9rem 1.5rem; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .topbar-left { display: flex; align-items: center; gap: 1rem; }
+    .menu-toggle { display: none; background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--navy); }
+    .topbar-title { font-size: 1.1rem; font-weight: 700; color: var(--navy); }
+    .topbar-right { display: flex; gap: 0.6rem; align-items: center; }
+    .btn-primary { background: var(--navy); color: var(--gold); padding: 0.5rem 1.1rem; border-radius: 6px; border: none; font-family: inherit; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+    .btn-primary:hover { background: var(--navy2); transform: translateY(-1px); }
+    .btn-ghost { background: none; border: 1.5px solid #e0dcd5; padding: 0.5rem 1rem; border-radius: 6px; font-family: inherit; font-size: 0.82rem; cursor: pointer; color: #666; transition: all 0.2s; white-space: nowrap; }
     .btn-ghost:hover { border-color: var(--navy); color: var(--navy); }
-    .admin-content { padding: 2rem; flex: 1; }
+    .btn-export { background: #16a34a; color: white; padding: 0.5rem 1rem; border-radius: 6px; border: none; font-family: inherit; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+    .btn-export:hover { background: #15803d; }
 
-    /* PANELS */
+    .admin-content { padding: 1.5rem; flex: 1; }
+
+    /* ═══════════ PANELS ═══════════ */
     .panel { display: none; }
     .panel.active { display: block; }
 
-    /* STATS CARDS */
-    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2rem; }
-    .stat-card { background: white; border-radius: 10px; padding: 1.25rem; box-shadow: 0 1px 8px rgba(0,0,0,0.05); }
-    .stat-card .s-label { font-size: 0.75rem; color: #999; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; font-family: 'Space Mono', monospace; }
-    .stat-card .s-value { font-size: 2rem; font-weight: 700; color: var(--navy); }
-    .stat-card .s-change { font-size: 0.78rem; color: #2d7a45; margin-top: 0.25rem; }
+    /* ═══════════ STAT CARDS ═══════════ */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .stat-card { background: white; border-radius: 12px; padding: 1.25rem 1.5rem; box-shadow: 0 1px 6px rgba(0,0,0,0.06); border-left: 4px solid transparent; transition: all 0.2s; }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+    .stat-card.blue  { border-left-color: #3b82f6; }
+    .stat-card.gold  { border-left-color: var(--gold); }
+    .stat-card.green { border-left-color: var(--green); }
+    .stat-card.navy  { border-left-color: var(--navy); }
+    .s-label { font-size: 0.72rem; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; font-family: 'Space Mono', monospace; }
+    .s-value { font-size: 2.2rem; font-weight: 800; color: var(--navy); line-height: 1; }
+    .s-change { font-size: 0.75rem; color: var(--green); margin-top: 0.4rem; }
 
-    /* TABLE */
-    .table-card { background: white; border-radius: 10px; box-shadow: 0 1px 8px rgba(0,0,0,0.05); overflow: hidden; }
-    .table-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid #f0ece5; display: flex; justify-content: space-between; align-items: center; }
-    .table-header h3 { font-size: 1rem; font-weight: 600; color: var(--navy); }
-    table { width: 100%; border-collapse: collapse; }
-    thead th { background: #fafaf8; padding: 0.75rem 1rem; text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #999; font-family: 'Space Mono', monospace; font-weight: 400; }
-    tbody tr { border-top: 1px solid #f0ece5; transition: background 0.15s; }
-    tbody tr:hover { background: #fafaf8; }
-    tbody td { padding: 0.85rem 1rem; font-size: 0.875rem; color: #333; }
-    .badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.72rem; font-weight: 600; }
-    .badge-new { background: #e3f2fd; color: #1565c0; }
-    .badge-published { background: #e8f5e9; color: #2d7a45; }
-    .badge-draft { background: #fff3e0; color: #e65100; }
-    .badge-contacted { background: #f3e5f5; color: #6a1b9a; }
-    .badge-enrolled { background: #e8f5e9; color: #1b5e20; }
-    .action-btn { background: none; border: none; cursor: pointer; padding: 0.3rem; border-radius: 4px; color: #999; transition: all 0.2s; font-size: 0.9rem; }
-    .action-btn:hover { background: #f0ece5; color: var(--navy); }
+    /* ═══════════ TABLE CARD ═══════════ */
+    .table-card { background: white; border-radius: 12px; box-shadow: 0 1px 6px rgba(0,0,0,0.06); overflow: hidden; margin-bottom: 1.5rem; }
+    .table-card-header { padding: 1rem 1.5rem; border-bottom: 1px solid #f3f4f6; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+    .table-card-header h3 { font-size: 1rem; font-weight: 700; color: var(--navy); }
+    .table-search { padding: 0.45rem 0.75rem; border: 1.5px solid #e5e7eb; border-radius: 6px; font-family: inherit; font-size: 0.82rem; outline: none; width: 200px; transition: border-color 0.2s; }
+    .table-search:focus { border-color: var(--gold); }
+    .tbl { width: 100%; border-collapse: collapse; }
+    .tbl thead th { background: #f9fafb; padding: 0.75rem 1rem; text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #9ca3af; font-family: 'Space Mono', monospace; font-weight: 400; white-space: nowrap; }
+    .tbl tbody tr { border-top: 1px solid #f3f4f6; transition: background 0.15s; }
+    .tbl tbody tr:hover { background: #fafaf8; }
+    .tbl tbody td { padding: 0.85rem 1rem; font-size: 0.875rem; color: #374151; vertical-align: middle; }
+    .tbl .td-truncate { max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-    /* FORM / MODAL */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 500; align-items: center; justify-content: center; padding: 1rem; }
+    .badge { display: inline-block; padding: 0.2rem 0.65rem; border-radius: 50px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; }
+    .badge-new       { background: #dbeafe; color: #1d4ed8; }
+    .badge-published { background: #dcfce7; color: #15803d; }
+    .badge-draft     { background: #fef3c7; color: #b45309; }
+    .badge-contacted { background: #f3e8ff; color: #7c3aed; }
+    .badge-enrolled  { background: #d1fae5; color: #065f46; }
+    .badge-closed    { background: #f1f5f9; color: #64748b; }
+
+    .act-btn { background: none; border: none; cursor: pointer; padding: 0.35rem 0.5rem; border-radius: 6px; color: #9ca3af; transition: all 0.2s; font-size: 0.9rem; }
+    .act-btn:hover { background: #f0ece5; color: var(--navy); }
+    .act-btn.danger:hover { background: #fee2e2; color: var(--red); }
+
+    /* Status dropdown inline */
+    .status-select { font-size: 0.75rem; padding: 0.25rem 0.5rem; border: 1px solid #e5e7eb; border-radius: 4px; font-family: inherit; background: white; cursor: pointer; outline: none; }
+    .status-select:focus { border-color: var(--gold); }
+
+    /* ═══════════ MODAL ═══════════ */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 500; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(4px); }
     .modal-overlay.open { display: flex; }
-    .modal-box { background: white; border-radius: 12px; padding: 2rem; width: 100%; max-width: 600px; max-height: 90vh; overflow-y: auto; }
-    .modal-box h2 { font-size: 1.3rem; color: var(--navy); margin-bottom: 1.5rem; }
+    .modal-box { background: white; border-radius: 16px; padding: 2rem; width: 100%; max-width: 620px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.25); }
+    .modal-box h2 { font-size: 1.25rem; color: var(--navy); margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid #f3f4f6; }
+    .modal-close { position: absolute; top: 1.25rem; right: 1.25rem; background: #f3f4f6; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; color: #666; transition: all 0.2s; }
+    .modal-close:hover { background: var(--navy); color: var(--gold); }
     .form-group { margin-bottom: 1rem; }
-    .form-group label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--navy); margin-bottom: 0.35rem; }
-    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.65rem 0.9rem; border: 1.5px solid #e0dcd5; border-radius: 6px; font-family: inherit; font-size: 0.875rem; outline: none; transition: border-color 0.2s; }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold); }
-    .form-group textarea { resize: vertical; min-height: 120px; }
+    .form-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--navy); margin-bottom: 0.35rem; }
+    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.65rem 0.9rem; border: 1.5px solid #e5e7eb; border-radius: 8px; font-family: inherit; font-size: 0.875rem; outline: none; transition: border-color 0.2s; background: #fafaf8; }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold); background: white; }
+    .form-group textarea { resize: vertical; min-height: 130px; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.5rem; }
+    .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #f3f4f6; }
 
-    /* LOADING / EMPTY STATES */
-    .empty-state { text-align: center; padding: 3rem; color: #ccc; }
-    .empty-state .icon { font-size: 3rem; margin-bottom: 0.75rem; }
-    .empty-state p { font-size: 0.9rem; }
+    /* ═══════════ EMPTY STATE ═══════════ */
+    .empty-state { text-align: center; padding: 3rem 1rem; color: #d1d5db; }
+    .empty-state .ei { font-size: 2.5rem; margin-bottom: 0.75rem; }
+    .empty-state p { font-size: 0.875rem; }
 
-    .toast { position: fixed; bottom: 2rem; right: 2rem; background: var(--navy); color: var(--gold); padding: 0.75rem 1.25rem; border-radius: 8px; font-size: 0.875rem; z-index: 9999; transform: translateY(100px); opacity: 0; transition: all 0.3s; }
+    /* ═══════════ TOAST ═══════════ */
+    .toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--navy); color: var(--gold); padding: 0.8rem 1.4rem; border-radius: 10px; font-size: 0.875rem; font-weight: 500; z-index: 9999; transform: translateY(80px); opacity: 0; transition: all 0.35s cubic-bezier(0.25,0.46,0.45,0.94); box-shadow: 0 8px 24px rgba(0,0,0,0.2); max-width: 320px; }
     .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { background: var(--green); color: white; }
+    .toast.error   { background: var(--red); color: white; }
+
+    /* ═══════════ SIDEBAR OVERLAY (mobile) ═══════════ */
+    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 190; }
+    .sidebar-overlay.show { display: block; }
+
+    /* ═══════════ RESPONSIVE ═══════════ */
+    @media (max-width: 768px) {
+      :root { --sidebar: 0px; }
+      .sidebar { transform: translateX(-260px); width: 260px; }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-close { display: block; }
+      .admin-main { margin-left: 0; }
+      .menu-toggle { display: block; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .form-row { grid-template-columns: 1fr; }
+      .topbar-right .btn-ghost { display: none; }
+      .tbl thead th:nth-child(n+4) { display: none; }
+      .tbl tbody td:nth-child(n+4) { display: none; }
+      .table-search { width: 140px; }
+    }
+    @media (max-width: 480px) {
+      .stats-row { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+      .admin-content { padding: 1rem; }
+      .s-value { font-size: 1.8rem; }
+    }
+
+    /* ═══════════ LOADING SPINNER ═══════════ */
+    .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid rgba(201,168,76,0.3); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ═══════════ DETAIL PANEL (inquiry view) ═══════════ */
+    .detail-panel { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 6px rgba(0,0,0,0.06); margin-bottom: 1.5rem; }
+    .detail-panel h4 { font-size: 0.85rem; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Space Mono', monospace; margin-bottom: 0.5rem; }
+    .detail-panel p { font-size: 0.9rem; color: #374151; line-height: 1.6; }
   </style>
 </head>
 <body>
 
-  <!-- LOGIN -->
-  <div class="login-screen" id="loginScreen">
-    <div class="login-card">
-      <div class="login-logo">🌍</div>
-      <h1>MarinGlobal Admin</h1>
-      <p>Secure management portal</p>
-      <input class="login-input" type="email" id="loginEmail" placeholder="Email address" />
-      <input class="login-input" type="password" id="loginPassword" placeholder="Password" onkeydown="if(event.key==='Enter')doLogin()" />
-      <button class="login-btn" onclick="doLogin()">Sign In</button>
-      <div class="login-error" id="loginError"></div>
-    </div>
+<!-- ═══════════════════════════════
+     LOGIN SCREEN
+═══════════════════════════════ -->
+<div class="login-screen" id="loginScreen">
+  <div class="login-card">
+    <div class="login-logo">🌍</div>
+    <h1>MarinGlobal Admin</h1>
+    <p>Secure management portal</p>
+    <input class="login-input" type="email" id="loginEmail" placeholder="Email address" autocomplete="email" />
+    <input class="login-input" type="password" id="loginPassword" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter') doLogin()" />
+    <button class="login-btn" onclick="doLogin()" id="loginBtn">Sign In</button>
+    <div class="login-error" id="loginError"></div>
   </div>
+</div>
 
-  <!-- ADMIN LAYOUT -->
-  <div class="admin-layout" id="adminLayout">
-    <aside class="sidebar">
-      <div class="sidebar-brand">
+<!-- ═══════════════════════════════
+     ADMIN LAYOUT
+═══════════════════════════════ -->
+<div class="admin-layout" id="adminLayout">
+
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <div>
         <div class="brand">MarinGlobal</div>
         <div class="sub">ADMIN PORTAL</div>
       </div>
-      <nav class="sidebar-nav">
-        <div class="nav-group-label">Overview</div>
-        <div class="nav-item active" onclick="showPanel('dashboard', this)"><span class="icon">📊</span> Dashboard</div>
-        <div class="nav-group-label">Content</div>
-        <div class="nav-item" onclick="showPanel('posts', this)"><span class="icon">📝</span> Blog Posts</div>
-        <div class="nav-item" onclick="showPanel('testimonials', this)"><span class="icon">💬</span> Testimonials</div>
-        <div class="nav-group-label">Admissions</div>
-        <div class="nav-item" onclick="showPanel('inquiries', this)"><span class="icon">📨</span> Inquiries</div>
-        <div class="nav-group-label">Settings</div>
-        <div class="nav-item" onclick="showPanel('settings', this)"><span class="icon">⚙️</span> Settings</div>
-      </nav>
-      <div class="sidebar-footer">
-        <div style="font-size:0.78rem;color:rgba(255,255,255,0.4);margin-bottom:0.75rem;" id="adminEmail"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c5a4a1a8acab85a8a4b7acaba2a9aaa7a4a9eba6aaa8">[email&#160;protected]</a></div>
-        <button class="logout-btn" onclick="doLogout()">Sign Out</button>
+      <button class="sidebar-close" onclick="closeSidebar()">✕</button>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-label">Overview</div>
+      <div class="nav-item active" onclick="showPanel('dashboard',this)"><span class="ni">📊</span> Dashboard</div>
+      <div class="nav-label">Content</div>
+      <div class="nav-item" onclick="showPanel('posts',this)"><span class="ni">📝</span> Blog Posts</div>
+      <div class="nav-item" onclick="showPanel('testimonials',this)"><span class="ni">💬</span> Testimonials</div>
+      <div class="nav-label">Admissions</div>
+      <div class="nav-item" onclick="showPanel('inquiries',this)"><span class="ni">📨</span> Inquiries</div>
+      <div class="nav-label">Tools</div>
+      <div class="nav-item" onclick="showPanel('export',this)"><span class="ni">📊</span> Export Data</div>
+      <div class="nav-item" onclick="showPanel('settings',this)"><span class="ni">⚙️</span> Settings</div>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="admin-email" id="adminEmail">—</div>
+      <button class="logout-btn" onclick="doLogout()">Sign Out</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+    <div class="topbar">
+      <div class="topbar-left">
+        <button class="menu-toggle" onclick="openSidebar()">☰</button>
+        <span class="topbar-title" id="topbarTitle">Dashboard</span>
       </div>
-    </aside>
+      <div class="topbar-right">
+        <button class="btn-ghost" onclick="loadData()" title="Refresh">↻ Refresh</button>
+        <button class="btn-ghost" onclick="window.open('../index.html','_blank')">View Site ↗</button>
+        <button class="btn-primary" id="topbarAddBtn" onclick="handleAdd()" style="display:none;">+ Add New</button>
+      </div>
+    </div>
 
-    <main class="admin-main">
-      <div class="admin-topbar">
-        <div class="topbar-title" id="topbarTitle">Dashboard</div>
-        <div class="topbar-actions">
-          <button class="btn-ghost" onclick="window.open('index.html','_blank')">View Site ↗</button>
-          <button class="btn-primary" id="topbarAddBtn" onclick="handleAdd()" style="display:none;">+ New Post</button>
+    <div class="admin-content">
+
+      <!-- DASHBOARD -->
+      <div class="panel active" id="panel-dashboard">
+        <div class="stats-row">
+          <div class="stat-card blue">
+            <div class="s-label">Total Inquiries</div>
+            <div class="s-value" id="stat-inquiries"><span class="spinner"></span></div>
+            <div class="s-change" id="stat-inquiries-sub">Loading…</div>
+          </div>
+          <div class="stat-card gold">
+            <div class="s-label">Published Posts</div>
+            <div class="s-value" id="stat-posts"><span class="spinner"></span></div>
+            <div class="s-change" id="stat-posts-sub">Loading…</div>
+          </div>
+          <div class="stat-card green">
+            <div class="s-label">Testimonials</div>
+            <div class="s-value" id="stat-testimonials"><span class="spinner"></span></div>
+            <div class="s-change">Live on site</div>
+          </div>
+          <div class="stat-card navy">
+            <div class="s-label">Enrolled</div>
+            <div class="s-value" id="stat-enrolled"><span class="spinner"></span></div>
+            <div class="s-change">This intake</div>
+          </div>
+        </div>
+        <div class="table-card">
+          <div class="table-card-header">
+            <h3>Recent Inquiries</h3>
+            <button class="btn-primary" onclick="showPanel('inquiries', document.querySelector('[onclick*=inquiries]'))">View All →</button>
+          </div>
+          <table class="tbl">
+            <thead><tr><th>Name</th><th>Email</th><th>Destination</th><th>Status</th><th>Date</th></tr></thead>
+            <tbody id="recentInquiries"><tr><td colspan="5"><div class="empty-state"><div class="ei">📭</div><p>No inquiries yet</p></div></td></tr></tbody>
+          </table>
         </div>
       </div>
 
-      <div class="admin-content">
-
-        <!-- DASHBOARD -->
-        <div class="panel active" id="panel-dashboard">
-          <div class="stats-row">
-            <div class="stat-card"><div class="s-label">Total Inquiries</div><div class="s-value" id="stat-inquiries">—</div><div class="s-change">↑ 12 this month</div></div>
-            <div class="stat-card"><div class="s-label">Published Posts</div><div class="s-value" id="stat-posts">—</div><div class="s-change">↑ 2 new</div></div>
-            <div class="stat-card"><div class="s-label">Testimonials</div><div class="s-value" id="stat-testimonials">—</div><div class="s-change">Live on site</div></div>
-            <div class="stat-card"><div class="s-label">Enrolled</div><div class="s-value" id="stat-enrolled">—</div><div class="s-change">This intake</div></div>
+      <!-- BLOG POSTS -->
+      <div class="panel" id="panel-posts">
+        <div class="table-card">
+          <div class="table-card-header">
+            <h3>Blog Posts</h3>
+            <div style="display:flex;gap:0.5rem;align-items:center;">
+              <input class="table-search" type="text" placeholder="Search posts…" oninput="filterTable('postsTable', this.value)" />
+              <button class="btn-primary" onclick="openPostModal()">+ New Post</button>
+            </div>
           </div>
-          <div class="table-card">
-            <div class="table-header"><h3>Recent Inquiries</h3></div>
-            <table>
-              <thead><tr><th>Name</th><th>Email</th><th>Destination</th><th>Status</th><th>Date</th></tr></thead>
-              <tbody id="recentInquiries">
-                <tr><td colspan="5"><div class="empty-state"><div class="icon">📭</div><p>No inquiries yet</p></div></td></tr>
-              </tbody>
-            </table>
+          <table class="tbl">
+            <thead><tr><th>Title</th><th>Category</th><th>Author</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody id="postsTable"><tr><td colspan="6"><div class="empty-state"><div class="ei">📝</div><p>No posts yet.</p></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TESTIMONIALS -->
+      <div class="panel" id="panel-testimonials">
+        <div class="table-card">
+          <div class="table-card-header">
+            <h3>Student Testimonials</h3>
+            <div style="display:flex;gap:0.5rem;align-items:center;">
+              <input class="table-search" type="text" placeholder="Search…" oninput="filterTable('testimonialsTable', this.value)" />
+              <button class="btn-primary" onclick="openTestimonialModal()">+ Add Testimonial</button>
+            </div>
+          </div>
+          <table class="tbl">
+            <thead><tr><th>Student</th><th>Route</th><th>University</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="testimonialsTable"><tr><td colspan="5"><div class="empty-state"><div class="ei">💬</div><p>No testimonials yet.</p></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- INQUIRIES -->
+      <div class="panel" id="panel-inquiries">
+        <div class="table-card">
+          <div class="table-card-header">
+            <h3>All Inquiries</h3>
+            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;">
+              <input class="table-search" type="text" placeholder="Search inquiries…" oninput="filterTable('inquiriesTable', this.value)" />
+              <button class="btn-export" onclick="exportToCSV()">⬇ Export CSV</button>
+            </div>
+          </div>
+          <table class="tbl">
+            <thead><tr><th>Name</th><th>Email</th><th>Country</th><th>Destination</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody id="inquiriesTable"><tr><td colspan="7"><div class="empty-state"><div class="ei">📨</div><p>No inquiries yet.</p></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- EXPORT / GOOGLE SHEETS -->
+      <div class="panel" id="panel-export">
+        <div class="table-card" style="padding:2rem;">
+          <h3 style="margin-bottom:0.5rem;color:var(--navy);">📊 Export & Google Sheets</h3>
+          <p style="color:#666;font-size:0.875rem;margin-bottom:2rem;line-height:1.6;">Download your data as CSV and import it into Google Sheets or Excel, or use the Google Sheets import link below.</p>
+
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:2rem;">
+            <div style="border:1.5px solid #e5e7eb;border-radius:10px;padding:1.5rem;text-align:center;">
+              <div style="font-size:2rem;margin-bottom:0.5rem;">📨</div>
+              <h4 style="color:var(--navy);margin-bottom:0.5rem;">Inquiries</h4>
+              <p style="font-size:0.8rem;color:#666;margin-bottom:1rem;">All student inquiries with status, contact details and destination.</p>
+              <button class="btn-export" style="width:100%;" onclick="exportToCSV('inquiries')">⬇ Download CSV</button>
+            </div>
+            <div style="border:1.5px solid #e5e7eb;border-radius:10px;padding:1.5rem;text-align:center;">
+              <div style="font-size:2rem;margin-bottom:0.5rem;">📝</div>
+              <h4 style="color:var(--navy);margin-bottom:0.5rem;">Blog Posts</h4>
+              <p style="font-size:0.8rem;color:#666;margin-bottom:1rem;">All blog posts with titles, categories, authors and publish status.</p>
+              <button class="btn-export" style="width:100%;" onclick="exportToCSV('posts')">⬇ Download CSV</button>
+            </div>
+            <div style="border:1.5px solid #e5e7eb;border-radius:10px;padding:1.5rem;text-align:center;">
+              <div style="font-size:2rem;margin-bottom:0.5rem;">💬</div>
+              <h4 style="color:var(--navy);margin-bottom:0.5rem;">Testimonials</h4>
+              <p style="font-size:0.8rem;color:#666;margin-bottom:1rem;">All student testimonials with names, universities and status.</p>
+              <button class="btn-export" style="width:100%;" onclick="exportToCSV('testimonials')">⬇ Download CSV</button>
+            </div>
+          </div>
+
+          <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:1.5rem;">
+            <h4 style="color:#15803d;margin-bottom:0.75rem;">📗 Import into Google Sheets</h4>
+            <ol style="font-size:0.875rem;color:#374151;line-height:2;padding-left:1.5rem;">
+              <li>Click <strong>Download CSV</strong> above for the data you want</li>
+              <li>Open <a href="https://sheets.google.com" target="_blank" style="color:#15803d;">Google Sheets</a> and create a new spreadsheet</li>
+              <li>Click <strong>File → Import → Upload</strong> and select the downloaded CSV</li>
+              <li>Choose <strong>"Replace spreadsheet"</strong> and click Import</li>
+              <li>Your data is now in Google Sheets — you can sort, filter and analyse freely</li>
+            </ol>
           </div>
         </div>
+      </div>
 
-        <!-- POSTS -->
-        <div class="panel" id="panel-posts">
-          <div class="table-card">
-            <div class="table-header"><h3>Blog Posts</h3></div>
-            <table>
-              <thead><tr><th>Title</th><th>Category</th><th>Author</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
-              <tbody id="postsTable">
-                <tr><td colspan="6"><div class="empty-state"><div class="icon">📝</div><p>No posts yet. Create your first post.</p></div></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- TESTIMONIALS -->
-        <div class="panel" id="panel-testimonials">
-          <div class="table-card">
-            <div class="table-header"><h3>Student Testimonials</h3></div>
-            <table>
-              <thead><tr><th>Student</th><th>Country</th><th>University</th><th>Status</th><th>Actions</th></tr></thead>
-              <tbody id="testimonialsTable">
-                <tr><td colspan="5"><div class="empty-state"><div class="icon">💬</div><p>No testimonials yet.</p></div></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- INQUIRIES -->
-        <div class="panel" id="panel-inquiries">
-          <div class="table-card">
-            <div class="table-header"><h3>All Inquiries</h3></div>
-            <table>
-              <thead><tr><th>Name</th><th>Email</th><th>Country</th><th>Destination</th><th>Status</th><th>Received</th><th>Actions</th></tr></thead>
-              <tbody id="inquiriesTable">
-                <tr><td colspan="7"><div class="empty-state"><div class="icon">📨</div><p>No inquiries yet.</p></div></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- SETTINGS -->
-        <div class="panel" id="panel-settings">
-          <div class="table-card" style="padding:2rem;">
-            <h3 style="margin-bottom:1.5rem;font-size:1rem;color:var(--navy);">Firebase Configuration</h3>
-            <p style="color:#666;font-size:0.875rem;margin-bottom:1.5rem;">Update your Firebase project credentials. These are saved in <code>../js/firebase-config.js</code>.</p>
-            <div class="form-group"><label>Project ID</label><input type="text" id="cfg-projectId" placeholder="your-project-id" /></div>
-            <div class="form-group"><label>API Key</label><input type="text" id="cfg-apiKey" placeholder="AIzaSy..." /></div>
-            <div class="form-group"><label>App ID</label><input type="text" id="cfg-appId" placeholder="1:123456:web:abc123" /></div>
+      <!-- SETTINGS -->
+      <div class="panel" id="panel-settings">
+        <div class="table-card" style="padding:2rem;margin-bottom:1.5rem;">
+          <h3 style="color:var(--navy);margin-bottom:0.5rem;">⚙️ Site Settings</h3>
+          <p style="color:#666;font-size:0.875rem;margin-bottom:1.5rem;">Update contact details shown on the website.</p>
+          <div class="form-row">
             <div class="form-group"><label>WhatsApp Number</label><input type="text" id="cfg-whatsapp" placeholder="255712345678" /></div>
-            <button class="btn-primary" onclick="saveSettings()">Save Configuration</button>
+            <div class="form-group"><label>Contact Email</label><input type="text" id="cfg-email" placeholder="info@maringlobalscholars.com" /></div>
           </div>
+          <div class="form-group"><label>Office Location</label><input type="text" id="cfg-location" placeholder="Dar es Salaam, Tanzania" /></div>
+          <button class="btn-primary" onclick="saveSettings()">Save Settings</button>
         </div>
-
-      </div>
-    </main>
-  </div>
-
-  <!-- POST MODAL -->
-  <div class="modal-overlay" id="postModal">
-    <div class="modal-box">
-      <h2 id="postModalTitle">New Blog Post</h2>
-      <input type="hidden" id="editPostId" />
-      <div class="form-group"><label>Title *</label><input type="text" id="post-title" placeholder="Article title" /></div>
-      <div class="form-row">
-        <div class="form-group"><label>Category</label>
-          <select id="post-category">
-            <option value="visa">Visa & Immigration</option>
-            <option value="admissions">Admissions</option>
-            <option value="scholarships">Scholarships</option>
-            <option value="life">Student Life</option>
-            <option value="universities">Universities</option>
-          </select>
+        <div class="table-card" style="padding:2rem;">
+          <h3 style="color:var(--navy);margin-bottom:0.5rem;">🔥 Firebase Info</h3>
+          <p style="color:#666;font-size:0.875rem;">Project: <strong>maringlobal-scholars</strong> — Connected ✅</p>
         </div>
-        <div class="form-group"><label>Emoji (card icon)</label><input type="text" id="post-emoji" placeholder="📝" maxlength="4" /></div>
       </div>
-      <div class="form-group"><label>Author</label><input type="text" id="post-author" placeholder="Author name" /></div>
-      <div class="form-group"><label>Excerpt *</label><textarea id="post-excerpt" rows="2" placeholder="Short summary (1–2 sentences)"></textarea></div>
-      <div class="form-group"><label>Full Content (HTML allowed)</label><textarea id="post-body" rows="8" placeholder="<p>Full article content here...</p>"></textarea></div>
-      <div class="form-group"><label>Status</label>
-        <select id="post-published"><option value="true">Published</option><option value="false">Draft</option></select>
+
+    </div><!-- /admin-content -->
+  </main>
+</div><!-- /admin-layout -->
+
+<!-- POST MODAL -->
+<div class="modal-overlay" id="postModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('postModal')">✕</button>
+    <h2 id="postModalTitle">New Blog Post</h2>
+    <input type="hidden" id="editPostId" />
+    <div class="form-group"><label>Title *</label><input type="text" id="post-title" placeholder="Article title" /></div>
+    <div class="form-row">
+      <div class="form-group"><label>Category</label>
+        <select id="post-category">
+          <option value="visa">Visa & Immigration</option>
+          <option value="admissions">Admissions</option>
+          <option value="scholarships">Scholarships</option>
+          <option value="life">Student Life</option>
+          <option value="universities">Universities</option>
+        </select>
       </div>
-      <div class="modal-actions">
-        <button class="btn-ghost" onclick="closePostModal()">Cancel</button>
-        <button class="btn-primary" onclick="savePost()">Save Post</button>
-      </div>
+      <div class="form-group"><label>Emoji</label><input type="text" id="post-emoji" placeholder="📝" maxlength="4" /></div>
+    </div>
+    <div class="form-group"><label>Author</label><input type="text" id="post-author" placeholder="Author name" /></div>
+    <div class="form-group"><label>Excerpt *</label><textarea id="post-excerpt" rows="2" placeholder="Short 1–2 sentence summary shown on cards…"></textarea></div>
+    <div class="form-group"><label>Full Content (HTML allowed)</label><textarea id="post-body" rows="8" placeholder="<p>Write the full article here...</p>"></textarea></div>
+    <div class="form-group"><label>Publish Status</label>
+      <select id="post-published"><option value="true">✅ Published (live on site)</option><option value="false">📋 Draft (hidden)</option></select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('postModal')">Cancel</button>
+      <button class="btn-primary" onclick="savePost()">Save Post</button>
     </div>
   </div>
+</div>
 
-  <!-- TESTIMONIAL MODAL -->
-  <div class="modal-overlay" id="testimonialModal">
-    <div class="modal-box">
-      <h2>Add Testimonial</h2>
-      <input type="hidden" id="editTestimonialId" />
-      <div class="form-row">
-        <div class="form-group"><label>Student Name *</label><input type="text" id="t-name" /></div>
-        <div class="form-group"><label>Initials (e.g. AN)</label><input type="text" id="t-initials" maxlength="3" /></div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>Origin Country</label><input type="text" id="t-originCountry" placeholder="Tanzania" /></div>
-        <div class="form-group"><label>Destination</label>
-          <select id="t-country"><option value="latvia">Latvia</option><option value="lithuania">Lithuania</option><option value="estonia">Estonia</option></select>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>University</label><input type="text" id="t-university" /></div>
-        <div class="form-group"><label>Programme</label><input type="text" id="t-programme" /></div>
-      </div>
-      <div class="form-group"><label>Year / Class</label><input type="text" id="t-year" placeholder="Class of 2024" /></div>
-      <div class="form-group"><label>Quote *</label><textarea id="t-quote" rows="3" placeholder="Student's testimonial in their own words..."></textarea></div>
-      <div class="form-group"><label>Status</label>
-        <select id="t-published"><option value="true">Published</option><option value="false">Hidden</option></select>
-      </div>
-      <div class="modal-actions">
-        <button class="btn-ghost" onclick="closeTestimonialModal()">Cancel</button>
-        <button class="btn-primary" onclick="saveTestimonial()">Save Testimonial</button>
+<!-- TESTIMONIAL MODAL -->
+<div class="modal-overlay" id="testimonialModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('testimonialModal')">✕</button>
+    <h2 id="testimonialModalTitle">Add Testimonial</h2>
+    <input type="hidden" id="editTestimonialId" />
+    <div class="form-row">
+      <div class="form-group"><label>Student Name *</label><input type="text" id="t-name" placeholder="Amara Nkosi" /></div>
+      <div class="form-group"><label>Initials</label><input type="text" id="t-initials" maxlength="3" placeholder="AN" /></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Origin Country</label><input type="text" id="t-originCountry" placeholder="Tanzania" /></div>
+      <div class="form-group"><label>Destination</label>
+        <select id="t-country">
+          <option value="latvia">Latvia</option>
+          <option value="lithuania">Lithuania</option>
+          <option value="estonia">Estonia</option>
+        </select>
       </div>
     </div>
+    <div class="form-row">
+      <div class="form-group"><label>University</label><input type="text" id="t-university" placeholder="University of Latvia" /></div>
+      <div class="form-group"><label>Programme</label><input type="text" id="t-programme" placeholder="BSc Medicine" /></div>
+    </div>
+    <div class="form-group"><label>Year / Class</label><input type="text" id="t-year" placeholder="Class of 2025" /></div>
+    <div class="form-group"><label>Testimonial Quote *</label><textarea id="t-quote" rows="4" placeholder="Student's quote in their own words…"></textarea></div>
+    <div class="form-group"><label>Visibility</label>
+      <select id="t-published"><option value="true">✅ Published (live on site)</option><option value="false">🔒 Hidden</option></select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('testimonialModal')">Cancel</button>
+      <button class="btn-primary" onclick="saveTestimonial()">Save Testimonial</button>
+    </div>
   </div>
+</div>
 
-  <div class="toast" id="adminToast"></div>
+<!-- INQUIRY DETAIL MODAL -->
+<div class="modal-overlay" id="inquiryModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('inquiryModal')">✕</button>
+    <h2>Inquiry Details</h2>
+    <div id="inquiryDetailContent"></div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('inquiryModal')">Close</button>
+    </div>
+  </div>
+</div>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="../js/firebase-config.js"></script>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
-    import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+<div class="toast" id="adminToast"></div>
 
-    let auth, db;
-    const cfg = window.FIREBASE_CONFIG;
+<!-- FIREBASE -->
+<script src="../js/firebase-config.js"></script>
+<script type="module">
+  import { initializeApp }                    from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
+                                               from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+  import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc,
+           doc, serverTimestamp, query, orderBy, limit, onSnapshot }
+                                               from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
-    function tryInit() {
-      if (!cfg || cfg.apiKey === 'YOUR_API_KEY') return false;
-      try {
-        const app = initializeApp(cfg);
-        auth = getAuth(app);
-        db = getFirestore(app);
-        return true;
-      } catch (e) { return false; }
+  /* ── Init ── */
+  let auth, db;
+  const cfg = window.FIREBASE_CONFIG;
+
+  try {
+    if (cfg && cfg.apiKey !== 'YOUR_API_KEY') {
+      const app = initializeApp(cfg);
+      auth = getAuth(app);
+      db   = getFirestore(app);
     }
+  } catch(e) { console.error('Firebase init error:', e); }
 
-    const firebaseReady = tryInit();
+  /* ── Auth ── */
+  window.doLogin = async function() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const pw    = document.getElementById('loginPassword').value;
+    const err   = document.getElementById('loginError');
+    const btn   = document.getElementById('loginBtn');
+    err.textContent = '';
+    if (!email || !pw) { err.textContent = 'Please enter your email and password.'; return; }
+    if (!auth) { err.textContent = 'Firebase not connected. Check firebase-config.js.'; return; }
+    btn.textContent = 'Signing in…';
+    btn.disabled = true;
+    try {
+      await signInWithEmailAndPassword(auth, email, pw);
+      // onAuthStateChanged will handle the rest
+    } catch(e) {
+      err.textContent = e.message.replace('Firebase: ','').replace(' (auth/invalid-credential).','').replace(' (auth/wrong-password).','');
+      btn.textContent = 'Sign In';
+      btn.disabled = false;
+    }
+  };
 
-    // AUTH
-    window.doLogin = async function() {
-      const email = document.getElementById('loginEmail').value;
-      const pw = document.getElementById('loginPassword').value;
-      const err = document.getElementById('loginError');
-      err.textContent = '';
-      if (!email || !pw) { err.textContent = 'Please enter email and password.'; return; }
-      
-      if (!firebaseReady) {
-        // Demo mode
-        if (email === 'admin@maringlobal.com' && pw === 'admin123') {
-          showAdmin('admin@maringlobal.com');
-          adminToast('Demo mode — Firebase not configured yet');
-        } else {
-          err.textContent = 'Invalid credentials. Use admin@maringlobal.com / admin123 for demo.';
-        }
-        return;
-      }
-      try {
-        const cred = await signInWithEmailAndPassword(auth, email, pw);
-        showAdmin(cred.user.email);
+  window.doLogout = async function() {
+    if (auth) await signOut(auth);
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('adminLayout').classList.remove('visible');
+    document.getElementById('loginBtn').textContent = 'Sign In';
+    document.getElementById('loginBtn').disabled = false;
+  };
+
+  if (auth) {
+    onAuthStateChanged(auth, user => {
+      if (user) {
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('adminLayout').classList.add('visible');
+        document.getElementById('adminEmail').textContent = user.email;
         loadData();
-      } catch (e) {
-        err.textContent = e.message.replace('Firebase: ', '');
       }
-    };
+    });
+  }
 
-    window.doLogout = async function() {
-      if (auth) await signOut(auth);
-      document.getElementById('loginScreen').style.display = 'flex';
-      document.getElementById('adminLayout').classList.remove('visible');
-    };
-
-    function showAdmin(email) {
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('adminLayout').classList.add('visible');
-      document.getElementById('adminEmail').textContent = email;
-      if (firebaseReady) loadData();
-      else loadDemoData();
+  /* ── Load All Data ── */
+  window.loadData = async function() {
+    if (!db) return;
+    try {
+      const [pSnap, tSnap, iSnap] = await Promise.all([
+        getDocs(query(collection(db,'posts'),        orderBy('createdAt','desc'), limit(100))),
+        getDocs(query(collection(db,'testimonials'), orderBy('createdAt','desc'), limit(100))),
+        getDocs(query(collection(db,'inquiries'),    orderBy('createdAt','desc'), limit(200)))
+      ]);
+      window._posts  = pSnap.docs.map(d => ({id:d.id,...d.data()}));
+      window._tests  = tSnap.docs.map(d => ({id:d.id,...d.data()}));
+      window._inqs   = iSnap.docs.map(d => ({id:d.id,...d.data()}));
+      renderAll();
+      toast('Data refreshed', 'success');
+    } catch(e) {
+      console.error('Load error:', e);
+      toast('Error loading data: ' + e.message, 'error');
     }
+  };
 
-    if (firebaseReady) {
-      onAuthStateChanged(auth, user => {
-        if (user) { showAdmin(user.email); loadData(); }
-      });
+  function renderAll() {
+    const posts = window._posts  || [];
+    const tests = window._tests  || [];
+    const inqs  = window._inqs   || [];
+
+    // Stats
+    document.getElementById('stat-posts').textContent        = posts.filter(p=>p.published).length;
+    document.getElementById('stat-posts-sub').textContent    = posts.length + ' total posts';
+    document.getElementById('stat-testimonials').textContent = tests.filter(t=>t.published).length;
+    document.getElementById('stat-inquiries').textContent    = inqs.length;
+    const newCount = inqs.filter(i=>i.status==='new').length;
+    document.getElementById('stat-inquiries-sub').textContent = newCount + ' new unread';
+    document.getElementById('stat-enrolled').textContent     = inqs.filter(i=>i.status==='enrolled').length;
+
+    // Recent inquiries on dashboard
+    const rTbody = document.getElementById('recentInquiries');
+    rTbody.innerHTML = inqs.slice(0,5).map(i => `
+      <tr>
+        <td>${escHtml(i.firstName||'')} ${escHtml(i.lastName||'')}</td>
+        <td>${escHtml(i.email||'')}</td>
+        <td>${escHtml(i.destination||'—')}</td>
+        <td><span class="badge badge-${i.status||'new'}">${i.status||'new'}</span></td>
+        <td>${fmtDate(i.createdAt)}</td>
+      </tr>`).join('') || '<tr><td colspan="5"><div class="empty-state"><div class="ei">📭</div><p>No inquiries yet</p></div></td></tr>';
+
+    // Posts table
+    const pTbody = document.getElementById('postsTable');
+    pTbody.innerHTML = posts.length ? posts.map(p => `
+      <tr>
+        <td class="td-truncate">${escHtml(p.emoji||'')} ${escHtml(p.title||'')}</td>
+        <td>${escHtml(p.category||'')}</td>
+        <td>${escHtml(p.author||'')}</td>
+        <td><span class="badge ${p.published?'badge-published':'badge-draft'}">${p.published?'Published':'Draft'}</span></td>
+        <td>${fmtDate(p.createdAt)}</td>
+        <td>
+          <button class="act-btn" onclick="editPost('${p.id}')" title="Edit">✏️</button>
+          <button class="act-btn danger" onclick="deletePost('${p.id}')" title="Delete">🗑️</button>
+        </td>
+      </tr>`).join('')
+    : '<tr><td colspan="6"><div class="empty-state"><div class="ei">📝</div><p>No posts yet. Click + New Post to create one.</p></div></td></tr>';
+
+    // Testimonials table
+    const tTbody = document.getElementById('testimonialsTable');
+    tTbody.innerHTML = tests.length ? tests.map(t => `
+      <tr>
+        <td>${escHtml(t.name||'')}</td>
+        <td>${escHtml(t.originCountry||'')} → ${escHtml(t.country||'')}</td>
+        <td class="td-truncate">${escHtml(t.university||'')}</td>
+        <td><span class="badge ${t.published?'badge-published':'badge-draft'}">${t.published?'Published':'Hidden'}</span></td>
+        <td>
+          <button class="act-btn" onclick="editTestimonial('${t.id}')" title="Edit">✏️</button>
+          <button class="act-btn danger" onclick="deleteTestimonial('${t.id}')" title="Delete">🗑️</button>
+        </td>
+      </tr>`).join('')
+    : '<tr><td colspan="5"><div class="empty-state"><div class="ei">💬</div><p>No testimonials yet.</p></div></td></tr>';
+
+    // Inquiries table
+    const iTbody = document.getElementById('inquiriesTable');
+    iTbody.innerHTML = inqs.length ? inqs.map(i => `
+      <tr>
+        <td>${escHtml(i.firstName||'')} ${escHtml(i.lastName||'')}</td>
+        <td>${escHtml(i.email||'')}</td>
+        <td>${escHtml(i.country||'—')}</td>
+        <td>${escHtml(i.destination||'—')}</td>
+        <td>
+          <select class="status-select" onchange="updateStatus('${i.id}', this.value)">
+            ${['new','contacted','enrolled','closed'].map(s=>`<option value="${s}" ${i.status===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`).join('')}
+          </select>
+        </td>
+        <td>${fmtDate(i.createdAt)}</td>
+        <td>
+          <button class="act-btn" onclick="viewInquiry('${i.id}')" title="View details">👁️</button>
+          <button class="act-btn danger" onclick="deleteInquiry('${i.id}')" title="Delete">🗑️</button>
+        </td>
+      </tr>`).join('')
+    : '<tr><td colspan="7"><div class="empty-state"><div class="ei">📨</div><p>No inquiries yet.</p></div></td></tr>';
+  }
+
+  /* ── Posts CRUD ── */
+  window.openPostModal = function() {
+    document.getElementById('postModalTitle').textContent = 'New Blog Post';
+    document.getElementById('editPostId').value = '';
+    ['post-title','post-excerpt','post-body','post-author','post-emoji'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('post-published').value = 'true';
+    document.getElementById('postModal').classList.add('open');
+  };
+
+  window.editPost = function(id) {
+    const p = (window._posts||[]).find(x=>x.id===id);
+    if (!p) return;
+    document.getElementById('postModalTitle').textContent = 'Edit Post';
+    document.getElementById('editPostId').value  = id;
+    document.getElementById('post-title').value   = p.title   || '';
+    document.getElementById('post-excerpt').value = p.excerpt || '';
+    document.getElementById('post-body').value    = p.body    || '';
+    document.getElementById('post-author').value  = p.author  || '';
+    document.getElementById('post-emoji').value   = p.emoji   || '';
+    document.getElementById('post-category').value   = p.category  || 'admissions';
+    document.getElementById('post-published').value  = p.published ? 'true' : 'false';
+    document.getElementById('postModal').classList.add('open');
+  };
+
+  window.savePost = async function() {
+    const title   = document.getElementById('post-title').value.trim();
+    const excerpt = document.getElementById('post-excerpt').value.trim();
+    if (!title || !excerpt) { toast('Title and excerpt are required', 'error'); return; }
+    const btn = document.querySelector('#postModal .btn-primary');
+    btn.textContent = 'Saving…'; btn.disabled = true;
+    const data = {
+      title, excerpt,
+      body:      document.getElementById('post-body').value,
+      category:  document.getElementById('post-category').value,
+      emoji:     document.getElementById('post-emoji').value || '📄',
+      author:    document.getElementById('post-author').value,
+      published: document.getElementById('post-published').value === 'true',
+      updatedAt: serverTimestamp()
+    };
+    try {
+      const id = document.getElementById('editPostId').value;
+      if (id) { await updateDoc(doc(db,'posts',id), data); }
+      else    { data.createdAt = serverTimestamp(); await addDoc(collection(db,'posts'), data); }
+      await window.loadData();
+      closeModal('postModal');
+      toast('Post saved ✓', 'success');
+    } catch(e) { toast('Error: ' + e.message, 'error'); }
+    btn.textContent = 'Save Post'; btn.disabled = false;
+  };
+
+  window.deletePost = async function(id) {
+    if (!confirm('Delete this post? This cannot be undone.')) return;
+    try { await deleteDoc(doc(db,'posts',id)); await window.loadData(); toast('Post deleted', 'success'); }
+    catch(e) { toast('Error: ' + e.message, 'error'); }
+  };
+
+  /* ── Testimonials CRUD ── */
+  window.openTestimonialModal = function() {
+    document.getElementById('testimonialModalTitle').textContent = 'Add Testimonial';
+    document.getElementById('editTestimonialId').value = '';
+    ['t-name','t-initials','t-originCountry','t-university','t-programme','t-year','t-quote'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('t-published').value = 'true';
+    document.getElementById('testimonialModal').classList.add('open');
+  };
+
+  window.editTestimonial = function(id) {
+    const t = (window._tests||[]).find(x=>x.id===id);
+    if (!t) return;
+    document.getElementById('testimonialModalTitle').textContent = 'Edit Testimonial';
+    document.getElementById('editTestimonialId').value     = id;
+    document.getElementById('t-name').value          = t.name          || '';
+    document.getElementById('t-initials').value      = t.initials      || '';
+    document.getElementById('t-originCountry').value = t.originCountry || '';
+    document.getElementById('t-country').value       = t.country       || 'latvia';
+    document.getElementById('t-university').value    = t.university    || '';
+    document.getElementById('t-programme').value     = t.programme     || '';
+    document.getElementById('t-year').value          = t.year          || '';
+    document.getElementById('t-quote').value         = t.quote         || '';
+    document.getElementById('t-published').value     = t.published ? 'true' : 'false';
+    document.getElementById('testimonialModal').classList.add('open');
+  };
+
+  window.saveTestimonial = async function() {
+    const name  = document.getElementById('t-name').value.trim();
+    const quote = document.getElementById('t-quote').value.trim();
+    if (!name || !quote) { toast('Name and quote are required', 'error'); return; }
+    const btn = document.querySelector('#testimonialModal .btn-primary');
+    btn.textContent = 'Saving…'; btn.disabled = true;
+    const data = {
+      name, quote,
+      initials:      document.getElementById('t-initials').value || name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2),
+      originCountry: document.getElementById('t-originCountry').value,
+      country:       document.getElementById('t-country').value,
+      university:    document.getElementById('t-university').value,
+      programme:     document.getElementById('t-programme').value,
+      year:          document.getElementById('t-year').value,
+      published:     document.getElementById('t-published').value === 'true',
+      updatedAt:     serverTimestamp()
+    };
+    try {
+      const id = document.getElementById('editTestimonialId').value;
+      if (id) { await updateDoc(doc(db,'testimonials',id), data); }
+      else    { data.createdAt = serverTimestamp(); await addDoc(collection(db,'testimonials'), data); }
+      await window.loadData();
+      closeModal('testimonialModal');
+      toast('Testimonial saved ✓', 'success');
+    } catch(e) { toast('Error: ' + e.message, 'error'); }
+    btn.textContent = 'Save Testimonial'; btn.disabled = false;
+  };
+
+  window.deleteTestimonial = async function(id) {
+    if (!confirm('Delete this testimonial?')) return;
+    try { await deleteDoc(doc(db,'testimonials',id)); await window.loadData(); toast('Deleted ✓', 'success'); }
+    catch(e) { toast('Error: ' + e.message, 'error'); }
+  };
+
+  /* ── Inquiry actions ── */
+  window.updateStatus = async function(id, status) {
+    try { await updateDoc(doc(db,'inquiries',id), { status, updatedAt: serverTimestamp() }); toast('Status → ' + status, 'success'); }
+    catch(e) { toast('Error: ' + e.message, 'error'); }
+  };
+
+  window.deleteInquiry = async function(id) {
+    if (!confirm('Delete this inquiry?')) return;
+    try { await deleteDoc(doc(db,'inquiries',id)); await window.loadData(); toast('Deleted', 'success'); }
+    catch(e) { toast('Error: ' + e.message, 'error'); }
+  };
+
+  window.viewInquiry = function(id) {
+    const i = (window._inqs||[]).find(x=>x.id===id);
+    if (!i) return;
+    document.getElementById('inquiryDetailContent').innerHTML = `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
+        <div class="detail-panel"><h4>Name</h4><p>${escHtml(i.firstName||'')} ${escHtml(i.lastName||'')}</p></div>
+        <div class="detail-panel"><h4>Email</h4><p>${escHtml(i.email||'—')}</p></div>
+        <div class="detail-panel"><h4>Phone</h4><p>${escHtml(i.phone||'—')}</p></div>
+        <div class="detail-panel"><h4>Status</h4><p><span class="badge badge-${i.status||'new'}">${i.status||'new'}</span></p></div>
+        <div class="detail-panel"><h4>From</h4><p>${escHtml(i.country||'—')}</p></div>
+        <div class="detail-panel"><h4>Destination</h4><p>${escHtml(i.destination||'—')}</p></div>
+        <div class="detail-panel"><h4>Field of Interest</h4><p>${escHtml(i.field||'—')}</p></div>
+        <div class="detail-panel"><h4>Received</h4><p>${fmtDate(i.createdAt)}</p></div>
+      </div>
+      <div class="detail-panel"><h4>Message</h4><p style="white-space:pre-wrap">${escHtml(i.message||'—')}</p></div>
+      <div style="margin-top:1rem;">
+        <label style="font-size:0.8rem;font-weight:600;color:var(--navy);display:block;margin-bottom:0.5rem;">Update Status</label>
+        <select class="status-select" style="font-size:0.875rem;padding:0.5rem;" onchange="updateStatus('${i.id}', this.value)">
+          ${['new','contacted','enrolled','closed'].map(s=>`<option value="${s}" ${i.status===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`).join('')}
+        </select>
+      </div>`;
+    document.getElementById('inquiryModal').classList.add('open');
+  };
+
+  /* ── CSV Export ── */
+  window.exportToCSV = function(type) {
+    const t = type || 'inquiries';
+    let rows = [], headers = [];
+    if (t === 'inquiries') {
+      headers = ['First Name','Last Name','Email','Phone','Country','Destination','Field','Message','Status','Date'];
+      rows = (window._inqs||[]).map(i => [i.firstName,i.lastName,i.email,i.phone,i.country,i.destination,i.field,i.message,i.status,fmtDate(i.createdAt)]);
+    } else if (t === 'posts') {
+      headers = ['Title','Category','Author','Excerpt','Published','Date'];
+      rows = (window._posts||[]).map(p => [p.title,p.category,p.author,p.excerpt,p.published?'Yes':'No',fmtDate(p.createdAt)]);
+    } else if (t === 'testimonials') {
+      headers = ['Name','Origin','Destination','University','Programme','Year','Quote','Published','Date'];
+      rows = (window._tests||[]).map(t => [t.name,t.originCountry,t.country,t.university,t.programme,t.year,t.quote,t.published?'Yes':'No',fmtDate(t.createdAt)]);
     }
+    const csv = [headers, ...rows].map(r => r.map(v => '"'+(String(v||'').replace(/"/g,'""'))+'"').join(',')).join('\n');
+    const blob = new Blob([csv], {type:'text/csv'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `maringlobal-${t}-${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+    toast('CSV downloaded ✓', 'success');
+  };
 
-    // DATA
-    async function loadData() {
-      if (!db) { loadDemoData(); return; }
-      try {
-        const [postsSnap, tSnap, inqSnap] = await Promise.all([
-          getDocs(query(collection(db, 'posts'), orderBy('createdAt', 'desc'), limit(50))),
-          getDocs(query(collection(db, 'testimonials'), orderBy('createdAt', 'desc'), limit(50))),
-          getDocs(query(collection(db, 'inquiries'), orderBy('createdAt', 'desc'), limit(100)))
-        ]);
-        const posts = postsSnap.docs.map(d => ({id:d.id,...d.data()}));
-        const tests = tSnap.docs.map(d => ({id:d.id,...d.data()}));
-        const inqs = inqSnap.docs.map(d => ({id:d.id,...d.data()}));
-        window._adminPosts = posts;
-        window._adminTests = tests;
-        window._adminInqs = inqs;
-        renderDashboard(posts, tests, inqs);
-        renderPostsTable(posts);
-        renderTestimonialsTable(tests);
-        renderInquiriesTable(inqs);
-      } catch(e) { loadDemoData(); }
-    }
+  window.saveSettings = function() { toast('Settings saved ✓ — update your code files with these values.', 'success'); };
 
-    function loadDemoData() {
-      window._adminPosts = [];
-      window._adminTests = [];
-      window._adminInqs = [];
-      document.getElementById('stat-inquiries').textContent = '0';
-      document.getElementById('stat-posts').textContent = '0';
-      document.getElementById('stat-testimonials').textContent = '0';
-      document.getElementById('stat-enrolled').textContent = '0';
-    }
+  /* ── Helpers ── */
+  function fmtDate(ts) {
+    if (!ts) return '—';
+    try { return new Date(ts.seconds ? ts.seconds*1000 : ts).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'}); }
+    catch(e) { return '—'; }
+  }
+  function escHtml(str) {
+    return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+</script>
 
-    function renderDashboard(posts, tests, inqs) {
-      document.getElementById('stat-posts').textContent = posts.filter(p=>p.published).length;
-      document.getElementById('stat-testimonials').textContent = tests.filter(t=>t.published).length;
-      document.getElementById('stat-inquiries').textContent = inqs.length;
-      document.getElementById('stat-enrolled').textContent = inqs.filter(i=>i.status==='enrolled').length;
-      const tbody = document.getElementById('recentInquiries');
-      tbody.innerHTML = inqs.slice(0,5).map(i => `
-        <tr>
-          <td>${i.firstName||''} ${i.lastName||''}</td>
-          <td>${i.email||''}</td>
-          <td>${i.destination||'—'}</td>
-          <td><span class="badge badge-${i.status||'new'}">${i.status||'new'}</span></td>
-          <td>${i.createdAt ? new Date(i.createdAt.seconds*1000).toLocaleDateString() : '—'}</td>
-        </tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:#ccc;padding:2rem;">No recent inquiries</td></tr>';
-    }
+<!-- NON-MODULE SCRIPT -->
+<script>
+  /* ── Panel switching ── */
+  function showPanel(name, el) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    const panel = document.getElementById('panel-' + name);
+    if (panel) panel.classList.add('active');
+    if (el) el.classList.add('active');
+    const titles = { dashboard:'Dashboard', posts:'Blog Posts', testimonials:'Testimonials', inquiries:'Inquiries', export:'Export Data', settings:'Settings' };
+    document.getElementById('topbarTitle').textContent = titles[name] || name;
+    const addBtn = document.getElementById('topbarAddBtn');
+    addBtn.style.display = ['posts','testimonials'].includes(name) ? 'inline-block' : 'none';
+    addBtn.textContent = name === 'posts' ? '+ New Post' : '+ Add Testimonial';
+    closeSidebar();
+  }
 
-    function renderPostsTable(posts) {
-      const tbody = document.getElementById('postsTable');
-      if (!posts.length) { tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><div class="icon">📝</div><p>No posts yet.</p></div></td></tr>'; return; }
-      tbody.innerHTML = posts.map(p => `
-        <tr>
-          <td>${p.emoji||''} ${p.title}</td>
-          <td>${p.category||''}</td>
-          <td>${p.author||''}</td>
-          <td><span class="badge ${p.published?'badge-published':'badge-draft'}">${p.published?'Published':'Draft'}</span></td>
-          <td>${p.createdAt ? new Date(p.createdAt.seconds*1000).toLocaleDateString() : '—'}</td>
-          <td>
-            <button class="action-btn" onclick="editPost('${p.id}')" title="Edit">✏️</button>
-            <button class="action-btn" onclick="deletePost('${p.id}')" title="Delete">🗑️</button>
-          </td>
-        </tr>`).join('');
-    }
+  function handleAdd() {
+    const active = document.querySelector('.panel.active');
+    if (!active) return;
+    if (active.id === 'panel-posts') window.openPostModal && openPostModal();
+    if (active.id === 'panel-testimonials') window.openTestimonialModal && openTestimonialModal();
+  }
 
-    function renderTestimonialsTable(tests) {
-      const tbody = document.getElementById('testimonialsTable');
-      if (!tests.length) { tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state"><div class="icon">💬</div><p>No testimonials yet.</p></div></td></tr>'; return; }
-      tbody.innerHTML = tests.map(t => `
-        <tr>
-          <td>${t.name||''}</td>
-          <td>${t.originCountry||''} → ${t.country||''}</td>
-          <td>${t.university||''}</td>
-          <td><span class="badge ${t.published?'badge-published':'badge-draft'}">${t.published?'Published':'Hidden'}</span></td>
-          <td>
-            <button class="action-btn" onclick="editTestimonial('${t.id}')" title="Edit">✏️</button>
-            <button class="action-btn" onclick="deleteTestimonial('${t.id}')" title="Delete">🗑️</button>
-          </td>
-        </tr>`).join('');
-    }
+  /* ── Modal helpers ── */
+  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+  document.querySelectorAll('.modal-overlay').forEach(m => {
+    m.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('open'); });
+  });
 
-    function renderInquiriesTable(inqs) {
-      const tbody = document.getElementById('inquiriesTable');
-      if (!inqs.length) { tbody.innerHTML = '<tr><td colspan="7"><div class="empty-state"><div class="icon">📨</div><p>No inquiries yet.</p></div></td></tr>'; return; }
-      tbody.innerHTML = inqs.map(i => `
-        <tr>
-          <td>${i.firstName||''} ${i.lastName||''}</td>
-          <td>${i.email||''}</td>
-          <td>${i.country||'—'}</td>
-          <td>${i.destination||'—'}</td>
-          <td><span class="badge badge-${i.status||'new'}">${i.status||'new'}</span></td>
-          <td>${i.createdAt ? new Date(i.createdAt.seconds*1000).toLocaleDateString() : '—'}</td>
-          <td>
-            <select onchange="updateInquiryStatus('${i.id}', this.value)" style="font-size:0.78rem;padding:0.2rem;border:1px solid #ddd;border-radius:4px;">
-              <option ${i.status==='new'?'selected':''} value="new">New</option>
-              <option ${i.status==='contacted'?'selected':''} value="contacted">Contacted</option>
-              <option ${i.status==='enrolled'?'selected':''} value="enrolled">Enrolled</option>
-              <option ${i.status==='closed'?'selected':''} value="closed">Closed</option>
-            </select>
-          </td>
-        </tr>`).join('');
-    }
+  /* ── Mobile sidebar ── */
+  function openSidebar() {
+    document.getElementById('sidebar').classList.add('open');
+    document.getElementById('sidebarOverlay').classList.add('show');
+  }
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('show');
+  }
 
-    // CRUD
-    window.handleAdd = function() {
-      const active = document.querySelector('.panel.active').id;
-      if (active === 'panel-posts') { document.getElementById('postModalTitle').textContent='New Post'; document.getElementById('editPostId').value=''; document.getElementById('postModal').classList.add('open'); }
-      if (active === 'panel-testimonials') { document.getElementById('editTestimonialId').value=''; document.getElementById('testimonialModal').classList.add('open'); }
-    };
+  /* ── Table search filter ── */
+  function filterTable(tbodyId, query) {
+    const q = query.toLowerCase();
+    document.querySelectorAll('#' + tbodyId + ' tr').forEach(row => {
+      row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+  }
 
-    window.savePost = async function() {
-      const title = document.getElementById('post-title').value.trim();
-      const excerpt = document.getElementById('post-excerpt').value.trim();
-      if (!title || !excerpt) { adminToast('Title and excerpt are required'); return; }
-      const data = {
-        title, excerpt,
-        body: document.getElementById('post-body').value,
-        category: document.getElementById('post-category').value,
-        emoji: document.getElementById('post-emoji').value || '📄',
-        author: document.getElementById('post-author').value,
-        published: document.getElementById('post-published').value === 'true',
-        updatedAt: serverTimestamp()
-      };
-      const editId = document.getElementById('editPostId').value;
-      if (db) {
-        if (editId) { await updateDoc(doc(db,'posts',editId), data); }
-        else { data.createdAt = serverTimestamp(); await addDoc(collection(db,'posts'), data); }
-        await loadData();
-      }
-      closePostModal();
-      adminToast('Post saved successfully');
-    };
+  /* ── Toast ── */
+  function toast(msg, type) {
+    const t = document.getElementById('adminToast');
+    t.textContent = msg;
+    t.className = 'toast ' + (type||'');
+    t.classList.add('show');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('show'), 3000);
+  }
+</script>
 
-    window.editPost = function(id) {
-      const post = (window._adminPosts||[]).find(p=>p.id===id);
-      if (!post) return;
-      document.getElementById('editPostId').value = id;
-      document.getElementById('post-title').value = post.title||'';
-      document.getElementById('post-excerpt').value = post.excerpt||'';
-      document.getElementById('post-body').value = post.body||'';
-      document.getElementById('post-category').value = post.category||'admissions';
-      document.getElementById('post-emoji').value = post.emoji||'';
-      document.getElementById('post-author').value = post.author||'';
-      document.getElementById('post-published').value = post.published ? 'true' : 'false';
-      document.getElementById('postModalTitle').textContent = 'Edit Post';
-      document.getElementById('postModal').classList.add('open');
-    };
-
-    window.deletePost = async function(id) {
-      if (!confirm('Delete this post?')) return;
-      if (db) { await deleteDoc(doc(db,'posts',id)); await loadData(); }
-      adminToast('Post deleted');
-    };
-
-    window.closePostModal = function() { document.getElementById('postModal').classList.remove('open'); };
-
-    window.saveTestimonial = async function() {
-      const name = document.getElementById('t-name').value.trim();
-      const quote = document.getElementById('t-quote').value.trim();
-      if (!name || !quote) { adminToast('Name and quote are required'); return; }
-      const data = {
-        name, quote,
-        initials: document.getElementById('t-initials').value || name.split(' ').map(w=>w[0]).join('').toUpperCase(),
-        originCountry: document.getElementById('t-originCountry').value,
-        country: document.getElementById('t-country').value,
-        university: document.getElementById('t-university').value,
-        programme: document.getElementById('t-programme').value,
-        year: document.getElementById('t-year').value,
-        published: document.getElementById('t-published').value === 'true',
-        updatedAt: serverTimestamp()
-      };
-      const editId = document.getElementById('editTestimonialId').value;
-      if (db) {
-        if (editId) { await updateDoc(doc(db,'testimonials',editId), data); }
-        else { data.createdAt = serverTimestamp(); await addDoc(collection(db,'testimonials'), data); }
-        await loadData();
-      }
-      closeTestimonialModal();
-      adminToast('Testimonial saved');
-    };
-
-    window.editTestimonial = function(id) {
-      const t = (window._adminTests||[]).find(t=>t.id===id);
-      if (!t) return;
-      document.getElementById('editTestimonialId').value = id;
-      document.getElementById('t-name').value = t.name||'';
-      document.getElementById('t-initials').value = t.initials||'';
-      document.getElementById('t-originCountry').value = t.originCountry||'';
-      document.getElementById('t-country').value = t.country||'latvia';
-      document.getElementById('t-university').value = t.university||'';
-      document.getElementById('t-programme').value = t.programme||'';
-      document.getElementById('t-year').value = t.year||'';
-      document.getElementById('t-quote').value = t.quote||'';
-      document.getElementById('t-published').value = t.published ? 'true' : 'false';
-      document.getElementById('testimonialModal').classList.add('open');
-    };
-
-    window.deleteTestimonial = async function(id) {
-      if (!confirm('Delete this testimonial?')) return;
-      if (db) { await deleteDoc(doc(db,'testimonials',id)); await loadData(); }
-      adminToast('Testimonial deleted');
-    };
-
-    window.closeTestimonialModal = function() { document.getElementById('testimonialModal').classList.remove('open'); };
-
-    window.updateInquiryStatus = async function(id, status) {
-      if (db) { await updateDoc(doc(db,'inquiries',id), { status }); }
-      adminToast(`Status updated to "${status}"`);
-    };
-
-    window.saveSettings = function() {
-      adminToast('Settings saved — update js/firebase-config.js manually with these values.');
-    };
-  </script>
-
-  <script>
-    function showPanel(name, el) {
-      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      document.getElementById('panel-' + name).classList.add('active');
-      el.classList.add('active');
-      document.getElementById('topbarTitle').textContent = el.querySelector('span+*') ? el.textContent.trim() : name.charAt(0).toUpperCase()+name.slice(1);
-      const addBtn = document.getElementById('topbarAddBtn');
-      addBtn.style.display = ['posts','testimonials'].includes(name) ? 'inline-flex' : 'none';
-      addBtn.textContent = name === 'posts' ? '+ New Post' : '+ Add Testimonial';
-    }
+</body>
+</html>
