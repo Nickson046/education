@@ -1,233 +1,307 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin — MarinGlobal Scholars</title>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-title" content="MG Admin"/>
+  <meta name="theme-color" content="#0D1B3E"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet"/>
+  <!-- Chart.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--navy:#0D1B3E;--navy2:#162251;--gold:#C9A84C;--gold2:#E8C97A;--cream:#F8F4EE;--green:#16a34a;--red:#dc2626;--purple:#7c3aed;--blue:#2563eb;--sidebar:250px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:#f0f2f5;color:#1a1a2e;overflow-x:hidden;}
 
-  <!-- PWA support -->
-  <meta name="mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="MG Admin" />
-  <meta name="theme-color" content="#0D1B3E" />
-  <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230D1B3E' rx='20'/><circle cx='50' cy='50' r='32' fill='%23C9A84C'/><polygon points='50,22 68,33 68,55 50,66 32,55 32,33' fill='none' stroke='%230D1B3E' stroke-width='3'/></svg>" />
+/* LOGIN */
+.login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--navy);background-image:radial-gradient(ellipse at 70% 30%,rgba(201,168,76,0.15) 0%,transparent 60%);}
+.login-card{background:white;border-radius:20px;padding:2.5rem;width:100%;max-width:380px;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,0.4);}
+.login-logo{font-size:2.8rem;margin-bottom:0.5rem;}
+.login-card h1{font-size:1.4rem;color:var(--navy);margin-bottom:0.2rem;}
+.login-card>p{font-size:0.82rem;color:#aaa;margin-bottom:2rem;}
+.login-input{width:100%;padding:0.85rem 1rem;border:1.5px solid #e5e7eb;border-radius:10px;font-family:inherit;font-size:0.9rem;margin-bottom:0.75rem;outline:none;transition:border-color 0.2s;display:block;}
+.login-input:focus{border-color:var(--gold);}
+.login-btn{width:100%;padding:0.9rem;background:var(--navy);color:var(--gold);border:none;border-radius:10px;font-family:inherit;font-weight:700;font-size:1rem;cursor:pointer;transition:all 0.2s;}
+.login-btn:hover{background:var(--navy2);}
+.login-error{color:var(--red);font-size:0.82rem;margin-top:0.75rem;min-height:1.2em;}
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet" />
+/* LAYOUT */
+.admin-layout{display:none;min-height:100vh;}
+.admin-layout.visible{display:flex;}
 
-  <style>
-    :root {
-      --navy: #0D1B3E;
-      --navy2: #162251;
-      --gold: #C9A84C;
-      --gold2: #E8C97A;
-      --cream: #F8F4EE;
-      --green: #2d7a45;
-      --red: #e53935;
-      --sidebar: 240px;
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'DM Sans', sans-serif; background: #f0f2f5; color: #1a1a2e; }
+/* SIDEBAR */
+.sidebar{width:var(--sidebar);background:var(--navy);flex-shrink:0;display:flex;flex-direction:column;position:fixed;top:0;bottom:0;z-index:200;transition:transform 0.3s;overflow-y:auto;}
+.sidebar-brand{padding:1.4rem 1.25rem;border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.brand-text .brand{font-size:1rem;color:var(--cream);font-weight:700;}
+.brand-text .sub{font-size:0.62rem;color:var(--gold);font-family:'Space Mono',monospace;letter-spacing:0.12em;margin-top:0.15rem;}
+.sidebar-close{display:none;background:none;border:none;color:rgba(255,255,255,0.4);font-size:1.3rem;cursor:pointer;padding:0.25rem;}
+.sidebar-nav{flex:1;padding:0.75rem 0;}
+.nav-section{font-size:0.6rem;text-transform:uppercase;letter-spacing:0.16em;color:rgba(255,255,255,0.22);padding:0.75rem 1.25rem 0.3rem;font-family:'Space Mono',monospace;}
+.nav-item{display:flex;align-items:center;gap:0.75rem;padding:0.65rem 1.25rem;color:rgba(255,255,255,0.58);font-size:0.855rem;cursor:pointer;transition:all 0.2s;border-left:3px solid transparent;user-select:none;position:relative;}
+.nav-item:hover{background:rgba(255,255,255,0.06);color:white;}
+.nav-item.active{background:rgba(201,168,76,0.12);color:var(--gold);border-left-color:var(--gold);font-weight:600;}
+.nav-item .ni{font-size:1rem;width:18px;text-align:center;flex-shrink:0;}
+.nav-badge{margin-left:auto;background:var(--red);color:white;font-size:0.65rem;font-weight:700;padding:0.1rem 0.45rem;border-radius:50px;min-width:18px;text-align:center;}
+.sidebar-footer{padding:1.1rem 1.25rem;border-top:1px solid rgba(255,255,255,0.07);}
+.admin-email{font-size:0.73rem;color:rgba(255,255,255,0.3);margin-bottom:0.6rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.logout-btn{width:100%;padding:0.6rem;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:6px;color:rgba(255,255,255,0.55);font-family:inherit;font-size:0.8rem;cursor:pointer;transition:all 0.2s;}
+.logout-btn:hover{background:rgba(220,38,38,0.15);border-color:rgba(220,38,38,0.3);color:#fca5a5;}
 
-    /* ═══════════ LOGIN ═══════════ */
-    .login-screen { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--navy); }
-    .login-card { background: white; border-radius: 16px; padding: 2.5rem; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.35); }
-    .login-logo { font-size: 2.5rem; margin-bottom: 0.5rem; }
-    .login-card h1 { font-size: 1.4rem; color: var(--navy); margin-bottom: 0.25rem; }
-    .login-card > p { font-size: 0.82rem; color: #999; margin-bottom: 2rem; }
-    .login-input { width: 100%; padding: 0.8rem 1rem; border: 1.5px solid #e0dcd5; border-radius: 8px; font-family: inherit; font-size: 0.9rem; margin-bottom: 0.75rem; outline: none; transition: border-color 0.2s; display: block; }
-    .login-input:focus { border-color: var(--gold); }
-    .login-btn { width: 100%; padding: 0.9rem; background: var(--navy); color: var(--gold); border: none; border-radius: 8px; font-family: inherit; font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.2s; }
-    .login-btn:hover { background: var(--navy2); }
-    .login-error { color: var(--red); font-size: 0.82rem; margin-top: 0.75rem; min-height: 1.2em; }
+/* MAIN */
+.admin-main{margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column;min-height:100vh;}
+.topbar{background:white;padding:0.85rem 1.5rem;border-bottom:1px solid #e5e7eb;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;box-shadow:0 1px 4px rgba(0,0,0,0.05);}
+.topbar-left{display:flex;align-items:center;gap:0.9rem;}
+.menu-toggle{display:none;background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--navy);}
+.topbar-title{font-size:1.05rem;font-weight:700;color:var(--navy);}
+.topbar-right{display:flex;gap:0.5rem;align-items:center;}
 
-    /* ═══════════ LAYOUT ═══════════ */
-    .admin-layout { display: none; min-height: 100vh; }
-    .admin-layout.visible { display: flex; }
+/* GLOBAL SEARCH */
+.global-search-wrap{position:relative;}
+.global-search{padding:0.45rem 0.85rem 0.45rem 2.2rem;border:1.5px solid #e5e7eb;border-radius:20px;font-family:inherit;font-size:0.82rem;outline:none;width:220px;transition:all 0.2s;background:#f9fafb;}
+.global-search:focus{border-color:var(--gold);width:280px;background:white;}
+.global-search-wrap::before{content:'🔍';position:absolute;left:0.65rem;top:50%;transform:translateY(-50%);font-size:0.75rem;pointer-events:none;}
+.search-results{position:absolute;top:calc(100% + 6px);left:0;right:0;background:white;border-radius:10px;box-shadow:0 8px 32px rgba(0,0,0,0.15);z-index:300;max-height:320px;overflow-y:auto;display:none;}
+.search-results.show{display:block;}
+.search-result-item{padding:0.75rem 1rem;cursor:pointer;border-bottom:1px solid #f3f4f6;transition:background 0.15s;}
+.search-result-item:hover{background:#fafaf8;}
+.search-result-item:last-child{border-bottom:none;}
+.sri-type{font-size:0.65rem;font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:0.08em;color:#9ca3af;margin-bottom:0.2rem;}
+.sri-title{font-size:0.875rem;color:var(--navy);font-weight:500;}
 
-    /* ═══════════ SIDEBAR ═══════════ */
-    .sidebar { width: var(--sidebar); background: var(--navy); flex-shrink: 0; display: flex; flex-direction: column; position: fixed; top: 0; bottom: 0; z-index: 200; transition: transform 0.3s; }
-    .sidebar-brand { padding: 1.5rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: space-between; }
-    .sidebar-brand .brand { font-size: 1rem; color: var(--cream); font-weight: 700; }
-    .sidebar-brand .sub { font-size: 0.65rem; color: var(--gold); font-family: 'Space Mono', monospace; letter-spacing: 0.1em; margin-top: 0.15rem; }
-    .sidebar-close { display: none; background: none; border: none; color: rgba(255,255,255,0.5); font-size: 1.4rem; cursor: pointer; }
-    .sidebar-nav { flex: 1; padding: 1rem 0; overflow-y: auto; }
-    .nav-label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(255,255,255,0.25); padding: 0.75rem 1.25rem 0.35rem; font-family: 'Space Mono', monospace; }
-    .nav-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 1.25rem; color: rgba(255,255,255,0.6); font-size: 0.875rem; cursor: pointer; transition: all 0.2s; border-left: 3px solid transparent; user-select: none; }
-    .nav-item:hover { background: rgba(255,255,255,0.06); color: white; }
-    .nav-item.active { background: rgba(201,168,76,0.12); color: var(--gold); border-left-color: var(--gold); font-weight: 600; }
-    .nav-item .ni { font-size: 1rem; width: 18px; text-align: center; }
-    .sidebar-footer { padding: 1.25rem; border-top: 1px solid rgba(255,255,255,0.08); }
-    .admin-email { font-size: 0.75rem; color: rgba(255,255,255,0.35); margin-bottom: 0.6rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .logout-btn { width: 100%; padding: 0.6rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 6px; color: rgba(255,255,255,0.6); font-family: inherit; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; }
-    .logout-btn:hover { background: rgba(255,0,0,0.15); border-color: rgba(255,0,0,0.3); color: #ff6b6b; }
+/* BUTTONS */
+.btn-primary{background:var(--navy);color:var(--gold);padding:0.48rem 1rem;border-radius:7px;border:none;font-family:inherit;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;white-space:nowrap;}
+.btn-primary:hover{background:var(--navy2);}
+.btn-ghost{background:none;border:1.5px solid #e5e7eb;padding:0.48rem 0.9rem;border-radius:7px;font-family:inherit;font-size:0.82rem;cursor:pointer;color:#555;transition:all 0.2s;white-space:nowrap;}
+.btn-ghost:hover{border-color:var(--navy);color:var(--navy);}
+.btn-green{background:var(--green);color:white;padding:0.48rem 0.9rem;border-radius:7px;border:none;font-family:inherit;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.btn-green:hover{background:#15803d;}
+.btn-red{background:var(--red);color:white;padding:0.48rem 0.9rem;border-radius:7px;border:none;font-family:inherit;font-size:0.82rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.btn-red:hover{background:#b91c1c;}
 
-    /* ═══════════ MAIN CONTENT ═══════════ */
-    .admin-main { margin-left: var(--sidebar); flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
-    .topbar { background: white; padding: 0.9rem 1.5rem; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
-    .topbar-left { display: flex; align-items: center; gap: 1rem; }
-    .menu-toggle { display: none; background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--navy); }
-    .topbar-title { font-size: 1.1rem; font-weight: 700; color: var(--navy); }
-    .topbar-right { display: flex; gap: 0.6rem; align-items: center; }
-    .btn-primary { background: var(--navy); color: var(--gold); padding: 0.5rem 1.1rem; border-radius: 6px; border: none; font-family: inherit; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
-    .btn-primary:hover { background: var(--navy2); transform: translateY(-1px); }
-    .btn-ghost { background: none; border: 1.5px solid #e0dcd5; padding: 0.5rem 1rem; border-radius: 6px; font-family: inherit; font-size: 0.82rem; cursor: pointer; color: #666; transition: all 0.2s; white-space: nowrap; }
-    .btn-ghost:hover { border-color: var(--navy); color: var(--navy); }
-    .btn-export { background: #16a34a; color: white; padding: 0.5rem 1rem; border-radius: 6px; border: none; font-family: inherit; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-    .btn-export:hover { background: #15803d; }
+.admin-content{padding:1.5rem;flex:1;}
 
-    .admin-content { padding: 1.5rem; flex: 1; }
+/* PANELS */
+.panel{display:none;}.panel.active{display:block;}
 
-    /* ═══════════ PANELS ═══════════ */
-    .panel { display: none; }
-    .panel.active { display: block; }
+/* STAT CARDS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;}
+.stat-card{background:white;border-radius:12px;padding:1.2rem 1.4rem;box-shadow:0 1px 6px rgba(0,0,0,0.06);border-left:4px solid transparent;transition:all 0.2s;cursor:pointer;}
+.stat-card:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,0.1);}
+.stat-card.blue{border-left-color:#3b82f6;}.stat-card.gold{border-left-color:var(--gold);}
+.stat-card.green{border-left-color:var(--green);}.stat-card.navy{border-left-color:var(--navy);}
+.stat-card.purple{border-left-color:var(--purple);}
+.s-label{font-size:0.7rem;color:#9ca3af;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.4rem;font-family:'Space Mono',monospace;}
+.s-value{font-size:2.1rem;font-weight:800;color:var(--navy);line-height:1;}
+.s-change{font-size:0.73rem;color:var(--green);margin-top:0.35rem;}
+.s-change.warn{color:#d97706;}
 
-    /* ═══════════ STAT CARDS ═══════════ */
-    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
-    .stat-card { background: white; border-radius: 12px; padding: 1.25rem 1.5rem; box-shadow: 0 1px 6px rgba(0,0,0,0.06); border-left: 4px solid transparent; transition: all 0.2s; }
-    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
-    .stat-card.blue  { border-left-color: #3b82f6; }
-    .stat-card.gold  { border-left-color: var(--gold); }
-    .stat-card.green { border-left-color: var(--green); }
-    .stat-card.navy  { border-left-color: var(--navy); }
-    .s-label { font-size: 0.72rem; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.5rem; font-family: 'Space Mono', monospace; }
-    .s-value { font-size: 2.2rem; font-weight: 800; color: var(--navy); line-height: 1; }
-    .s-change { font-size: 0.75rem; color: var(--green); margin-top: 0.4rem; }
+/* TABLE CARD */
+.table-card{background:white;border-radius:12px;box-shadow:0 1px 6px rgba(0,0,0,0.06);overflow:hidden;margin-bottom:1.5rem;}
+.tc-header{padding:1rem 1.4rem;border-bottom:1px solid #f3f4f6;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.6rem;}
+.tc-header h3{font-size:0.975rem;font-weight:700;color:var(--navy);}
+.tc-actions{display:flex;gap:0.5rem;align-items:center;flex-wrap:wrap;}
+.tbl-search{padding:0.42rem 0.75rem;border:1.5px solid #e5e7eb;border-radius:6px;font-family:inherit;font-size:0.8rem;outline:none;width:190px;transition:border-color 0.2s;}
+.tbl-search:focus{border-color:var(--gold);}
+.tbl{width:100%;border-collapse:collapse;}
+.tbl thead th{background:#f9fafb;padding:0.7rem 1rem;text-align:left;font-size:0.68rem;text-transform:uppercase;letter-spacing:0.09em;color:#9ca3af;font-family:'Space Mono',monospace;font-weight:400;white-space:nowrap;}
+.tbl tbody tr{border-top:1px solid #f3f4f6;transition:background 0.15s;}
+.tbl tbody tr:hover{background:#fafaf8;}
+.tbl tbody td{padding:0.8rem 1rem;font-size:0.855rem;color:#374151;vertical-align:middle;}
+.td-clip{max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cb-col{width:36px;}
 
-    /* ═══════════ TABLE CARD ═══════════ */
-    .table-card { background: white; border-radius: 12px; box-shadow: 0 1px 6px rgba(0,0,0,0.06); overflow: hidden; margin-bottom: 1.5rem; }
-    .table-card-header { padding: 1rem 1.5rem; border-bottom: 1px solid #f3f4f6; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
-    .table-card-header h3 { font-size: 1rem; font-weight: 700; color: var(--navy); }
-    .table-search { padding: 0.45rem 0.75rem; border: 1.5px solid #e5e7eb; border-radius: 6px; font-family: inherit; font-size: 0.82rem; outline: none; width: 200px; transition: border-color 0.2s; }
-    .table-search:focus { border-color: var(--gold); }
-    .tbl { width: 100%; border-collapse: collapse; }
-    .tbl thead th { background: #f9fafb; padding: 0.75rem 1rem; text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #9ca3af; font-family: 'Space Mono', monospace; font-weight: 400; white-space: nowrap; }
-    .tbl tbody tr { border-top: 1px solid #f3f4f6; transition: background 0.15s; }
-    .tbl tbody tr:hover { background: #fafaf8; }
-    .tbl tbody td { padding: 0.85rem 1rem; font-size: 0.875rem; color: #374151; vertical-align: middle; }
-    .tbl .td-truncate { max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* BADGES */
+.badge{display:inline-block;padding:0.18rem 0.6rem;border-radius:50px;font-size:0.68rem;font-weight:700;letter-spacing:0.04em;}
+.badge-new{background:#dbeafe;color:#1d4ed8;}.badge-published{background:#dcfce7;color:#15803d;}
+.badge-draft{background:#fef3c7;color:#b45309;}.badge-contacted{background:#f3e8ff;color:#7c3aed;}
+.badge-enrolled{background:#d1fae5;color:#065f46;}.badge-closed{background:#f1f5f9;color:#64748b;}
+.badge-hot{background:#fee2e2;color:#dc2626;}
 
-    .badge { display: inline-block; padding: 0.2rem 0.65rem; border-radius: 50px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; }
-    .badge-new       { background: #dbeafe; color: #1d4ed8; }
-    .badge-published { background: #dcfce7; color: #15803d; }
-    .badge-draft     { background: #fef3c7; color: #b45309; }
-    .badge-contacted { background: #f3e8ff; color: #7c3aed; }
-    .badge-enrolled  { background: #d1fae5; color: #065f46; }
-    .badge-closed    { background: #f1f5f9; color: #64748b; }
+/* ACTION BUTTONS */
+.act-btn{background:none;border:none;cursor:pointer;padding:0.3rem 0.45rem;border-radius:5px;color:#9ca3af;transition:all 0.2s;font-size:0.9rem;line-height:1;}
+.act-btn:hover{background:#f0ece5;color:var(--navy);}
+.act-btn.danger:hover{background:#fee2e2;color:var(--red);}
+.act-btn.whatsapp:hover{background:#d1fae5;color:#16a34a;}
 
-    .act-btn { background: none; border: none; cursor: pointer; padding: 0.35rem 0.5rem; border-radius: 6px; color: #9ca3af; transition: all 0.2s; font-size: 0.9rem; }
-    .act-btn:hover { background: #f0ece5; color: var(--navy); }
-    .act-btn.danger:hover { background: #fee2e2; color: var(--red); }
+/* STATUS SELECT */
+.status-sel{font-size:0.75rem;padding:0.22rem 0.45rem;border:1px solid #e5e7eb;border-radius:4px;font-family:inherit;background:white;cursor:pointer;outline:none;}
+.status-sel:focus{border-color:var(--gold);}
 
-    /* Status dropdown inline */
-    .status-select { font-size: 0.75rem; padding: 0.25rem 0.5rem; border: 1px solid #e5e7eb; border-radius: 4px; font-family: inherit; background: white; cursor: pointer; outline: none; }
-    .status-select:focus { border-color: var(--gold); }
+/* BULK BAR */
+.bulk-bar{background:var(--navy);color:var(--cream);padding:0.75rem 1.4rem;display:none;align-items:center;gap:1rem;flex-wrap:wrap;}
+.bulk-bar.show{display:flex;}
+.bulk-bar span{font-size:0.85rem;}
+.bulk-bar select{padding:0.35rem 0.6rem;border-radius:5px;border:none;font-family:inherit;font-size:0.8rem;}
+.bulk-bar button{padding:0.35rem 0.9rem;border-radius:5px;border:none;font-family:inherit;font-size:0.8rem;font-weight:600;cursor:pointer;background:var(--gold);color:var(--navy);}
 
-    /* ═══════════ MODAL ═══════════ */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 500; align-items: center; justify-content: center; padding: 1rem; backdrop-filter: blur(4px); }
-    .modal-overlay.open { display: flex; }
-    .modal-box { background: white; border-radius: 16px; padding: 2rem; width: 100%; max-width: 620px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.25); }
-    .modal-box h2 { font-size: 1.25rem; color: var(--navy); margin-bottom: 1.5rem; padding-bottom: 0.75rem; border-bottom: 1px solid #f3f4f6; }
-    .modal-close { position: absolute; top: 1.25rem; right: 1.25rem; background: #f3f4f6; border: none; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; color: #666; transition: all 0.2s; }
-    .modal-close:hover { background: var(--navy); color: var(--gold); }
-    .form-group { margin-bottom: 1rem; }
-    .form-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--navy); margin-bottom: 0.35rem; }
-    .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.65rem 0.9rem; border: 1.5px solid #e5e7eb; border-radius: 8px; font-family: inherit; font-size: 0.875rem; outline: none; transition: border-color 0.2s; background: #fafaf8; }
-    .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold); background: white; }
-    .form-group textarea { resize: vertical; min-height: 130px; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-    .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid #f3f4f6; }
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:500;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(4px);}
+.modal-overlay.open{display:flex;}
+.modal-box{background:white;border-radius:16px;padding:2rem;width:100%;max-width:640px;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 24px 64px rgba(0,0,0,0.25);}
+.modal-box.wide{max-width:820px;}
+.modal-box h2{font-size:1.2rem;color:var(--navy);margin-bottom:1.25rem;padding-bottom:0.75rem;border-bottom:1px solid #f3f4f6;}
+.modal-close{position:absolute;top:1.1rem;right:1.1rem;background:#f3f4f6;border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;font-size:0.9rem;display:flex;align-items:center;justify-content:center;color:#666;transition:all 0.2s;}
+.modal-close:hover{background:var(--navy);color:var(--gold);}
+.form-group{margin-bottom:0.9rem;}
+.form-group label{display:block;font-size:0.78rem;font-weight:600;color:var(--navy);margin-bottom:0.3rem;}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:0.6rem 0.85rem;border:1.5px solid #e5e7eb;border-radius:8px;font-family:inherit;font-size:0.855rem;outline:none;transition:border-color 0.2s;background:#fafaf8;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--gold);background:white;}
+.form-group textarea{resize:vertical;min-height:100px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;}
+.modal-actions{display:flex;gap:0.7rem;justify-content:flex-end;margin-top:1.25rem;padding-top:1rem;border-top:1px solid #f3f4f6;}
 
-    /* ═══════════ EMPTY STATE ═══════════ */
-    .empty-state { text-align: center; padding: 3rem 1rem; color: #d1d5db; }
-    .empty-state .ei { font-size: 2.5rem; margin-bottom: 0.75rem; }
-    .empty-state p { font-size: 0.875rem; }
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:3rem 1rem;color:#d1d5db;}
+.empty-state .ei{font-size:2.5rem;margin-bottom:0.75rem;}
+.empty-state p{font-size:0.875rem;}
 
-    /* ═══════════ TOAST ═══════════ */
-    .toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: var(--navy); color: var(--gold); padding: 0.8rem 1.4rem; border-radius: 10px; font-size: 0.875rem; font-weight: 500; z-index: 9999; transform: translateY(80px); opacity: 0; transition: all 0.35s cubic-bezier(0.25,0.46,0.45,0.94); box-shadow: 0 8px 24px rgba(0,0,0,0.2); max-width: 320px; }
-    .toast.show { transform: translateY(0); opacity: 1; }
-    .toast.success { background: var(--green); color: white; }
-    .toast.error   { background: var(--red); color: white; }
+/* TOAST */
+.toast{position:fixed;bottom:1.5rem;right:1.5rem;padding:0.8rem 1.4rem;border-radius:10px;font-size:0.855rem;font-weight:500;z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.35s cubic-bezier(0.25,0.46,0.45,0.94);box-shadow:0 8px 24px rgba(0,0,0,0.2);max-width:320px;background:var(--navy);color:var(--gold);}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{background:var(--green);color:white;}
+.toast.error{background:var(--red);color:white;}
+.toast.info{background:#1d4ed8;color:white;}
 
-    /* ═══════════ SIDEBAR OVERLAY (mobile) ═══════════ */
-    .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 190; }
-    .sidebar-overlay.show { display: block; }
+/* SPINNER */
+.spinner{display:inline-block;width:20px;height:20px;border:2.5px solid rgba(201,168,76,0.3);border-top-color:var(--gold);border-radius:50%;animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
 
-    /* ═══════════ RESPONSIVE ═══════════ */
-    @media (max-width: 768px) {
-      :root { --sidebar: 0px; }
-      .sidebar { transform: translateX(-260px); width: 260px; }
-      .sidebar.open { transform: translateX(0); }
-      .sidebar-close { display: block; }
-      .admin-main { margin-left: 0; }
-      .menu-toggle { display: block; }
-      .stats-row { grid-template-columns: repeat(2, 1fr); }
-      .form-row { grid-template-columns: 1fr; }
-      .topbar-right .btn-ghost { display: none; }
-      .tbl thead th:nth-child(n+4) { display: none; }
-      .tbl tbody td:nth-child(n+4) { display: none; }
-      .table-search { width: 140px; }
-    }
-    @media (max-width: 480px) {
-      .stats-row { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
-      .admin-content { padding: 1rem; }
-      .s-value { font-size: 1.8rem; }
-    }
+/* ═══════ PIPELINE / KANBAN ═══════ */
+.pipeline-wrap{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.5rem;}
+.pipeline-col{background:white;border-radius:12px;box-shadow:0 1px 6px rgba(0,0,0,0.06);overflow:hidden;min-height:300px;}
+.pipeline-col-header{padding:0.9rem 1rem;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;display:flex;justify-content:space-between;align-items:center;}
+.pipeline-col-header .count{font-family:'Space Mono',monospace;background:rgba(0,0,0,0.1);padding:0.1rem 0.5rem;border-radius:50px;}
+.pipeline-col-header.new-h{background:#dbeafe;color:#1d4ed8;}
+.pipeline-col-header.contacted-h{background:#f3e8ff;color:#7c3aed;}
+.pipeline-col-header.docs-h{background:#fef3c7;color:#b45309;}
+.pipeline-col-header.enrolled-h{background:#d1fae5;color:#065f46;}
+.pipeline-items{padding:0.6rem;}
+.pipeline-card{background:#f9fafb;border-radius:8px;padding:0.75rem;margin-bottom:0.5rem;cursor:pointer;transition:all 0.2s;border:1px solid #f3f4f6;}
+.pipeline-card:hover{background:white;box-shadow:0 2px 8px rgba(0,0,0,0.08);border-color:#e5e7eb;}
+.pc-name{font-size:0.855rem;font-weight:600;color:var(--navy);margin-bottom:0.2rem;}
+.pc-dest{font-size:0.75rem;color:#9ca3af;}
+.pc-date{font-size:0.7rem;color:#d1d5db;margin-top:0.35rem;font-family:'Space Mono',monospace;}
 
-    /* ═══════════ LOADING SPINNER ═══════════ */
-    .spinner { display: inline-block; width: 20px; height: 20px; border: 2px solid rgba(201,168,76,0.3); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.7s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+/* ═══════ CHARTS ═══════ */
+.charts-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;}
+.chart-card{background:white;border-radius:12px;padding:1.4rem;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
+.chart-card h4{font-size:0.9rem;font-weight:700;color:var(--navy);margin-bottom:1rem;}
+.chart-wrap{position:relative;height:220px;}
+@media(max-width:768px){.charts-row{grid-template-columns:1fr;}.chart-wrap{height:180px;}}
 
-    /* ═══════════ DETAIL PANEL (inquiry view) ═══════════ */
-    .detail-panel { background: white; border-radius: 12px; padding: 1.5rem; box-shadow: 0 1px 6px rgba(0,0,0,0.06); margin-bottom: 1.5rem; }
-    .detail-panel h4 { font-size: 0.85rem; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.08em; font-family: 'Space Mono', monospace; margin-bottom: 0.5rem; }
-    .detail-panel p { font-size: 0.9rem; color: #374151; line-height: 1.6; }
-  </style>
+/* ═══════ NOTES (on inquiry) ═══════ */
+.notes-list{margin-bottom:0.75rem;}
+.note-item{background:#f9fafb;border-radius:8px;padding:0.75rem;margin-bottom:0.5rem;border-left:3px solid var(--gold);}
+.note-item .note-text{font-size:0.855rem;color:#374151;line-height:1.5;}
+.note-item .note-meta{font-size:0.7rem;color:#9ca3af;font-family:'Space Mono',monospace;margin-top:0.35rem;}
+.note-input-wrap{display:flex;gap:0.5rem;margin-top:0.5rem;}
+.note-input-wrap input{flex:1;padding:0.55rem 0.85rem;border:1.5px solid #e5e7eb;border-radius:7px;font-family:inherit;font-size:0.855rem;outline:none;}
+.note-input-wrap input:focus{border-color:var(--gold);}
+.note-input-wrap button{padding:0.55rem 1rem;background:var(--navy);color:var(--gold);border:none;border-radius:7px;font-family:inherit;font-size:0.82rem;font-weight:600;cursor:pointer;}
+
+/* ═══════ ACTIVITY LOG ═══════ */
+.activity-list{padding:0;}
+.activity-item{display:flex;gap:0.85rem;padding:0.75rem 1.4rem;border-bottom:1px solid #f3f4f6;align-items:flex-start;}
+.activity-item:last-child{border-bottom:none;}
+.act-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:0.35rem;}
+.act-dot.green{background:var(--green);}.act-dot.blue{background:var(--blue);}
+.act-dot.gold{background:var(--gold);}.act-dot.red{background:var(--red);}
+.act-dot.purple{background:var(--purple);}
+.act-body{flex:1;}
+.act-text{font-size:0.855rem;color:#374151;line-height:1.4;}
+.act-time{font-size:0.7rem;color:#9ca3af;font-family:'Space Mono',monospace;margin-top:0.2rem;}
+
+/* ═══════ DETAIL GRID ═══════ */
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-bottom:1rem;}
+.detail-cell{background:#f9fafb;border-radius:8px;padding:0.85rem;}
+.detail-cell h5{font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:#9ca3af;font-family:'Space Mono',monospace;margin-bottom:0.3rem;}
+.detail-cell p{font-size:0.875rem;color:#374151;font-weight:500;}
+
+/* ═══════ INTAKE TRACKER ═══════ */
+.intake-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1.5rem;}
+.intake-card{background:white;border-radius:12px;padding:1.4rem;box-shadow:0 1px 6px rgba(0,0,0,0.06);}
+.intake-card h4{font-size:0.9rem;font-weight:700;color:var(--navy);margin-bottom:1rem;}
+.intake-bar-wrap{margin-bottom:0.75rem;}
+.intake-bar-label{display:flex;justify-content:space-between;font-size:0.78rem;color:#666;margin-bottom:0.3rem;}
+.intake-bar{height:8px;background:#f3f4f6;border-radius:50px;overflow:hidden;}
+.intake-bar-fill{height:100%;border-radius:50px;transition:width 0.6s ease;}
+
+/* MOBILE SIDEBAR */
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:190;}
+.sidebar-overlay.show{display:block;}
+@media(max-width:768px){
+  :root{--sidebar:0px;}
+  .sidebar{transform:translateX(-260px);width:260px;}
+  .sidebar.open{transform:translateX(0);}
+  .sidebar-close{display:block;}
+  .admin-main{margin-left:0;}
+  .menu-toggle{display:block;}
+  .stats-row{grid-template-columns:1fr 1fr;}
+  .form-row{grid-template-columns:1fr;}
+  .topbar-right .btn-ghost{display:none;}
+  .global-search{width:160px;}.global-search:focus{width:200px;}
+  .pipeline-wrap{grid-template-columns:1fr 1fr;}
+  .charts-row{grid-template-columns:1fr;}
+  .detail-grid{grid-template-columns:1fr;}
+  .intake-grid{grid-template-columns:1fr;}
+  .tbl thead th:nth-child(n+4){display:none;}
+  .tbl tbody td:nth-child(n+4){display:none;}
+}
+@media(max-width:480px){
+  .stats-row{grid-template-columns:1fr 1fr;gap:0.6rem;}
+  .pipeline-wrap{grid-template-columns:1fr;}
+  .admin-content{padding:1rem;}
+  .s-value{font-size:1.8rem;}
+}
+</style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════
-     LOGIN SCREEN
-═══════════════════════════════ -->
+<!-- LOGIN -->
 <div class="login-screen" id="loginScreen">
   <div class="login-card">
     <div class="login-logo">🌍</div>
     <h1>MarinGlobal Admin</h1>
     <p>Secure management portal</p>
-    <input class="login-input" type="email" id="loginEmail" placeholder="Email address" autocomplete="email" />
-    <input class="login-input" type="password" id="loginPassword" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter') doLogin()" />
+    <input class="login-input" type="email" id="loginEmail" placeholder="Email address" autocomplete="email"/>
+    <input class="login-input" type="password" id="loginPassword" placeholder="Password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"/>
     <button class="login-btn" onclick="doLogin()" id="loginBtn">Sign In</button>
     <div class="login-error" id="loginError"></div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════
-     ADMIN LAYOUT
-═══════════════════════════════ -->
+<!-- ADMIN LAYOUT -->
 <div class="admin-layout" id="adminLayout">
-
   <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
 
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
-      <div>
+      <div class="brand-text">
         <div class="brand">MarinGlobal</div>
         <div class="sub">ADMIN PORTAL</div>
       </div>
       <button class="sidebar-close" onclick="closeSidebar()">✕</button>
     </div>
     <nav class="sidebar-nav">
-      <div class="nav-label">Overview</div>
+      <div class="nav-section">Overview</div>
       <div class="nav-item active" onclick="showPanel('dashboard',this)"><span class="ni">📊</span> Dashboard</div>
-      <div class="nav-label">Content</div>
+      <div class="nav-section">Admissions</div>
+      <div class="nav-item" onclick="showPanel('pipeline',this)"><span class="ni">🗂️</span> Pipeline <span class="nav-badge" id="nb-new">0</span></div>
+      <div class="nav-item" onclick="showPanel('inquiries',this)"><span class="ni">📨</span> All Inquiries</div>
+      <div class="nav-section">Content</div>
       <div class="nav-item" onclick="showPanel('posts',this)"><span class="ni">📝</span> Blog Posts</div>
       <div class="nav-item" onclick="showPanel('testimonials',this)"><span class="ni">💬</span> Testimonials</div>
-      <div class="nav-label">Admissions</div>
-      <div class="nav-item" onclick="showPanel('inquiries',this)"><span class="ni">📨</span> Inquiries</div>
-      <div class="nav-label">Tools</div>
-      <div class="nav-item" onclick="showPanel('export',this)"><span class="ni">📊</span> Export Data</div>
+      <div class="nav-section">Analytics</div>
+      <div class="nav-item" onclick="showPanel('analytics',this)"><span class="ni">📈</span> Charts & Stats</div>
+      <div class="nav-item" onclick="showPanel('intake',this)"><span class="ni">🎓</span> Intake Tracker</div>
+      <div class="nav-section">Tools</div>
+      <div class="nav-item" onclick="showPanel('activity',this)"><span class="ni">🕐</span> Activity Log</div>
+      <div class="nav-item" onclick="showPanel('export',this)"><span class="ni">📤</span> Export Data</div>
       <div class="nav-item" onclick="showPanel('settings',this)"><span class="ni">⚙️</span> Settings</div>
     </nav>
     <div class="sidebar-footer">
@@ -244,57 +318,131 @@
         <span class="topbar-title" id="topbarTitle">Dashboard</span>
       </div>
       <div class="topbar-right">
-        <button class="btn-ghost" onclick="loadData()" title="Refresh">↻ Refresh</button>
-        <button class="btn-ghost" onclick="window.open('../index.html','_blank')">View Site ↗</button>
+        <div class="global-search-wrap">
+          <input class="global-search" type="text" placeholder="Search everything…" id="globalSearch" oninput="globalSearch(this.value)" onblur="setTimeout(()=>hideSearch(),200)"/>
+          <div class="search-results" id="searchResults"></div>
+        </div>
+        <button class="btn-ghost" onclick="loadData()" title="Refresh data">↻</button>
+        <button class="btn-ghost" onclick="window.open('../index.html','_blank')" title="View site">Site ↗</button>
         <button class="btn-primary" id="topbarAddBtn" onclick="handleAdd()" style="display:none;">+ Add New</button>
       </div>
     </div>
 
     <div class="admin-content">
 
-      <!-- DASHBOARD -->
+      <!-- ═══ DASHBOARD ═══ -->
       <div class="panel active" id="panel-dashboard">
         <div class="stats-row">
-          <div class="stat-card blue">
+          <div class="stat-card blue" onclick="showPanel('inquiries',document.querySelector('[onclick*=inquiries]'))">
             <div class="s-label">Total Inquiries</div>
             <div class="s-value" id="stat-inquiries"><span class="spinner"></span></div>
-            <div class="s-change" id="stat-inquiries-sub">Loading…</div>
+            <div class="s-change" id="stat-inq-sub">Loading…</div>
           </div>
-          <div class="stat-card gold">
+          <div class="stat-card gold" onclick="showPanel('posts',document.querySelector('[onclick*=posts]'))">
             <div class="s-label">Published Posts</div>
             <div class="s-value" id="stat-posts"><span class="spinner"></span></div>
             <div class="s-change" id="stat-posts-sub">Loading…</div>
           </div>
-          <div class="stat-card green">
+          <div class="stat-card green" onclick="showPanel('testimonials',document.querySelector('[onclick*=testimonials]'))">
             <div class="s-label">Testimonials</div>
             <div class="s-value" id="stat-testimonials"><span class="spinner"></span></div>
             <div class="s-change">Live on site</div>
           </div>
-          <div class="stat-card navy">
+          <div class="stat-card navy" onclick="showPanel('pipeline',document.querySelector('[onclick*=pipeline]'))">
             <div class="s-label">Enrolled</div>
             <div class="s-value" id="stat-enrolled"><span class="spinner"></span></div>
             <div class="s-change">This intake</div>
           </div>
         </div>
+
+        <div class="charts-row">
+          <div class="chart-card">
+            <h4>Inquiries by Destination</h4>
+            <div class="chart-wrap"><canvas id="chartDest"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h4>Pipeline Status</h4>
+            <div class="chart-wrap"><canvas id="chartStatus"></canvas></div>
+          </div>
+        </div>
+
         <div class="table-card">
-          <div class="table-card-header">
-            <h3>Recent Inquiries</h3>
-            <button class="btn-primary" onclick="showPanel('inquiries', document.querySelector('[onclick*=inquiries]'))">View All →</button>
+          <div class="tc-header">
+            <h3>🔥 New Inquiries</h3>
+            <button class="btn-primary" onclick="showPanel('inquiries',document.querySelector('[onclick*=inquiries]'))">View All →</button>
           </div>
           <table class="tbl">
-            <thead><tr><th>Name</th><th>Email</th><th>Destination</th><th>Status</th><th>Date</th></tr></thead>
-            <tbody id="recentInquiries"><tr><td colspan="5"><div class="empty-state"><div class="ei">📭</div><p>No inquiries yet</p></div></td></tr></tbody>
+            <thead><tr><th>Name</th><th>Email</th><th>Destination</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody id="recentInquiries"><tr><td colspan="6"><div class="empty-state"><div class="ei">📭</div><p>No inquiries yet</p></div></td></tr></tbody>
           </table>
         </div>
       </div>
 
-      <!-- BLOG POSTS -->
+      <!-- ═══ PIPELINE ═══ -->
+      <div class="panel" id="panel-pipeline">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+          <p style="font-size:0.85rem;color:#666;">Drag students through the admissions pipeline by updating their status.</p>
+        </div>
+        <div class="pipeline-wrap" id="pipelineBoard">
+          <div class="pipeline-col">
+            <div class="pipeline-col-header new-h"><span>New</span><span class="count" id="pc-new">0</span></div>
+            <div class="pipeline-items" id="pipe-new"></div>
+          </div>
+          <div class="pipeline-col">
+            <div class="pipeline-col-header contacted-h"><span>Contacted</span><span class="count" id="pc-contacted">0</span></div>
+            <div class="pipeline-items" id="pipe-contacted"></div>
+          </div>
+          <div class="pipeline-col">
+            <div class="pipeline-col-header docs-h"><span>Docs Received</span><span class="count" id="pc-docs">0</span></div>
+            <div class="pipeline-items" id="pipe-docs"></div>
+          </div>
+          <div class="pipeline-col">
+            <div class="pipeline-col-header enrolled-h"><span>Enrolled</span><span class="count" id="pc-enrolled">0</span></div>
+            <div class="pipeline-items" id="pipe-enrolled"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ INQUIRIES ═══ -->
+      <div class="panel" id="panel-inquiries">
+        <div class="bulk-bar" id="bulkBar">
+          <span id="bulkCount">0 selected</span>
+          <span>→ Set status:</span>
+          <select id="bulkStatus">
+            <option value="new">New</option>
+            <option value="contacted">Contacted</option>
+            <option value="docs_received">Docs Received</option>
+            <option value="enrolled">Enrolled</option>
+            <option value="closed">Closed</option>
+          </select>
+          <button onclick="applyBulkStatus()">Apply</button>
+          <button style="background:rgba(255,255,255,0.15);color:white;" onclick="clearBulkSelection()">✕ Clear</button>
+        </div>
+        <div class="table-card">
+          <div class="tc-header">
+            <h3>All Inquiries</h3>
+            <div class="tc-actions">
+              <input class="tbl-search" type="text" placeholder="Search…" oninput="filterTable('inquiriesTable',this.value)"/>
+              <button class="btn-green" onclick="exportCSV('inquiries')">⬇ CSV</button>
+            </div>
+          </div>
+          <table class="tbl">
+            <thead><tr>
+              <th class="cb-col"><input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)"/></th>
+              <th>Name</th><th>Email</th><th>Country</th><th>Destination</th><th>Status</th><th>Date</th><th>Actions</th>
+            </tr></thead>
+            <tbody id="inquiriesTable"><tr><td colspan="8"><div class="empty-state"><div class="ei">📨</div><p>No inquiries yet.</p></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ BLOG POSTS ═══ -->
       <div class="panel" id="panel-posts">
         <div class="table-card">
-          <div class="table-card-header">
+          <div class="tc-header">
             <h3>Blog Posts</h3>
-            <div style="display:flex;gap:0.5rem;align-items:center;">
-              <input class="table-search" type="text" placeholder="Search posts…" oninput="filterTable('postsTable', this.value)" />
+            <div class="tc-actions">
+              <input class="tbl-search" type="text" placeholder="Search posts…" oninput="filterTable('postsTable',this.value)"/>
               <button class="btn-primary" onclick="openPostModal()">+ New Post</button>
             </div>
           </div>
@@ -305,14 +453,14 @@
         </div>
       </div>
 
-      <!-- TESTIMONIALS -->
+      <!-- ═══ TESTIMONIALS ═══ -->
       <div class="panel" id="panel-testimonials">
         <div class="table-card">
-          <div class="table-card-header">
+          <div class="tc-header">
             <h3>Student Testimonials</h3>
-            <div style="display:flex;gap:0.5rem;align-items:center;">
-              <input class="table-search" type="text" placeholder="Search…" oninput="filterTable('testimonialsTable', this.value)" />
-              <button class="btn-primary" onclick="openTestimonialModal()">+ Add Testimonial</button>
+            <div class="tc-actions">
+              <input class="tbl-search" type="text" placeholder="Search…" oninput="filterTable('testimonialsTable',this.value)"/>
+              <button class="btn-primary" onclick="openTestimonialModal()">+ Add</button>
             </div>
           </div>
           <table class="tbl">
@@ -322,92 +470,136 @@
         </div>
       </div>
 
-      <!-- INQUIRIES -->
-      <div class="panel" id="panel-inquiries">
-        <div class="table-card">
-          <div class="table-card-header">
-            <h3>All Inquiries</h3>
-            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;">
-              <input class="table-search" type="text" placeholder="Search inquiries…" oninput="filterTable('inquiriesTable', this.value)" />
-              <button class="btn-export" onclick="exportToCSV()">⬇ Export CSV</button>
-            </div>
+      <!-- ═══ ANALYTICS ═══ -->
+      <div class="panel" id="panel-analytics">
+        <div class="stats-row" style="grid-template-columns:repeat(5,1fr);">
+          <div class="stat-card blue"><div class="s-label">Total Inquiries</div><div class="s-value" id="an-total">—</div></div>
+          <div class="stat-card gold"><div class="s-label">New</div><div class="s-value" id="an-new">—</div></div>
+          <div class="stat-card purple"><div class="s-label">Contacted</div><div class="s-value" id="an-contacted">—</div></div>
+          <div class="stat-card green"><div class="s-label">Enrolled</div><div class="s-value" id="an-enrolled">—</div></div>
+          <div class="stat-card navy"><div class="s-label">Conversion</div><div class="s-value" id="an-rate">—</div></div>
+        </div>
+        <div class="charts-row">
+          <div class="chart-card">
+            <h4>Inquiries by Origin Country</h4>
+            <div class="chart-wrap"><canvas id="chartCountry"></canvas></div>
           </div>
-          <table class="tbl">
-            <thead><tr><th>Name</th><th>Email</th><th>Country</th><th>Destination</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
-            <tbody id="inquiriesTable"><tr><td colspan="7"><div class="empty-state"><div class="ei">📨</div><p>No inquiries yet.</p></div></td></tr></tbody>
-          </table>
+          <div class="chart-card">
+            <h4>Field of Interest</h4>
+            <div class="chart-wrap"><canvas id="chartField"></canvas></div>
+          </div>
+        </div>
+        <div class="charts-row">
+          <div class="chart-card">
+            <h4>Inquiries Over Time (Monthly)</h4>
+            <div class="chart-wrap"><canvas id="chartTimeline"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <h4>University Preferences</h4>
+            <div class="chart-wrap"><canvas id="chartUni"></canvas></div>
+          </div>
         </div>
       </div>
 
-      <!-- EXPORT / GOOGLE SHEETS -->
+      <!-- ═══ INTAKE TRACKER ═══ -->
+      <div class="panel" id="panel-intake">
+        <div class="intake-grid">
+          <div class="intake-card">
+            <h4>🎓 Sep 2025 Intake</h4>
+            <div id="intake-sep25"></div>
+          </div>
+          <div class="intake-card">
+            <h4>🎓 Feb 2026 Intake</h4>
+            <div id="intake-feb26"></div>
+          </div>
+          <div class="intake-card">
+            <h4>📍 By Destination</h4>
+            <div id="intake-dest"></div>
+          </div>
+          <div class="intake-card">
+            <h4>📚 By Field of Study</h4>
+            <div id="intake-field"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ ACTIVITY LOG ═══ -->
+      <div class="panel" id="panel-activity">
+        <div class="table-card">
+          <div class="tc-header"><h3>Activity Log</h3><button class="btn-ghost" onclick="renderActivity()">↻ Refresh</button></div>
+          <div class="activity-list" id="activityList">
+            <div class="empty-state"><div class="ei">🕐</div><p>No activity yet.</p></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ EXPORT ═══ -->
       <div class="panel" id="panel-export">
         <div class="table-card" style="padding:2rem;">
-          <h3 style="margin-bottom:0.5rem;color:var(--navy);">📊 Export & Google Sheets</h3>
-          <p style="color:#666;font-size:0.875rem;margin-bottom:2rem;line-height:1.6;">Download your data as CSV and import it into Google Sheets or Excel, or use the Google Sheets import link below.</p>
-
-          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin-bottom:2rem;">
+          <h3 style="color:var(--navy);margin-bottom:0.5rem;">📤 Export Data</h3>
+          <p style="color:#666;font-size:0.875rem;margin-bottom:2rem;">Download as CSV and open in Excel or import into Google Sheets.</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem;">
             <div style="border:1.5px solid #e5e7eb;border-radius:10px;padding:1.5rem;text-align:center;">
               <div style="font-size:2rem;margin-bottom:0.5rem;">📨</div>
               <h4 style="color:var(--navy);margin-bottom:0.5rem;">Inquiries</h4>
-              <p style="font-size:0.8rem;color:#666;margin-bottom:1rem;">All student inquiries with status, contact details and destination.</p>
-              <button class="btn-export" style="width:100%;" onclick="exportToCSV('inquiries')">⬇ Download CSV</button>
+              <p style="font-size:0.78rem;color:#666;margin-bottom:1rem;">All inquiries with contact info, status and messages.</p>
+              <button class="btn-green" style="width:100%;" onclick="exportCSV('inquiries')">⬇ Download CSV</button>
             </div>
             <div style="border:1.5px solid #e5e7eb;border-radius:10px;padding:1.5rem;text-align:center;">
               <div style="font-size:2rem;margin-bottom:0.5rem;">📝</div>
               <h4 style="color:var(--navy);margin-bottom:0.5rem;">Blog Posts</h4>
-              <p style="font-size:0.8rem;color:#666;margin-bottom:1rem;">All blog posts with titles, categories, authors and publish status.</p>
-              <button class="btn-export" style="width:100%;" onclick="exportToCSV('posts')">⬇ Download CSV</button>
+              <p style="font-size:0.78rem;color:#666;margin-bottom:1rem;">All posts with categories, authors and status.</p>
+              <button class="btn-green" style="width:100%;" onclick="exportCSV('posts')">⬇ Download CSV</button>
             </div>
             <div style="border:1.5px solid #e5e7eb;border-radius:10px;padding:1.5rem;text-align:center;">
               <div style="font-size:2rem;margin-bottom:0.5rem;">💬</div>
               <h4 style="color:var(--navy);margin-bottom:0.5rem;">Testimonials</h4>
-              <p style="font-size:0.8rem;color:#666;margin-bottom:1rem;">All student testimonials with names, universities and status.</p>
-              <button class="btn-export" style="width:100%;" onclick="exportToCSV('testimonials')">⬇ Download CSV</button>
+              <p style="font-size:0.78rem;color:#666;margin-bottom:1rem;">All testimonials with student details.</p>
+              <button class="btn-green" style="width:100%;" onclick="exportCSV('testimonials')">⬇ Download CSV</button>
             </div>
           </div>
-
           <div style="background:#f0fdf4;border:1.5px solid #bbf7d0;border-radius:10px;padding:1.5rem;">
-            <h4 style="color:#15803d;margin-bottom:0.75rem;">📗 Import into Google Sheets</h4>
-            <ol style="font-size:0.875rem;color:#374151;line-height:2;padding-left:1.5rem;">
-              <li>Click <strong>Download CSV</strong> above for the data you want</li>
-              <li>Open <a href="https://sheets.google.com" target="_blank" style="color:#15803d;">Google Sheets</a> and create a new spreadsheet</li>
-              <li>Click <strong>File → Import → Upload</strong> and select the downloaded CSV</li>
-              <li>Choose <strong>"Replace spreadsheet"</strong> and click Import</li>
-              <li>Your data is now in Google Sheets — you can sort, filter and analyse freely</li>
+            <h4 style="color:#15803d;margin-bottom:0.75rem;">📗 How to Import into Google Sheets</h4>
+            <ol style="font-size:0.855rem;color:#374151;line-height:2.2;padding-left:1.5rem;">
+              <li>Click <strong>Download CSV</strong> above</li>
+              <li>Open <a href="https://sheets.google.com" target="_blank" style="color:#15803d;font-weight:600;">Google Sheets</a> → Create new spreadsheet</li>
+              <li>Click <strong>File → Import → Upload</strong> → select the CSV file</li>
+              <li>Choose <strong>"Replace spreadsheet"</strong> → Import data</li>
+              <li>Your data is live in Sheets — sortable, filterable, shareable</li>
             </ol>
           </div>
         </div>
       </div>
 
-      <!-- SETTINGS -->
+      <!-- ═══ SETTINGS ═══ -->
       <div class="panel" id="panel-settings">
         <div class="table-card" style="padding:2rem;margin-bottom:1.5rem;">
-          <h3 style="color:var(--navy);margin-bottom:0.5rem;">⚙️ Site Settings</h3>
-          <p style="color:#666;font-size:0.875rem;margin-bottom:1.5rem;">Update contact details shown on the website.</p>
+          <h3 style="color:var(--navy);margin-bottom:1.25rem;">⚙️ Site Settings</h3>
           <div class="form-row">
-            <div class="form-group"><label>WhatsApp Number</label><input type="text" id="cfg-whatsapp" placeholder="255712345678" /></div>
-            <div class="form-group"><label>Contact Email</label><input type="text" id="cfg-email" placeholder="info@maringlobalscholars.com" /></div>
+            <div class="form-group"><label>WhatsApp Number</label><input type="text" id="cfg-wa" placeholder="255712345678"/></div>
+            <div class="form-group"><label>Contact Email</label><input type="text" id="cfg-email" placeholder="info@maringlobalscholars.com"/></div>
           </div>
-          <div class="form-group"><label>Office Location</label><input type="text" id="cfg-location" placeholder="Dar es Salaam, Tanzania" /></div>
-          <button class="btn-primary" onclick="saveSettings()">Save Settings</button>
+          <div class="form-group"><label>Office Location</label><input type="text" id="cfg-loc" placeholder="Dar es Salaam, Tanzania"/></div>
+          <button class="btn-primary" onclick="toast('Settings noted — update components.js with these values.','info')">Save Settings</button>
         </div>
         <div class="table-card" style="padding:2rem;">
-          <h3 style="color:var(--navy);margin-bottom:0.5rem;">🔥 Firebase Info</h3>
-          <p style="color:#666;font-size:0.875rem;">Project: <strong>maringlobal-scholars</strong> — Connected ✅</p>
+          <h3 style="color:var(--navy);margin-bottom:0.5rem;">🔥 Firebase Status</h3>
+          <p style="color:#666;font-size:0.875rem;">Project: <strong>maringlobal-scholars</strong></p>
+          <p style="color:var(--green);font-size:0.875rem;margin-top:0.4rem;" id="fbStatus">Checking connection…</p>
         </div>
       </div>
 
     </div><!-- /admin-content -->
   </main>
-</div><!-- /admin-layout -->
+</div>
 
-<!-- POST MODAL -->
+<!-- ════ POST MODAL ════ -->
 <div class="modal-overlay" id="postModal">
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal('postModal')">✕</button>
     <h2 id="postModalTitle">New Blog Post</h2>
-    <input type="hidden" id="editPostId" />
-    <div class="form-group"><label>Title *</label><input type="text" id="post-title" placeholder="Article title" /></div>
+    <input type="hidden" id="editPostId"/>
+    <div class="form-group"><label>Title *</label><input type="text" id="post-title" placeholder="Article title"/></div>
     <div class="form-row">
       <div class="form-group"><label>Category</label>
         <select id="post-category">
@@ -418,477 +610,767 @@
           <option value="universities">Universities</option>
         </select>
       </div>
-      <div class="form-group"><label>Emoji</label><input type="text" id="post-emoji" placeholder="📝" maxlength="4" /></div>
+      <div class="form-group"><label>Emoji</label><input type="text" id="post-emoji" placeholder="📝" maxlength="4"/></div>
     </div>
-    <div class="form-group"><label>Author</label><input type="text" id="post-author" placeholder="Author name" /></div>
-    <div class="form-group"><label>Excerpt *</label><textarea id="post-excerpt" rows="2" placeholder="Short 1–2 sentence summary shown on cards…"></textarea></div>
-    <div class="form-group"><label>Full Content (HTML allowed)</label><textarea id="post-body" rows="8" placeholder="<p>Write the full article here...</p>"></textarea></div>
-    <div class="form-group"><label>Publish Status</label>
-      <select id="post-published"><option value="true">✅ Published (live on site)</option><option value="false">📋 Draft (hidden)</option></select>
+    <div class="form-group"><label>Author</label><input type="text" id="post-author" placeholder="Author name"/></div>
+    <div class="form-group"><label>Excerpt *</label><textarea id="post-excerpt" rows="2" placeholder="Short summary shown on cards…"></textarea></div>
+    <div class="form-group"><label>Full Content (HTML allowed)</label><textarea id="post-body" rows="7" placeholder="<p>Full article content…</p>"></textarea></div>
+    <div class="form-group"><label>Status</label>
+      <select id="post-published"><option value="true">✅ Published</option><option value="false">📋 Draft</option></select>
     </div>
     <div class="modal-actions">
       <button class="btn-ghost" onclick="closeModal('postModal')">Cancel</button>
-      <button class="btn-primary" onclick="savePost()">Save Post</button>
+      <button class="btn-primary" id="savePostBtn" onclick="savePost()">Save Post</button>
     </div>
   </div>
 </div>
 
-<!-- TESTIMONIAL MODAL -->
+<!-- ════ TESTIMONIAL MODAL ════ -->
 <div class="modal-overlay" id="testimonialModal">
   <div class="modal-box">
     <button class="modal-close" onclick="closeModal('testimonialModal')">✕</button>
     <h2 id="testimonialModalTitle">Add Testimonial</h2>
-    <input type="hidden" id="editTestimonialId" />
+    <input type="hidden" id="editTestimonialId"/>
     <div class="form-row">
-      <div class="form-group"><label>Student Name *</label><input type="text" id="t-name" placeholder="Amara Nkosi" /></div>
-      <div class="form-group"><label>Initials</label><input type="text" id="t-initials" maxlength="3" placeholder="AN" /></div>
+      <div class="form-group"><label>Student Name *</label><input type="text" id="t-name" placeholder="Amara Nkosi"/></div>
+      <div class="form-group"><label>Initials</label><input type="text" id="t-initials" maxlength="3" placeholder="AN"/></div>
     </div>
     <div class="form-row">
-      <div class="form-group"><label>Origin Country</label><input type="text" id="t-originCountry" placeholder="Tanzania" /></div>
+      <div class="form-group"><label>Origin Country</label><input type="text" id="t-originCountry" placeholder="Tanzania"/></div>
       <div class="form-group"><label>Destination</label>
-        <select id="t-country">
-          <option value="latvia">Latvia</option>
-          <option value="lithuania">Lithuania</option>
-          <option value="estonia">Estonia</option>
-        </select>
+        <select id="t-country"><option value="latvia">Latvia</option><option value="lithuania">Lithuania</option><option value="estonia">Estonia</option></select>
       </div>
     </div>
     <div class="form-row">
-      <div class="form-group"><label>University</label><input type="text" id="t-university" placeholder="University of Latvia" /></div>
-      <div class="form-group"><label>Programme</label><input type="text" id="t-programme" placeholder="BSc Medicine" /></div>
+      <div class="form-group"><label>University</label><input type="text" id="t-university" placeholder="University of Latvia"/></div>
+      <div class="form-group"><label>Programme</label><input type="text" id="t-programme" placeholder="BSc Medicine"/></div>
     </div>
-    <div class="form-group"><label>Year / Class</label><input type="text" id="t-year" placeholder="Class of 2025" /></div>
-    <div class="form-group"><label>Testimonial Quote *</label><textarea id="t-quote" rows="4" placeholder="Student's quote in their own words…"></textarea></div>
+    <div class="form-group"><label>Year / Class</label><input type="text" id="t-year" placeholder="Class of 2025"/></div>
+    <div class="form-group"><label>Quote *</label><textarea id="t-quote" rows="3" placeholder="Student's own words…"></textarea></div>
     <div class="form-group"><label>Visibility</label>
-      <select id="t-published"><option value="true">✅ Published (live on site)</option><option value="false">🔒 Hidden</option></select>
+      <select id="t-published"><option value="true">✅ Published</option><option value="false">🔒 Hidden</option></select>
     </div>
     <div class="modal-actions">
       <button class="btn-ghost" onclick="closeModal('testimonialModal')">Cancel</button>
-      <button class="btn-primary" onclick="saveTestimonial()">Save Testimonial</button>
+      <button class="btn-primary" id="saveTestimonialBtn" onclick="saveTestimonial()">Save</button>
     </div>
   </div>
 </div>
 
-<!-- INQUIRY DETAIL MODAL -->
+<!-- ════ INQUIRY DETAIL MODAL ════ -->
 <div class="modal-overlay" id="inquiryModal">
-  <div class="modal-box">
+  <div class="modal-box wide">
     <button class="modal-close" onclick="closeModal('inquiryModal')">✕</button>
-    <h2>Inquiry Details</h2>
-    <div id="inquiryDetailContent"></div>
-    <div class="modal-actions">
-      <button class="btn-ghost" onclick="closeModal('inquiryModal')">Close</button>
-    </div>
+    <h2 id="inquiryModalTitle">Inquiry Details</h2>
+    <div id="inquiryDetail"></div>
+    <div class="modal-actions"><button class="btn-ghost" onclick="closeModal('inquiryModal')">Close</button></div>
   </div>
 </div>
 
 <div class="toast" id="adminToast"></div>
 
-<!-- FIREBASE -->
+<!-- ════════════ FIREBASE MODULE ════════════ -->
 <script src="../js/firebase-config.js"></script>
 <script type="module">
-  import { initializeApp }                    from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
-  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
-                                               from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
-  import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc,
-           doc, serverTimestamp, query, orderBy, limit, onSnapshot }
-                                               from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+import { initializeApp }       from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
+                                from "https://www.gstatic.com/firebasejs/12.11.0/firebase-auth.js";
+import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc,
+         doc, serverTimestamp, query, orderBy, limit, writeBatch }
+                                from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
 
-  /* ── Init ── */
-  let auth, db;
+let auth, db;
+try {
   const cfg = window.FIREBASE_CONFIG;
+  if (cfg && cfg.apiKey !== 'YOUR_API_KEY') {
+    const app = initializeApp(cfg);
+    auth = getAuth(app);
+    db   = getFirestore(app);
+    window._db   = db;
+    window._auth = auth;
+    window._fs   = { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, serverTimestamp, query, orderBy, limit, writeBatch };
+    document.getElementById('fbStatus').textContent = '✅ Connected to Firebase';
+  } else {
+    document.getElementById('fbStatus').textContent = '⚠️ firebase-config.js not configured';
+  }
+} catch(e) {
+  console.error('Firebase init:', e);
+  document.getElementById('fbStatus').textContent = '❌ ' + e.message;
+}
 
+/* ── AUTH ── */
+window.doLogin = async function() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pw    = document.getElementById('loginPassword').value;
+  const err   = document.getElementById('loginError');
+  const btn   = document.getElementById('loginBtn');
+  err.textContent = '';
+  if (!email || !pw) { err.textContent = 'Enter email and password.'; return; }
+  if (!auth)         { err.textContent = 'Firebase not connected. Check firebase-config.js.'; return; }
+  btn.textContent = 'Signing in…'; btn.disabled = true;
+  try { await signInWithEmailAndPassword(auth, email, pw); }
+  catch(e) {
+    err.textContent = e.code === 'auth/invalid-credential' || e.code === 'auth/wrong-password'
+      ? 'Wrong email or password.' : e.message.replace('Firebase: ','');
+    btn.textContent = 'Sign In'; btn.disabled = false;
+  }
+};
+
+window.doLogout = async function() {
+  if (auth) await signOut(auth);
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('adminLayout').classList.remove('visible');
+  document.getElementById('loginBtn').textContent = 'Sign In';
+  document.getElementById('loginBtn').disabled = false;
+};
+
+if (auth) {
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminLayout').classList.add('visible');
+      document.getElementById('adminEmail').textContent = user.email;
+      loadData();
+    }
+  });
+}
+
+/* ── LOAD DATA ── */
+window.loadData = async function() {
+  if (!db) return;
+  const F = window._fs;
   try {
-    if (cfg && cfg.apiKey !== 'YOUR_API_KEY') {
-      const app = initializeApp(cfg);
-      auth = getAuth(app);
-      db   = getFirestore(app);
-    }
-  } catch(e) { console.error('Firebase init error:', e); }
+    const [pSnap, tSnap, iSnap] = await Promise.all([
+      getDocs(query(collection(db,'posts'),        orderBy('createdAt','desc'), limit(200))),
+      getDocs(query(collection(db,'testimonials'), orderBy('createdAt','desc'), limit(200))),
+      getDocs(query(collection(db,'inquiries'),    orderBy('createdAt','desc'), limit(500)))
+    ]);
+    window._posts = pSnap.docs.map(d=>({id:d.id,...d.data()}));
+    window._tests = tSnap.docs.map(d=>({id:d.id,...d.data()}));
+    window._inqs  = iSnap.docs.map(d=>({id:d.id,...d.data()}));
+    renderAll();
+    logActivity('Data loaded', 'blue');
+    toast('Refreshed ✓', 'success');
+  } catch(e) {
+    toast('Error: ' + e.message, 'error');
+    console.error(e);
+  }
+};
 
-  /* ── Auth ── */
-  window.doLogin = async function() {
-    const email = document.getElementById('loginEmail').value.trim();
-    const pw    = document.getElementById('loginPassword').value;
-    const err   = document.getElementById('loginError');
-    const btn   = document.getElementById('loginBtn');
-    err.textContent = '';
-    if (!email || !pw) { err.textContent = 'Please enter your email and password.'; return; }
-    if (!auth) { err.textContent = 'Firebase not connected. Check firebase-config.js.'; return; }
-    btn.textContent = 'Signing in…';
-    btn.disabled = true;
-    try {
-      await signInWithEmailAndPassword(auth, email, pw);
-      // onAuthStateChanged will handle the rest
-    } catch(e) {
-      err.textContent = e.message.replace('Firebase: ','').replace(' (auth/invalid-credential).','').replace(' (auth/wrong-password).','');
-      btn.textContent = 'Sign In';
-      btn.disabled = false;
-    }
-  };
+function renderAll() {
+  const posts = window._posts || [];
+  const tests = window._tests || [];
+  const inqs  = window._inqs  || [];
 
-  window.doLogout = async function() {
-    if (auth) await signOut(auth);
-    document.getElementById('loginScreen').style.display = 'flex';
-    document.getElementById('adminLayout').classList.remove('visible');
-    document.getElementById('loginBtn').textContent = 'Sign In';
-    document.getElementById('loginBtn').disabled = false;
-  };
+  /* Stats */
+  const newCount = inqs.filter(i=>i.status==='new').length;
+  document.getElementById('stat-inquiries').textContent    = inqs.length;
+  document.getElementById('stat-inq-sub').textContent      = newCount + ' new unread';
+  document.getElementById('stat-inq-sub').className        = 's-change' + (newCount>0?' warn':'');
+  document.getElementById('stat-posts').textContent        = posts.filter(p=>p.published).length;
+  document.getElementById('stat-posts-sub').textContent    = posts.length + ' total';
+  document.getElementById('stat-testimonials').textContent = tests.filter(t=>t.published).length;
+  document.getElementById('stat-enrolled').textContent     = inqs.filter(i=>i.status==='enrolled').length;
+  document.getElementById('nb-new').textContent            = newCount;
 
-  if (auth) {
-    onAuthStateChanged(auth, user => {
-      if (user) {
-        document.getElementById('loginScreen').style.display = 'none';
-        document.getElementById('adminLayout').classList.add('visible');
-        document.getElementById('adminEmail').textContent = user.email;
-        loadData();
+  /* Analytics panel stats */
+  const setEl = (id, v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+  setEl('an-total',    inqs.length);
+  setEl('an-new',      newCount);
+  setEl('an-contacted',inqs.filter(i=>i.status==='contacted').length);
+  setEl('an-enrolled', inqs.filter(i=>i.status==='enrolled').length);
+  const rate = inqs.length ? Math.round(inqs.filter(i=>i.status==='enrolled').length/inqs.length*100) : 0;
+  setEl('an-rate', rate + '%');
+
+  renderRecentInquiries(inqs);
+  renderPostsTable(posts);
+  renderTestimonialsTable(tests);
+  renderInquiriesTable(inqs);
+  renderPipeline(inqs);
+  renderCharts(posts, tests, inqs);
+  renderIntake(inqs);
+  renderActivity();
+}
+
+/* ── RECENT INQUIRIES (dashboard) ── */
+function renderRecentInquiries(inqs) {
+  const tbody = document.getElementById('recentInquiries');
+  const recent = inqs.filter(i=>i.status==='new').slice(0,6);
+  tbody.innerHTML = recent.length ? recent.map(i=>`
+    <tr>
+      <td>${esc(i.firstName||'')} ${esc(i.lastName||'')}</td>
+      <td>${esc(i.email||'')}</td>
+      <td>${esc(i.destination||'—')}</td>
+      <td><span class="badge badge-new">new</span></td>
+      <td>${fmtDate(i.createdAt)}</td>
+      <td>
+        <button class="act-btn" onclick="viewInquiry('${i.id}')" title="View">👁️</button>
+        <button class="act-btn whatsapp" onclick="waOpen('${esc(i.phone||'')}')" title="WhatsApp">💬</button>
+      </td>
+    </tr>`).join('')
+  : '<tr><td colspan="6"><div class="empty-state"><div class="ei">✅</div><p>No new inquiries</p></div></td></tr>';
+}
+
+/* ── POSTS TABLE ── */
+function renderPostsTable(posts) {
+  const tbody = document.getElementById('postsTable');
+  tbody.innerHTML = posts.length ? posts.map(p=>`
+    <tr>
+      <td class="td-clip">${esc(p.emoji||'')} ${esc(p.title||'')}</td>
+      <td>${esc(p.category||'')}</td>
+      <td>${esc(p.author||'')}</td>
+      <td><span class="badge ${p.published?'badge-published':'badge-draft'}">${p.published?'Published':'Draft'}</span></td>
+      <td>${fmtDate(p.createdAt)}</td>
+      <td>
+        <button class="act-btn" onclick="editPost('${p.id}')">✏️</button>
+        <button class="act-btn danger" onclick="deletePost('${p.id}')">🗑️</button>
+      </td>
+    </tr>`).join('')
+  : '<tr><td colspan="6"><div class="empty-state"><div class="ei">📝</div><p>No posts yet.</p></div></td></tr>';
+}
+
+/* ── TESTIMONIALS TABLE ── */
+function renderTestimonialsTable(tests) {
+  const tbody = document.getElementById('testimonialsTable');
+  tbody.innerHTML = tests.length ? tests.map(t=>`
+    <tr>
+      <td>${esc(t.name||'')}</td>
+      <td>${esc(t.originCountry||'')} → ${esc(t.country||'')}</td>
+      <td class="td-clip">${esc(t.university||'')}</td>
+      <td><span class="badge ${t.published?'badge-published':'badge-draft'}">${t.published?'Published':'Hidden'}</span></td>
+      <td>
+        <button class="act-btn" onclick="editTestimonial('${t.id}')">✏️</button>
+        <button class="act-btn danger" onclick="deleteTestimonial('${t.id}')">🗑️</button>
+      </td>
+    </tr>`).join('')
+  : '<tr><td colspan="5"><div class="empty-state"><div class="ei">💬</div><p>No testimonials yet.</p></div></td></tr>';
+}
+
+/* ── INQUIRIES TABLE ── */
+function renderInquiriesTable(inqs) {
+  const tbody = document.getElementById('inquiriesTable');
+  tbody.innerHTML = inqs.length ? inqs.map(i=>`
+    <tr>
+      <td class="cb-col"><input type="checkbox" class="row-cb" value="${i.id}" onchange="updateBulkBar()"/></td>
+      <td>${esc(i.firstName||'')} ${esc(i.lastName||'')}</td>
+      <td>${esc(i.email||'')}</td>
+      <td>${esc(i.country||'—')}</td>
+      <td>${esc(i.destination||'—')}</td>
+      <td>
+        <select class="status-sel" onchange="updateStatus('${i.id}',this.value)">
+          ${['new','contacted','docs_received','enrolled','closed'].map(s=>`<option value="${s}"${i.status===s?' selected':''}>${s.replace('_',' ')}</option>`).join('')}
+        </select>
+      </td>
+      <td>${fmtDate(i.createdAt)}</td>
+      <td>
+        <button class="act-btn" onclick="viewInquiry('${i.id}')" title="Details">👁️</button>
+        <button class="act-btn whatsapp" onclick="waOpen('${esc(i.phone||'')}')" title="WhatsApp">💬</button>
+        <button class="act-btn danger" onclick="deleteInquiry('${i.id}')" title="Delete">🗑️</button>
+      </td>
+    </tr>`).join('')
+  : '<tr><td colspan="8"><div class="empty-state"><div class="ei">📨</div><p>No inquiries yet.</p></div></td></tr>';
+}
+
+/* ── PIPELINE ── */
+function renderPipeline(inqs) {
+  const stages = { new:'pipe-new', contacted:'pipe-contacted', docs_received:'pipe-docs', enrolled:'pipe-enrolled' };
+  const counts = { new:0, contacted:0, docs_received:0, enrolled:0 };
+  Object.values(stages).forEach(id => { const el=document.getElementById(id); if(el) el.innerHTML=''; });
+  inqs.forEach(i => {
+    const stage = i.status||'new';
+    if (!stages[stage]) return;
+    counts[stage] = (counts[stage]||0) + 1;
+    const container = document.getElementById(stages[stage]);
+    if (!container) return;
+    const card = document.createElement('div');
+    card.className = 'pipeline-card';
+    card.innerHTML = `
+      <div class="pc-name">${esc(i.firstName||'')} ${esc(i.lastName||'')}</div>
+      <div class="pc-dest">→ ${esc(i.destination||'—')} · ${esc(i.field||'—')}</div>
+      <div class="pc-date">${fmtDate(i.createdAt)}</div>`;
+    card.onclick = () => viewInquiry(i.id);
+    container.appendChild(card);
+  });
+  document.getElementById('pc-new').textContent       = counts.new;
+  document.getElementById('pc-contacted').textContent = counts.contacted;
+  document.getElementById('pc-docs').textContent      = counts.docs_received||0;
+  document.getElementById('pc-enrolled').textContent  = counts.enrolled;
+}
+
+/* ── CHARTS ── */
+let _charts = {};
+function renderCharts(posts, tests, inqs) {
+  const COLORS = ['#C9A84C','#0D1B3E','#16a34a','#2563eb','#7c3aed','#dc2626','#f59e0b','#06b6d4'];
+
+  function mkChart(id, type, labels, data, label) {
+    if (_charts[id]) _charts[id].destroy();
+    const canvas = document.getElementById(id);
+    if (!canvas) return;
+    _charts[id] = new Chart(canvas, {
+      type, data: {
+        labels,
+        datasets: [{ label: label||'', data,
+          backgroundColor: COLORS.map((c,i)=>c+(type==='bar'?'cc':'99')),
+          borderColor: COLORS, borderWidth: type==='bar'?0:2,
+          tension: 0.4, fill: type==='line'
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: { legend: { display: type!=='bar', position:'bottom', labels:{font:{size:11},padding:12} } },
+        scales: type==='bar'||type==='line' ? { y:{beginAtZero:true,grid:{color:'#f3f4f6'},ticks:{font:{size:11}}}, x:{grid:{display:false},ticks:{font:{size:11}}} } : {}
       }
     });
   }
 
-  /* ── Load All Data ── */
-  window.loadData = async function() {
-    if (!db) return;
-    try {
-      const [pSnap, tSnap, iSnap] = await Promise.all([
-        getDocs(query(collection(db,'posts'),        orderBy('createdAt','desc'), limit(100))),
-        getDocs(query(collection(db,'testimonials'), orderBy('createdAt','desc'), limit(100))),
-        getDocs(query(collection(db,'inquiries'),    orderBy('createdAt','desc'), limit(200)))
-      ]);
-      window._posts  = pSnap.docs.map(d => ({id:d.id,...d.data()}));
-      window._tests  = tSnap.docs.map(d => ({id:d.id,...d.data()}));
-      window._inqs   = iSnap.docs.map(d => ({id:d.id,...d.data()}));
-      renderAll();
-      toast('Data refreshed', 'success');
-    } catch(e) {
-      console.error('Load error:', e);
-      toast('Error loading data: ' + e.message, 'error');
-    }
-  };
+  // Destination donut
+  const destCounts = count(inqs, 'destination');
+  mkChart('chartDest', 'doughnut', Object.keys(destCounts), Object.values(destCounts), 'Destination');
 
-  function renderAll() {
-    const posts = window._posts  || [];
-    const tests = window._tests  || [];
-    const inqs  = window._inqs   || [];
+  // Status donut
+  const statusCounts = count(inqs, 'status');
+  mkChart('chartStatus', 'doughnut', Object.keys(statusCounts), Object.values(statusCounts), 'Status');
 
-    // Stats
-    document.getElementById('stat-posts').textContent        = posts.filter(p=>p.published).length;
-    document.getElementById('stat-posts-sub').textContent    = posts.length + ' total posts';
-    document.getElementById('stat-testimonials').textContent = tests.filter(t=>t.published).length;
-    document.getElementById('stat-inquiries').textContent    = inqs.length;
-    const newCount = inqs.filter(i=>i.status==='new').length;
-    document.getElementById('stat-inquiries-sub').textContent = newCount + ' new unread';
-    document.getElementById('stat-enrolled').textContent     = inqs.filter(i=>i.status==='enrolled').length;
+  // Country bar
+  const countryCounts = count(inqs, 'country');
+  const topCountries = Object.entries(countryCounts).sort((a,b)=>b[1]-a[1]).slice(0,8);
+  mkChart('chartCountry', 'bar', topCountries.map(x=>x[0]), topCountries.map(x=>x[1]), 'Inquiries');
 
-    // Recent inquiries on dashboard
-    const rTbody = document.getElementById('recentInquiries');
-    rTbody.innerHTML = inqs.slice(0,5).map(i => `
-      <tr>
-        <td>${escHtml(i.firstName||'')} ${escHtml(i.lastName||'')}</td>
-        <td>${escHtml(i.email||'')}</td>
-        <td>${escHtml(i.destination||'—')}</td>
-        <td><span class="badge badge-${i.status||'new'}">${i.status||'new'}</span></td>
-        <td>${fmtDate(i.createdAt)}</td>
-      </tr>`).join('') || '<tr><td colspan="5"><div class="empty-state"><div class="ei">📭</div><p>No inquiries yet</p></div></td></tr>';
+  // Field bar
+  const fieldCounts = count(inqs, 'field');
+  mkChart('chartField', 'bar', Object.keys(fieldCounts), Object.values(fieldCounts), 'Count');
 
-    // Posts table
-    const pTbody = document.getElementById('postsTable');
-    pTbody.innerHTML = posts.length ? posts.map(p => `
-      <tr>
-        <td class="td-truncate">${escHtml(p.emoji||'')} ${escHtml(p.title||'')}</td>
-        <td>${escHtml(p.category||'')}</td>
-        <td>${escHtml(p.author||'')}</td>
-        <td><span class="badge ${p.published?'badge-published':'badge-draft'}">${p.published?'Published':'Draft'}</span></td>
-        <td>${fmtDate(p.createdAt)}</td>
-        <td>
-          <button class="act-btn" onclick="editPost('${p.id}')" title="Edit">✏️</button>
-          <button class="act-btn danger" onclick="deletePost('${p.id}')" title="Delete">🗑️</button>
-        </td>
-      </tr>`).join('')
-    : '<tr><td colspan="6"><div class="empty-state"><div class="ei">📝</div><p>No posts yet. Click + New Post to create one.</p></div></td></tr>';
+  // Timeline line chart (monthly)
+  const monthly = {};
+  inqs.forEach(i => {
+    if (!i.createdAt) return;
+    const d = new Date(i.createdAt.seconds ? i.createdAt.seconds*1000 : i.createdAt);
+    const key = d.toLocaleString('en',{month:'short',year:'2-digit'});
+    monthly[key] = (monthly[key]||0)+1;
+  });
+  const months = Object.keys(monthly).slice(-8);
+  mkChart('chartTimeline', 'line', months, months.map(m=>monthly[m]), 'Inquiries');
 
-    // Testimonials table
-    const tTbody = document.getElementById('testimonialsTable');
-    tTbody.innerHTML = tests.length ? tests.map(t => `
-      <tr>
-        <td>${escHtml(t.name||'')}</td>
-        <td>${escHtml(t.originCountry||'')} → ${escHtml(t.country||'')}</td>
-        <td class="td-truncate">${escHtml(t.university||'')}</td>
-        <td><span class="badge ${t.published?'badge-published':'badge-draft'}">${t.published?'Published':'Hidden'}</span></td>
-        <td>
-          <button class="act-btn" onclick="editTestimonial('${t.id}')" title="Edit">✏️</button>
-          <button class="act-btn danger" onclick="deleteTestimonial('${t.id}')" title="Delete">🗑️</button>
-        </td>
-      </tr>`).join('')
-    : '<tr><td colspan="5"><div class="empty-state"><div class="ei">💬</div><p>No testimonials yet.</p></div></td></tr>';
+  // University bar
+  const uniCounts = count(inqs,'destination');
+  mkChart('chartUni','bar',Object.keys(uniCounts),Object.values(uniCounts),'Count');
+}
 
-    // Inquiries table
-    const iTbody = document.getElementById('inquiriesTable');
-    iTbody.innerHTML = inqs.length ? inqs.map(i => `
-      <tr>
-        <td>${escHtml(i.firstName||'')} ${escHtml(i.lastName||'')}</td>
-        <td>${escHtml(i.email||'')}</td>
-        <td>${escHtml(i.country||'—')}</td>
-        <td>${escHtml(i.destination||'—')}</td>
-        <td>
-          <select class="status-select" onchange="updateStatus('${i.id}', this.value)">
-            ${['new','contacted','enrolled','closed'].map(s=>`<option value="${s}" ${i.status===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`).join('')}
-          </select>
-        </td>
-        <td>${fmtDate(i.createdAt)}</td>
-        <td>
-          <button class="act-btn" onclick="viewInquiry('${i.id}')" title="View details">👁️</button>
-          <button class="act-btn danger" onclick="deleteInquiry('${i.id}')" title="Delete">🗑️</button>
-        </td>
-      </tr>`).join('')
-    : '<tr><td colspan="7"><div class="empty-state"><div class="ei">📨</div><p>No inquiries yet.</p></div></td></tr>';
+function count(arr, key) {
+  return arr.reduce((acc, item) => {
+    const v = item[key] || 'Unknown';
+    acc[v] = (acc[v]||0)+1;
+    return acc;
+  }, {});
+}
+
+/* ── INTAKE TRACKER ── */
+function renderIntake(inqs) {
+  function barHTML(label, val, max, color) {
+    const pct = max ? Math.round(val/max*100) : 0;
+    return `<div class="intake-bar-wrap">
+      <div class="intake-bar-label"><span>${label}</span><span>${val}</span></div>
+      <div class="intake-bar"><div class="intake-bar-fill" style="width:${pct}%;background:${color};"></div></div>
+    </div>`;
   }
 
-  /* ── Posts CRUD ── */
-  window.openPostModal = function() {
-    document.getElementById('postModalTitle').textContent = 'New Blog Post';
-    document.getElementById('editPostId').value = '';
-    ['post-title','post-excerpt','post-body','post-author','post-emoji'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('post-published').value = 'true';
-    document.getElementById('postModal').classList.add('open');
-  };
+  const sep25 = inqs.filter(i=>i.intake==='sep2025'||!i.intake);
+  const feb26 = inqs.filter(i=>i.intake==='feb2026');
 
-  window.editPost = function(id) {
-    const p = (window._posts||[]).find(x=>x.id===id);
-    if (!p) return;
-    document.getElementById('postModalTitle').textContent = 'Edit Post';
-    document.getElementById('editPostId').value  = id;
-    document.getElementById('post-title').value   = p.title   || '';
-    document.getElementById('post-excerpt').value = p.excerpt || '';
-    document.getElementById('post-body').value    = p.body    || '';
-    document.getElementById('post-author').value  = p.author  || '';
-    document.getElementById('post-emoji').value   = p.emoji   || '';
-    document.getElementById('post-category').value   = p.category  || 'admissions';
-    document.getElementById('post-published').value  = p.published ? 'true' : 'false';
-    document.getElementById('postModal').classList.add('open');
-  };
+  const statuses = ['new','contacted','docs_received','enrolled'];
+  const maxS = Math.max(...statuses.map(s=>sep25.filter(i=>i.status===s).length),1);
+  document.getElementById('intake-sep25').innerHTML = statuses.map(s=>barHTML(s.replace('_',' '),sep25.filter(i=>i.status===s).length,maxS,'#C9A84C')).join('');
 
-  window.savePost = async function() {
-    const title   = document.getElementById('post-title').value.trim();
-    const excerpt = document.getElementById('post-excerpt').value.trim();
-    if (!title || !excerpt) { toast('Title and excerpt are required', 'error'); return; }
-    const btn = document.querySelector('#postModal .btn-primary');
-    btn.textContent = 'Saving…'; btn.disabled = true;
-    const data = {
-      title, excerpt,
-      body:      document.getElementById('post-body').value,
-      category:  document.getElementById('post-category').value,
-      emoji:     document.getElementById('post-emoji').value || '📄',
-      author:    document.getElementById('post-author').value,
-      published: document.getElementById('post-published').value === 'true',
-      updatedAt: serverTimestamp()
-    };
-    try {
-      const id = document.getElementById('editPostId').value;
-      if (id) { await updateDoc(doc(db,'posts',id), data); }
-      else    { data.createdAt = serverTimestamp(); await addDoc(collection(db,'posts'), data); }
-      await window.loadData();
-      closeModal('postModal');
-      toast('Post saved ✓', 'success');
-    } catch(e) { toast('Error: ' + e.message, 'error'); }
-    btn.textContent = 'Save Post'; btn.disabled = false;
-  };
+  const maxF = Math.max(...statuses.map(s=>feb26.filter(i=>i.status===s).length),1);
+  document.getElementById('intake-feb26').innerHTML = feb26.length
+    ? statuses.map(s=>barHTML(s.replace('_',' '),feb26.filter(i=>i.status===s).length,maxF,'#16a34a')).join('')
+    : '<p style="color:#9ca3af;font-size:0.85rem;">No Feb 2026 inquiries yet.</p>';
 
-  window.deletePost = async function(id) {
-    if (!confirm('Delete this post? This cannot be undone.')) return;
-    try { await deleteDoc(doc(db,'posts',id)); await window.loadData(); toast('Post deleted', 'success'); }
-    catch(e) { toast('Error: ' + e.message, 'error'); }
-  };
+  const dests = ['Latvia','Lithuania','Estonia'];
+  const maxD = Math.max(...dests.map(d=>inqs.filter(i=>i.destination===d).length),1);
+  document.getElementById('intake-dest').innerHTML = dests.map(d=>barHTML(d,inqs.filter(i=>i.destination===d).length,maxD,'#2563eb')).join('');
 
-  /* ── Testimonials CRUD ── */
-  window.openTestimonialModal = function() {
-    document.getElementById('testimonialModalTitle').textContent = 'Add Testimonial';
-    document.getElementById('editTestimonialId').value = '';
-    ['t-name','t-initials','t-originCountry','t-university','t-programme','t-year','t-quote'].forEach(id => document.getElementById(id).value = '');
-    document.getElementById('t-published').value = 'true';
-    document.getElementById('testimonialModal').classList.add('open');
-  };
+  const fields = [...new Set(inqs.map(i=>i.field).filter(Boolean))].slice(0,6);
+  const maxFl = Math.max(...fields.map(f=>inqs.filter(i=>i.field===f).length),1);
+  document.getElementById('intake-field').innerHTML = fields.length
+    ? fields.map(f=>barHTML(f,inqs.filter(i=>i.field===f).length,maxFl,'#7c3aed')).join('')
+    : '<p style="color:#9ca3af;font-size:0.85rem;">No field data yet.</p>';
+}
 
-  window.editTestimonial = function(id) {
-    const t = (window._tests||[]).find(x=>x.id===id);
-    if (!t) return;
-    document.getElementById('testimonialModalTitle').textContent = 'Edit Testimonial';
-    document.getElementById('editTestimonialId').value     = id;
-    document.getElementById('t-name').value          = t.name          || '';
-    document.getElementById('t-initials').value      = t.initials      || '';
-    document.getElementById('t-originCountry').value = t.originCountry || '';
-    document.getElementById('t-country').value       = t.country       || 'latvia';
-    document.getElementById('t-university').value    = t.university    || '';
-    document.getElementById('t-programme').value     = t.programme     || '';
-    document.getElementById('t-year').value          = t.year          || '';
-    document.getElementById('t-quote').value         = t.quote         || '';
-    document.getElementById('t-published').value     = t.published ? 'true' : 'false';
-    document.getElementById('testimonialModal').classList.add('open');
-  };
-
-  window.saveTestimonial = async function() {
-    const name  = document.getElementById('t-name').value.trim();
-    const quote = document.getElementById('t-quote').value.trim();
-    if (!name || !quote) { toast('Name and quote are required', 'error'); return; }
-    const btn = document.querySelector('#testimonialModal .btn-primary');
-    btn.textContent = 'Saving…'; btn.disabled = true;
-    const data = {
-      name, quote,
-      initials:      document.getElementById('t-initials').value || name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2),
-      originCountry: document.getElementById('t-originCountry').value,
-      country:       document.getElementById('t-country').value,
-      university:    document.getElementById('t-university').value,
-      programme:     document.getElementById('t-programme').value,
-      year:          document.getElementById('t-year').value,
-      published:     document.getElementById('t-published').value === 'true',
-      updatedAt:     serverTimestamp()
-    };
-    try {
-      const id = document.getElementById('editTestimonialId').value;
-      if (id) { await updateDoc(doc(db,'testimonials',id), data); }
-      else    { data.createdAt = serverTimestamp(); await addDoc(collection(db,'testimonials'), data); }
-      await window.loadData();
-      closeModal('testimonialModal');
-      toast('Testimonial saved ✓', 'success');
-    } catch(e) { toast('Error: ' + e.message, 'error'); }
-    btn.textContent = 'Save Testimonial'; btn.disabled = false;
-  };
-
-  window.deleteTestimonial = async function(id) {
-    if (!confirm('Delete this testimonial?')) return;
-    try { await deleteDoc(doc(db,'testimonials',id)); await window.loadData(); toast('Deleted ✓', 'success'); }
-    catch(e) { toast('Error: ' + e.message, 'error'); }
-  };
-
-  /* ── Inquiry actions ── */
-  window.updateStatus = async function(id, status) {
-    try { await updateDoc(doc(db,'inquiries',id), { status, updatedAt: serverTimestamp() }); toast('Status → ' + status, 'success'); }
-    catch(e) { toast('Error: ' + e.message, 'error'); }
-  };
-
-  window.deleteInquiry = async function(id) {
-    if (!confirm('Delete this inquiry?')) return;
-    try { await deleteDoc(doc(db,'inquiries',id)); await window.loadData(); toast('Deleted', 'success'); }
-    catch(e) { toast('Error: ' + e.message, 'error'); }
-  };
-
-  window.viewInquiry = function(id) {
-    const i = (window._inqs||[]).find(x=>x.id===id);
-    if (!i) return;
-    document.getElementById('inquiryDetailContent').innerHTML = `
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.5rem;">
-        <div class="detail-panel"><h4>Name</h4><p>${escHtml(i.firstName||'')} ${escHtml(i.lastName||'')}</p></div>
-        <div class="detail-panel"><h4>Email</h4><p>${escHtml(i.email||'—')}</p></div>
-        <div class="detail-panel"><h4>Phone</h4><p>${escHtml(i.phone||'—')}</p></div>
-        <div class="detail-panel"><h4>Status</h4><p><span class="badge badge-${i.status||'new'}">${i.status||'new'}</span></p></div>
-        <div class="detail-panel"><h4>From</h4><p>${escHtml(i.country||'—')}</p></div>
-        <div class="detail-panel"><h4>Destination</h4><p>${escHtml(i.destination||'—')}</p></div>
-        <div class="detail-panel"><h4>Field of Interest</h4><p>${escHtml(i.field||'—')}</p></div>
-        <div class="detail-panel"><h4>Received</h4><p>${fmtDate(i.createdAt)}</p></div>
+/* ── ACTIVITY LOG ── */
+const _actLog = [];
+window.logActivity = function(text, type) {
+  _actLog.unshift({ text, type, time: new Date() });
+  if (_actLog.length > 50) _actLog.pop();
+};
+window.renderActivity = function() {
+  const el = document.getElementById('activityList');
+  if (!_actLog.length) { el.innerHTML = '<div class="empty-state"><div class="ei">🕐</div><p>No activity yet.</p></div>'; return; }
+  el.innerHTML = _actLog.map(a=>`
+    <div class="activity-item">
+      <div class="act-dot ${a.type||'blue'}"></div>
+      <div class="act-body">
+        <div class="act-text">${esc(a.text)}</div>
+        <div class="act-time">${a.time.toLocaleTimeString()} · ${a.time.toLocaleDateString()}</div>
       </div>
-      <div class="detail-panel"><h4>Message</h4><p style="white-space:pre-wrap">${escHtml(i.message||'—')}</p></div>
-      <div style="margin-top:1rem;">
-        <label style="font-size:0.8rem;font-weight:600;color:var(--navy);display:block;margin-bottom:0.5rem;">Update Status</label>
-        <select class="status-select" style="font-size:0.875rem;padding:0.5rem;" onchange="updateStatus('${i.id}', this.value)">
-          ${['new','contacted','enrolled','closed'].map(s=>`<option value="${s}" ${i.status===s?'selected':''}>${s.charAt(0).toUpperCase()+s.slice(1)}</option>`).join('')}
+    </div>`).join('');
+};
+
+/* ── INQUIRY DETAIL + NOTES ── */
+window.viewInquiry = function(id) {
+  const i = (window._inqs||[]).find(x=>x.id===id);
+  if (!i) return;
+  const notes = (i.notes||[]);
+  document.getElementById('inquiryModalTitle').textContent = (i.firstName||'') + ' ' + (i.lastName||'');
+  document.getElementById('inquiryDetail').innerHTML = `
+    <div class="detail-grid">
+      <div class="detail-cell"><h5>Full Name</h5><p>${esc(i.firstName||'')} ${esc(i.lastName||'')}</p></div>
+      <div class="detail-cell"><h5>Email</h5><p><a href="mailto:${esc(i.email||'')}" style="color:var(--navy)">${esc(i.email||'—')}</a></p></div>
+      <div class="detail-cell"><h5>Phone / WhatsApp</h5><p>${esc(i.phone||'—')} ${i.phone?`<button onclick="waOpen('${esc(i.phone)}')" style="background:#16a34a;color:white;border:none;padding:0.2rem 0.6rem;border-radius:4px;cursor:pointer;font-size:0.75rem;margin-left:0.4rem;">💬 WhatsApp</button>`:''}</p></div>
+      <div class="detail-cell"><h5>Status</h5>
+        <select class="status-sel" onchange="updateStatus('${i.id}',this.value)" style="font-size:0.875rem;">
+          ${['new','contacted','docs_received','enrolled','closed'].map(s=>`<option value="${s}"${i.status===s?' selected':''}>${s.replace('_',' ')}</option>`).join('')}
         </select>
-      </div>`;
-    document.getElementById('inquiryModal').classList.add('open');
-  };
+      </div>
+      <div class="detail-cell"><h5>Origin Country</h5><p>${esc(i.country||'—')}</p></div>
+      <div class="detail-cell"><h5>Destination</h5><p>${esc(i.destination||'—')}</p></div>
+      <div class="detail-cell"><h5>Field of Interest</h5><p>${esc(i.field||'—')}</p></div>
+      <div class="detail-cell"><h5>Date Received</h5><p>${fmtDate(i.createdAt)}</p></div>
+    </div>
+    <div class="detail-cell" style="margin-bottom:1rem;background:#f9fafb;border-radius:8px;padding:1rem;">
+      <h5 style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:#9ca3af;font-family:'Space Mono',monospace;margin-bottom:0.5rem;">Message</h5>
+      <p style="font-size:0.875rem;white-space:pre-wrap;color:#374151;">${esc(i.message||'—')}</p>
+    </div>
+    <div>
+      <h5 style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:0.6rem;">📋 Internal Notes (${notes.length})</h5>
+      <div class="notes-list" id="notesList-${i.id}">
+        ${notes.length ? notes.map(n=>`<div class="note-item"><div class="note-text">${esc(n.text)}</div><div class="note-meta">${n.by||'admin'} · ${n.time||''}</div></div>`).join('') : '<p style="color:#9ca3af;font-size:0.82rem;">No notes yet.</p>'}
+      </div>
+      <div class="note-input-wrap">
+        <input type="text" id="noteInput-${i.id}" placeholder="Add a note (e.g. Called, awaiting docs)…" onkeydown="if(event.key==='Enter')addNote('${i.id}')"/>
+        <button onclick="addNote('${i.id}')">Add</button>
+      </div>
+    </div>`;
+  document.getElementById('inquiryModal').classList.add('open');
+};
 
-  /* ── CSV Export ── */
-  window.exportToCSV = function(type) {
-    const t = type || 'inquiries';
-    let rows = [], headers = [];
-    if (t === 'inquiries') {
-      headers = ['First Name','Last Name','Email','Phone','Country','Destination','Field','Message','Status','Date'];
-      rows = (window._inqs||[]).map(i => [i.firstName,i.lastName,i.email,i.phone,i.country,i.destination,i.field,i.message,i.status,fmtDate(i.createdAt)]);
-    } else if (t === 'posts') {
-      headers = ['Title','Category','Author','Excerpt','Published','Date'];
-      rows = (window._posts||[]).map(p => [p.title,p.category,p.author,p.excerpt,p.published?'Yes':'No',fmtDate(p.createdAt)]);
-    } else if (t === 'testimonials') {
-      headers = ['Name','Origin','Destination','University','Programme','Year','Quote','Published','Date'];
-      rows = (window._tests||[]).map(t => [t.name,t.originCountry,t.country,t.university,t.programme,t.year,t.quote,t.published?'Yes':'No',fmtDate(t.createdAt)]);
-    }
-    const csv = [headers, ...rows].map(r => r.map(v => '"'+(String(v||'').replace(/"/g,'""'))+'"').join(',')).join('\n');
-    const blob = new Blob([csv], {type:'text/csv'});
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `maringlobal-${t}-${new Date().toISOString().slice(0,10)}.csv`;
-    a.click();
-    toast('CSV downloaded ✓', 'success');
-  };
+window.addNote = async function(id) {
+  const input = document.getElementById('noteInput-' + id);
+  const text = input.value.trim();
+  if (!text) return;
+  const inq = (window._inqs||[]).find(x=>x.id===id);
+  if (!inq) return;
+  const note = { text, by: document.getElementById('adminEmail').textContent, time: new Date().toLocaleString() };
+  const notes = [...(inq.notes||[]), note];
+  try {
+    const F = window._fs;
+    await updateDoc(doc(db,'inquiries',id), { notes });
+    inq.notes = notes;
+    const list = document.getElementById('notesList-' + id);
+    if (list) list.innerHTML = notes.map(n=>`<div class="note-item"><div class="note-text">${esc(n.text)}</div><div class="note-meta">${n.by} · ${n.time}</div></div>`).join('');
+    input.value = '';
+    logActivity('Note added to ' + (inq.firstName||'inquiry'), 'gold');
+    toast('Note saved ✓', 'success');
+  } catch(e) { toast('Error: ' + e.message, 'error'); }
+};
 
-  window.saveSettings = function() { toast('Settings saved ✓ — update your code files with these values.', 'success'); };
+/* ── STATUS UPDATE ── */
+window.updateStatus = async function(id, status) {
+  if (!db) return;
+  const F = window._fs;
+  try {
+    await updateDoc(doc(db,'inquiries',id), { status, updatedAt: serverTimestamp() });
+    const inq = (window._inqs||[]).find(x=>x.id===id);
+    if (inq) inq.status = status;
+    renderPipeline(window._inqs||[]);
+    logActivity('Status → ' + status + ' for ' + ((inq&&inq.firstName)||id), 'purple');
+    toast('Status updated ✓', 'success');
+  } catch(e) { toast('Error: ' + e.message, 'error'); }
+};
 
-  /* ── Helpers ── */
-  function fmtDate(ts) {
-    if (!ts) return '—';
-    try { return new Date(ts.seconds ? ts.seconds*1000 : ts).toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'}); }
-    catch(e) { return '—'; }
+/* ── BULK ACTIONS ── */
+window.updateBulkBar = function() {
+  const checked = document.querySelectorAll('.row-cb:checked');
+  const bar = document.getElementById('bulkBar');
+  if (checked.length > 0) {
+    bar.classList.add('show');
+    document.getElementById('bulkCount').textContent = checked.length + ' selected';
+  } else { bar.classList.remove('show'); }
+};
+
+window.toggleSelectAll = function(cb) {
+  document.querySelectorAll('.row-cb').forEach(c => { c.checked = cb.checked; });
+  updateBulkBar();
+};
+
+window.clearBulkSelection = function() {
+  document.querySelectorAll('.row-cb, #selectAll').forEach(c => { c.checked = false; });
+  document.getElementById('bulkBar').classList.remove('show');
+};
+
+window.applyBulkStatus = async function() {
+  if (!db) return;
+  const status = document.getElementById('bulkStatus').value;
+  const ids = [...document.querySelectorAll('.row-cb:checked')].map(c=>c.value);
+  if (!ids.length) return;
+  try {
+    const F = window._fs;
+    await Promise.all(ids.map(id => updateDoc(doc(db,'inquiries',id), { status, updatedAt: serverTimestamp() })));
+    ids.forEach(id => { const inq=(window._inqs||[]).find(x=>x.id===id); if(inq) inq.status=status; });
+    clearBulkSelection();
+    renderInquiriesTable(window._inqs||[]);
+    renderPipeline(window._inqs||[]);
+    logActivity(`Bulk status → ${status} for ${ids.length} inquiries`, 'purple');
+    toast(`${ids.length} updated to "${status}" ✓`, 'success');
+  } catch(e) { toast('Error: ' + e.message, 'error'); }
+};
+
+/* ── DELETE INQUIRY ── */
+window.deleteInquiry = async function(id) {
+  if (!confirm('Delete this inquiry? Cannot be undone.')) return;
+  const F = window._fs;
+  try {
+    await deleteDoc(doc(db,'inquiries',id));
+    window._inqs = (window._inqs||[]).filter(x=>x.id!==id);
+    renderInquiriesTable(window._inqs);
+    renderPipeline(window._inqs);
+    logActivity('Inquiry deleted', 'red');
+    toast('Deleted ✓', 'success');
+  } catch(e) { toast('Error: ' + e.message, 'error'); }
+};
+
+/* ── POSTS CRUD ── */
+window.openPostModal = function() {
+  document.getElementById('postModalTitle').textContent = 'New Blog Post';
+  document.getElementById('editPostId').value = '';
+  ['post-title','post-excerpt','post-body','post-author','post-emoji'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('post-published').value = 'true';
+  document.getElementById('postModal').classList.add('open');
+};
+window.editPost = function(id) {
+  const p = (window._posts||[]).find(x=>x.id===id);
+  if (!p) return;
+  document.getElementById('postModalTitle').textContent = 'Edit Post';
+  document.getElementById('editPostId').value   = id;
+  document.getElementById('post-title').value   = p.title  ||'';
+  document.getElementById('post-excerpt').value = p.excerpt||'';
+  document.getElementById('post-body').value    = p.body   ||'';
+  document.getElementById('post-author').value  = p.author ||'';
+  document.getElementById('post-emoji').value   = p.emoji  ||'';
+  document.getElementById('post-category').value  = p.category ||'admissions';
+  document.getElementById('post-published').value = p.published?'true':'false';
+  document.getElementById('postModal').classList.add('open');
+};
+window.savePost = async function() {
+  const title   = document.getElementById('post-title').value.trim();
+  const excerpt = document.getElementById('post-excerpt').value.trim();
+  if (!title||!excerpt) { toast('Title and excerpt required','error'); return; }
+  const btn = document.getElementById('savePostBtn');
+  btn.textContent='Saving…'; btn.disabled=true;
+  const F = window._fs;
+  const data = { title, excerpt, body:document.getElementById('post-body').value,
+    category:document.getElementById('post-category').value,
+    emoji:document.getElementById('post-emoji').value||'📄',
+    author:document.getElementById('post-author').value,
+    published:document.getElementById('post-published').value==='true',
+    updatedAt:serverTimestamp() };
+  try {
+    const id = document.getElementById('editPostId').value;
+    if (id) await updateDoc(doc(db,'posts',id), data);
+    else    { data.createdAt=serverTimestamp(); await addDoc(collection(db,'posts'),data); }
+    await loadData();
+    closeModal('postModal');
+    logActivity((id?'Edited':'Created') + ' post: ' + title, 'green');
+    toast('Post saved ✓','success');
+  } catch(e) { toast('Error: '+e.message,'error'); }
+  btn.textContent='Save Post'; btn.disabled=false;
+};
+window.deletePost = async function(id) {
+  if (!confirm('Delete post?')) return;
+  const F = window._fs;
+  try { await deleteDoc(doc(db,'posts',id)); await loadData(); logActivity('Post deleted','red'); toast('Deleted ✓','success'); }
+  catch(e) { toast('Error: '+e.message,'error'); }
+};
+
+/* ── TESTIMONIALS CRUD ── */
+window.openTestimonialModal = function() {
+  document.getElementById('testimonialModalTitle').textContent = 'Add Testimonial';
+  document.getElementById('editTestimonialId').value = '';
+  ['t-name','t-initials','t-originCountry','t-university','t-programme','t-year','t-quote'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('t-published').value = 'true';
+  document.getElementById('testimonialModal').classList.add('open');
+};
+window.editTestimonial = function(id) {
+  const t = (window._tests||[]).find(x=>x.id===id);
+  if (!t) return;
+  document.getElementById('testimonialModalTitle').textContent = 'Edit Testimonial';
+  document.getElementById('editTestimonialId').value    = id;
+  document.getElementById('t-name').value          = t.name         ||'';
+  document.getElementById('t-initials').value      = t.initials     ||'';
+  document.getElementById('t-originCountry').value = t.originCountry||'';
+  document.getElementById('t-country').value       = t.country      ||'latvia';
+  document.getElementById('t-university').value    = t.university   ||'';
+  document.getElementById('t-programme').value     = t.programme    ||'';
+  document.getElementById('t-year').value          = t.year         ||'';
+  document.getElementById('t-quote').value         = t.quote        ||'';
+  document.getElementById('t-published').value     = t.published?'true':'false';
+  document.getElementById('testimonialModal').classList.add('open');
+};
+window.saveTestimonial = async function() {
+  const name  = document.getElementById('t-name').value.trim();
+  const quote = document.getElementById('t-quote').value.trim();
+  if (!name||!quote) { toast('Name and quote required','error'); return; }
+  const btn = document.getElementById('saveTestimonialBtn');
+  btn.textContent='Saving…'; btn.disabled=true;
+  const F = window._fs;
+  const data = { name, quote,
+    initials:document.getElementById('t-initials').value||name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2),
+    originCountry:document.getElementById('t-originCountry').value,
+    country:document.getElementById('t-country').value,
+    university:document.getElementById('t-university').value,
+    programme:document.getElementById('t-programme').value,
+    year:document.getElementById('t-year').value,
+    published:document.getElementById('t-published').value==='true',
+    updatedAt:serverTimestamp() };
+  try {
+    const id = document.getElementById('editTestimonialId').value;
+    if (id) await updateDoc(doc(db,'testimonials',id),data);
+    else    { data.createdAt=serverTimestamp(); await addDoc(collection(db,'testimonials'),data); }
+    await loadData();
+    closeModal('testimonialModal');
+    logActivity((id?'Edited':'Added')+' testimonial: '+name,'green');
+    toast('Saved ✓','success');
+  } catch(e) { toast('Error: '+e.message,'error'); }
+  btn.textContent='Save'; btn.disabled=false;
+};
+window.deleteTestimonial = async function(id) {
+  if (!confirm('Delete testimonial?')) return;
+  const F = window._fs;
+  try { await deleteDoc(doc(db,'testimonials',id)); await loadData(); toast('Deleted ✓','success'); }
+  catch(e) { toast('Error: '+e.message,'error'); }
+};
+
+/* ── WHATSAPP ── */
+window.waOpen = function(phone) {
+  if (!phone) { toast('No phone number on record','error'); return; }
+  const clean = phone.replace(/\D/g,'');
+  window.open('https://wa.me/'+clean,'_blank');
+  logActivity('WhatsApp opened for '+phone,'green');
+};
+
+/* ── CSV EXPORT ── */
+window.exportCSV = function(type) {
+  let rows=[], headers=[];
+  if (type==='inquiries') {
+    headers=['First Name','Last Name','Email','Phone','Country','Destination','Field','Message','Status','Date'];
+    rows=(window._inqs||[]).map(i=>[i.firstName,i.lastName,i.email,i.phone,i.country,i.destination,i.field,i.message,i.status,fmtDate(i.createdAt)]);
+  } else if (type==='posts') {
+    headers=['Title','Category','Author','Excerpt','Published','Date'];
+    rows=(window._posts||[]).map(p=>[p.title,p.category,p.author,p.excerpt,p.published?'Yes':'No',fmtDate(p.createdAt)]);
+  } else if (type==='testimonials') {
+    headers=['Name','Origin','Destination','University','Programme','Year','Quote','Published','Date'];
+    rows=(window._tests||[]).map(t=>[t.name,t.originCountry,t.country,t.university,t.programme,t.year,t.quote,t.published?'Yes':'No',fmtDate(t.createdAt)]);
   }
-  function escHtml(str) {
-    return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const csv=[headers,...rows].map(r=>r.map(v=>'"'+(String(v||'').replace(/"/g,'""'))+'"').join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
+  a.download='maringlobal-'+type+'-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+  logActivity('CSV exported: '+type,'blue');
+  toast('CSV downloaded ✓','success');
+};
+
+/* ── GLOBAL SEARCH ── */
+window.globalSearch = function(q) {
+  const box = document.getElementById('searchResults');
+  if (!q || q.length < 2) { box.classList.remove('show'); return; }
+  q = q.toLowerCase();
+  const results = [];
+  (window._inqs||[]).forEach(i => {
+    if ((i.firstName+' '+i.lastName+' '+i.email+' '+i.country+' '+i.destination).toLowerCase().includes(q))
+      results.push({ type:'Inquiry', title: (i.firstName||'')+ ' '+(i.lastName||''), sub: i.email, id: i.id, kind:'inquiry' });
+  });
+  (window._posts||[]).forEach(p => {
+    if ((p.title+' '+p.author+' '+p.category).toLowerCase().includes(q))
+      results.push({ type:'Post', title: p.title, sub: p.category, id: p.id, kind:'post' });
+  });
+  (window._tests||[]).forEach(t => {
+    if ((t.name+' '+t.university+' '+t.originCountry).toLowerCase().includes(q))
+      results.push({ type:'Testimonial', title: t.name, sub: t.university, id: t.id, kind:'test' });
+  });
+  if (!results.length) {
+    box.innerHTML = '<div class="search-result-item"><div class="sri-type">No results</div><div class="sri-title">Nothing found for "'+esc(q)+'"</div></div>';
+  } else {
+    box.innerHTML = results.slice(0,8).map(r=>`
+      <div class="search-result-item" onclick="handleSearchClick('${r.kind}','${r.id}')">
+        <div class="sri-type">${r.type}</div>
+        <div class="sri-title">${esc(r.title)} <span style="color:#9ca3af;font-size:0.75rem;">${esc(r.sub||'')}</span></div>
+      </div>`).join('');
   }
+  box.classList.add('show');
+};
+
+window.hideSearch = function() { document.getElementById('searchResults').classList.remove('show'); };
+
+window.handleSearchClick = function(kind, id) {
+  hideSearch();
+  document.getElementById('globalSearch').value = '';
+  if (kind==='inquiry') viewInquiry(id);
+  if (kind==='post')    { showPanel('posts', document.querySelector('[onclick*=posts]')); editPost(id); }
+  if (kind==='test')    { showPanel('testimonials', document.querySelector('[onclick*=testimonials]')); editTestimonial(id); }
+};
+
+/* ── HELPERS ── */
+window.fmtDate = function(ts) {
+  if (!ts) return '—';
+  try { return new Date(ts.seconds?ts.seconds*1000:ts).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}); }
+  catch(e) { return '—'; }
+};
+window.esc = function(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+};
 </script>
 
 <!-- NON-MODULE SCRIPT -->
 <script>
-  /* ── Panel switching ── */
-  function showPanel(name, el) {
-    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    const panel = document.getElementById('panel-' + name);
-    if (panel) panel.classList.add('active');
-    if (el) el.classList.add('active');
-    const titles = { dashboard:'Dashboard', posts:'Blog Posts', testimonials:'Testimonials', inquiries:'Inquiries', export:'Export Data', settings:'Settings' };
-    document.getElementById('topbarTitle').textContent = titles[name] || name;
-    const addBtn = document.getElementById('topbarAddBtn');
-    addBtn.style.display = ['posts','testimonials'].includes(name) ? 'inline-block' : 'none';
-    addBtn.textContent = name === 'posts' ? '+ New Post' : '+ Add Testimonial';
-    closeSidebar();
-  }
-
-  function handleAdd() {
-    const active = document.querySelector('.panel.active');
-    if (!active) return;
-    if (active.id === 'panel-posts') window.openPostModal && openPostModal();
-    if (active.id === 'panel-testimonials') window.openTestimonialModal && openTestimonialModal();
-  }
-
-  /* ── Modal helpers ── */
-  function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-  document.querySelectorAll('.modal-overlay').forEach(m => {
-    m.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('open'); });
+function showPanel(name, el) {
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const panel = document.getElementById('panel-'+name);
+  if (panel) panel.classList.add('active');
+  if (el) el.classList.add('active');
+  const titles={dashboard:'Dashboard',pipeline:'Pipeline',inquiries:'All Inquiries',posts:'Blog Posts',testimonials:'Testimonials',analytics:'Analytics',intake:'Intake Tracker',activity:'Activity Log',export:'Export Data',settings:'Settings'};
+  document.getElementById('topbarTitle').textContent = titles[name]||name;
+  const addBtn = document.getElementById('topbarAddBtn');
+  addBtn.style.display = ['posts','testimonials'].includes(name)?'inline-block':'none';
+  addBtn.textContent = name==='posts'?'+ New Post':'+ Add Testimonial';
+  closeSidebar();
+}
+function handleAdd() {
+  const id = document.querySelector('.panel.active')?.id;
+  if (id==='panel-posts') openPostModal && openPostModal();
+  if (id==='panel-testimonials') openTestimonialModal && openTestimonialModal();
+}
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.addEventListener('click', e => {
+  if (e.target.classList.contains('modal-overlay')) e.target.classList.remove('open');
+});
+function openSidebar()  { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('show'); }
+function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('show'); }
+function filterTable(tbodyId, q) {
+  q = q.toLowerCase();
+  document.querySelectorAll('#'+tbodyId+' tr').forEach(row=>{
+    row.style.display = row.textContent.toLowerCase().includes(q)?'':'none';
   });
-
-  /* ── Mobile sidebar ── */
-  function openSidebar() {
-    document.getElementById('sidebar').classList.add('open');
-    document.getElementById('sidebarOverlay').classList.add('show');
-  }
-  function closeSidebar() {
-    document.getElementById('sidebar').classList.remove('open');
-    document.getElementById('sidebarOverlay').classList.remove('show');
-  }
-
-  /* ── Table search filter ── */
-  function filterTable(tbodyId, query) {
-    const q = query.toLowerCase();
-    document.querySelectorAll('#' + tbodyId + ' tr').forEach(row => {
-      row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
-    });
-  }
-
-  /* ── Toast ── */
-  function toast(msg, type) {
-    const t = document.getElementById('adminToast');
-    t.textContent = msg;
-    t.className = 'toast ' + (type||'');
-    t.classList.add('show');
-    clearTimeout(t._timer);
-    t._timer = setTimeout(() => t.classList.remove('show'), 3000);
-  }
+}
+function toast(msg, type) {
+  const t = document.getElementById('adminToast');
+  t.textContent = msg;
+  t.className = 'toast '+(type||'');
+  t.classList.add('show');
+  clearTimeout(t._t);
+  t._t = setTimeout(()=>t.classList.remove('show'), 3200);
+}
 </script>
-
 </body>
 </html>
