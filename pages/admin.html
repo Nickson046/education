@@ -6,8 +6,11 @@
   <title>Admin — MarinGlobal Scholars</title>
   <meta name="mobile-web-app-capable" content="yes"/>
   <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
   <meta name="apple-mobile-web-app-title" content="MG Admin"/>
   <meta name="theme-color" content="#0D1B3E"/>
+  <link rel="manifest" href="../admin-manifest.json"/>
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='30' fill='%230D1B3E'/%3E%3Ccircle cx='90' cy='90' r='56' fill='%23C9A84C'/%3E%3Cpolygon points='90,42 124,62 124,102 90,122 56,102 56,62' fill='none' stroke='%230D1B3E' stroke-width='5'/%3E%3C/svg%3E"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet"/>
   <!-- Chart.js -->
@@ -696,6 +699,71 @@ body{font-family:'DM Sans',sans-serif;background:#f0f2f5;color:#1a1a2e;overflow-
               <li>Or tap <strong>"Tap to choose photos"</strong> to use your own image</li>
               <li>Changes save to your browser automatically</li>
             </ol>
+          </div>
+        </div>
+
+        <!-- Install App -->
+        <div class="table-card" style="padding:2rem;margin-bottom:1.5rem;" id="installCard">
+          <h3 style="color:var(--navy);margin-bottom:0.5rem;">📲 Install as Phone App</h3>
+          <p style="color:#666;font-size:0.875rem;margin-bottom:1.25rem;line-height:1.7;">
+            Install the admin panel as a native app on your phone — works like WhatsApp or any other app.
+            No App Store needed. Opens in full screen, works offline.
+          </p>
+
+          <!-- Android / Desktop install button (shown when browser supports it) -->
+          <div id="pwaInstallSection" style="display:none;margin-bottom:1.25rem;">
+            <button id="pwaInstallBtn" class="btn-primary" style="font-size:0.95rem;padding:0.75rem 1.5rem;width:100%;max-width:300px;">
+              📲 Install App Now
+            </button>
+            <p style="font-size:0.75rem;color:#9ca3af;margin-top:0.5rem;">
+              One tap — installs instantly, no download required.
+            </p>
+          </div>
+
+          <!-- Already installed message -->
+          <div id="pwaInstalledMsg" style="display:none;background:#dcfce7;border:1.5px solid #bbf7d0;border-radius:8px;padding:1rem;margin-bottom:1.25rem;">
+            <p style="color:#15803d;font-size:0.875rem;font-weight:600;">✅ App is installed on this device!</p>
+          </div>
+
+          <!-- Manual instructions for iOS and fallback -->
+          <div style="background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:1.25rem;">
+            <h4 style="font-size:0.875rem;font-weight:700;color:var(--navy);margin-bottom:0.75rem;">Manual Install Instructions</h4>
+
+            <div style="margin-bottom:1rem;">
+              <p style="font-size:0.82rem;font-weight:700;color:#374151;margin-bottom:0.4rem;">🍎 iPhone / iPad (Safari):</p>
+              <ol style="font-size:0.8rem;color:#6b7280;line-height:2;padding-left:1.25rem;">
+                <li>Open this page in <strong>Safari</strong> (not Chrome)</li>
+                <li>Tap the <strong>Share button</strong> <span style="background:#e2e8f0;padding:0.1rem 0.4rem;border-radius:4px;">⬆️</span> at the bottom</li>
+                <li>Scroll down and tap <strong>"Add to Home Screen"</strong></li>
+                <li>Tap <strong>Add</strong> — done!</li>
+              </ol>
+            </div>
+
+            <div style="margin-bottom:1rem;">
+              <p style="font-size:0.82rem;font-weight:700;color:#374151;margin-bottom:0.4rem;">🤖 Android (Chrome):</p>
+              <ol style="font-size:0.8rem;color:#6b7280;line-height:2;padding-left:1.25rem;">
+                <li>Open this page in <strong>Chrome</strong></li>
+                <li>Tap the <strong>⋮ menu</strong> (top right)</li>
+                <li>Tap <strong>"Add to Home Screen"</strong> or <strong>"Install App"</strong></li>
+                <li>Tap <strong>Install</strong> — done!</li>
+              </ol>
+            </div>
+
+            <div>
+              <p style="font-size:0.82rem;font-weight:700;color:#374151;margin-bottom:0.4rem;">💻 Desktop (Chrome / Edge):</p>
+              <ol style="font-size:0.8rem;color:#6b7280;line-height:2;padding-left:1.25rem;">
+                <li>Look for the <strong>install icon ⊕</strong> in the browser address bar</li>
+                <li>Click it and select <strong>Install</strong></li>
+                <li>The app opens in its own window like a desktop app</li>
+              </ol>
+            </div>
+          </div>
+
+          <div style="margin-top:1rem;background:#fffbeb;border:1.5px solid #fde68a;border-radius:8px;padding:0.9rem;">
+            <p style="font-size:0.8rem;color:#92400e;">
+              💡 <strong>Tip:</strong> The app works offline — you can view your last loaded data
+              even without internet. It syncs automatically when reconnected.
+            </p>
           </div>
         </div>
 
@@ -1668,6 +1736,96 @@ function toast(msg, type) {
   t.classList.add('show');
   clearTimeout(t._t);
   t._t = setTimeout(()=>t.classList.remove('show'), 3200);
+}
+</script>
+
+<!-- ═══════════ PWA: Service Worker + Install Prompt ═══════════ -->
+<script>
+/* Register Service Worker — only on real hosted domain, not localhost/file:// */
+if ('serviceWorker' in navigator) {
+  const isHosted = location.protocol === 'https:' && !location.hostname.includes('claudeusercontent');
+  if (isHosted) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('../admin-sw.js', { scope: '../' })
+        .then(reg => {
+          if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) {
+            const msg = document.getElementById('pwaInstalledMsg');
+            if (msg) msg.style.display = 'block';
+          }
+        })
+        .catch(() => {}); // Silent fail — non-critical
+    });
+  }
+}
+
+/* Capture the install prompt (Android/Desktop Chrome) */
+let _deferredInstallPrompt = null;
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  _deferredInstallPrompt = e;
+  // Show the install button
+  const section = document.getElementById('pwaInstallSection');
+  if (section) section.style.display = 'block';
+  // Also add a floating install button in topbar if panel not open
+  addTopbarInstallHint();
+});
+
+window.addEventListener('appinstalled', () => {
+  _deferredInstallPrompt = null;
+  const section = document.getElementById('pwaInstallSection');
+  if (section) section.style.display = 'none';
+  const msg = document.getElementById('pwaInstalledMsg');
+  if (msg) msg.style.display = 'block';
+  toast('App installed successfully! 🎉', 'success');
+  logActivity && logActivity('Admin app installed on device', 'green');
+});
+
+/* Install button click */
+const installBtn = document.getElementById('pwaInstallBtn');
+if (installBtn) {
+  installBtn.addEventListener('click', async () => {
+    if (!_deferredInstallPrompt) {
+      toast('Use browser menu → "Add to Home Screen"', 'info');
+      return;
+    }
+    _deferredInstallPrompt.prompt();
+    const result = await _deferredInstallPrompt.userChoice;
+    if (result.outcome === 'accepted') {
+      toast('Installing app…', 'success');
+    }
+    _deferredInstallPrompt = null;
+  });
+}
+
+/* Add subtle hint in topbar if install available */
+function addTopbarInstallHint() {
+  const topbarRight = document.querySelector('.topbar-right');
+  if (!topbarRight || document.getElementById('topbarInstallBtn')) return;
+  const btn = document.createElement('button');
+  btn.id = 'topbarInstallBtn';
+  btn.className = 'btn-ghost';
+  btn.innerHTML = '📲 Install App';
+  btn.title = 'Install as phone/desktop app';
+  btn.style.cssText = 'animation: pulse-border 2s ease-in-out 3;background:#fefce8;border-color:#fde047;color:#854d0e;';
+  btn.onclick = () => {
+    if (_deferredInstallPrompt) {
+      _deferredInstallPrompt.prompt();
+    } else {
+      showPanel('settings', document.querySelector('[onclick*=settings]'));
+      toast('Scroll to "Install as Phone App" section', 'info');
+    }
+  };
+  // Insert before the last button
+  topbarRight.insertBefore(btn, topbarRight.lastElementChild);
+}
+
+/* Auto-show install section if already in standalone (installed) */
+if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) {
+  document.addEventListener('DOMContentLoaded', () => {
+    const msg = document.getElementById('pwaInstalledMsg');
+    if (msg) msg.style.display = 'block';
+  });
 }
 </script>
 </body>
