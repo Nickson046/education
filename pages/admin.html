@@ -17,8 +17,34 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'DM Sans',sans-serif;background:#f0f2f5;color:#1a1a2e;overflow-x:hidden;}
 
+.inq-edit{width:100%;padding:0.5rem 0.75rem;border:1.5px solid #e5e7eb;border-radius:6px;font-family:inherit;font-size:0.855rem;outline:none;transition:border-color 0.2s;background:#fafaf8;box-sizing:border-box;}
+.inq-edit:focus{border-color:var(--gold);background:white;}
+
+
+/* ═══════ BG IMAGE MANAGER ═══════ */
+.bg-slot-btn{padding:0.4rem 1rem;border:1.5px solid #e5e7eb;border-radius:6px;background:white;font-family:inherit;font-size:0.82rem;cursor:pointer;transition:all 0.2s;color:#666;}
+.bg-slot-btn:hover{border-color:var(--gold);color:var(--navy);}
+.bg-slot-btn.active-slot{background:var(--navy);border-color:var(--navy);color:var(--gold);font-weight:600;}
+.bg-img-card{border-radius:10px;overflow:hidden;border:2px solid #f3f4f6;transition:all 0.2s;position:relative;aspect-ratio:16/9;background:#f9fafb;}
+.bg-img-card:hover{border-color:var(--gold);}
+.bg-img-card img{width:100%;height:100%;object-fit:cover;display:block;}
+.bg-img-card .bg-img-label{position:absolute;bottom:0;left:0;right:0;background:rgba(13,27,62,0.85);color:var(--gold);font-size:0.68rem;font-family:'Space Mono',monospace;padding:0.3rem 0.5rem;text-align:center;letter-spacing:0.05em;}
+.bg-img-card .bg-img-del{position:absolute;top:0.4rem;right:0.4rem;background:rgba(220,38,38,0.9);color:white;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:0.75rem;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s;}
+.bg-img-card:hover .bg-img-del{opacity:1;}
+.bg-img-empty{border:2px dashed #e5e7eb;border-radius:10px;aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all 0.2s;background:#fafaf8;color:#9ca3af;font-size:0.78rem;gap:0.4rem;}
+.bg-img-empty:hover{border-color:var(--gold);color:var(--navy);}
+.bg-img-empty .ei2{font-size:1.5rem;}
+
+/* INIT LOADER */
+#initLoader{position:fixed;inset:0;background:var(--navy);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.5s ease;}
+#initLoader.hide{opacity:0;pointer-events:none;}
+#initLoader .il-logo{font-size:3rem;animation:ilPulse 1.2s ease-in-out infinite;margin-bottom:1rem;}
+#initLoader .il-text{font-family:'Space Mono',monospace;font-size:0.72rem;letter-spacing:0.2em;color:rgba(201,168,76,0.6);text-transform:uppercase;}
+@keyframes ilPulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(0.95);}}
+
 /* LOGIN */
-.login-screen{display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--navy);background-image:radial-gradient(ellipse at 70% 30%,rgba(201,168,76,0.15) 0%,transparent 60%);}
+.login-screen{display:none;align-items:center;justify-content:center;min-height:100vh;background:var(--navy);background-image:radial-gradient(ellipse at 70% 30%,rgba(201,168,76,0.15) 0%,transparent 60%);}
+.login-screen.show{display:flex;}
 .login-card{background:white;border-radius:20px;padding:2.5rem;width:100%;max-width:380px;text-align:center;box-shadow:0 24px 64px rgba(0,0,0,0.4);}
 .login-logo{font-size:2.8rem;margin-bottom:0.5rem;}
 .login-card h1{font-size:1.4rem;color:var(--navy);margin-bottom:0.2rem;}
@@ -260,6 +286,9 @@ body{font-family:'DM Sans',sans-serif;background:#f0f2f5;color:#1a1a2e;overflow-
 </style>
 </head>
 <body>
+
+<!-- INIT LOADER -->
+<div id="initLoader"><div class="il-logo">🌍</div><div class="il-text">Loading…</div></div>
 
 <!-- LOGIN -->
 <div class="login-screen" id="loginScreen">
@@ -572,7 +601,10 @@ body{font-family:'DM Sans',sans-serif;background:#f0f2f5;color:#1a1a2e;overflow-
       </div>
 
       <!-- ═══ SETTINGS ═══ -->
+      <!-- ═══ SETTINGS ═══ -->
       <div class="panel" id="panel-settings">
+
+        <!-- Site Settings -->
         <div class="table-card" style="padding:2rem;margin-bottom:1.5rem;">
           <h3 style="color:var(--navy);margin-bottom:1.25rem;">⚙️ Site Settings</h3>
           <div class="form-row">
@@ -582,11 +614,98 @@ body{font-family:'DM Sans',sans-serif;background:#f0f2f5;color:#1a1a2e;overflow-
           <div class="form-group"><label>Office Location</label><input type="text" id="cfg-loc" placeholder="Dar es Salaam, Tanzania"/></div>
           <button class="btn-primary" onclick="toast('Settings noted — update components.js with these values.','info')">Save Settings</button>
         </div>
+
+        <!-- 🖼️ BACKGROUND IMAGE MANAGER -->
+        <div class="table-card" style="padding:2rem;margin-bottom:1.5rem;">
+          <h3 style="color:var(--navy);margin-bottom:0.4rem;">🎨 Admin Panel Appearance</h3>
+          <p style="color:#666;font-size:0.855rem;margin-bottom:1.5rem;line-height:1.6;">
+            Personalise how the admin panel looks. Choose a background theme or upload your own image.
+            Changes apply instantly and are saved to your browser.
+          </p>
+
+          <!-- Upload area -->
+          <div id="bgDropZone" style="border:2.5px dashed #e5e7eb;border-radius:12px;padding:2.5rem;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:1.5rem;background:#fafaf8;"
+               onclick="document.getElementById('bgFileInput').click()"
+               ondragover="event.preventDefault();this.style.borderColor='var(--gold)';this.style.background='#fefce8';"
+               ondragleave="this.style.borderColor='#e5e7eb';this.style.background='#fafaf8';"
+               ondrop="event.preventDefault();this.style.borderColor='#e5e7eb';this.style.background='#fafaf8';handleBgDrop(event);">
+            <div style="font-size:2.5rem;margin-bottom:0.75rem;">📸</div>
+            <p style="font-weight:700;color:var(--navy);margin-bottom:0.25rem;">Tap to choose photos</p>
+            <p style="font-size:0.78rem;color:#9ca3af;">or drag & drop here · JPG, PNG, WebP · max 5MB each</p>
+            <input type="file" id="bgFileInput" accept="image/*" multiple style="display:none;" onchange="handleBgUpload(this.files)"/>
+          </div>
+
+          <!-- Upload progress -->
+          <div id="bgUploadProgress" style="display:none;margin-bottom:1.5rem;">
+            <div style="display:flex;justify-content:space-between;font-size:0.82rem;color:#666;margin-bottom:0.4rem;">
+              <span id="bgProgressLabel">Uploading…</span>
+              <span id="bgProgressPct">0%</span>
+            </div>
+            <div style="height:6px;background:#f3f4f6;border-radius:50px;overflow:hidden;">
+              <div id="bgProgressBar" style="height:100%;background:var(--gold);border-radius:50px;width:0%;transition:width 0.3s;"></div>
+            </div>
+          </div>
+
+          <!-- Theme Presets -->
+          <div style="margin-bottom:1.5rem;">
+            <label style="font-size:0.8rem;font-weight:600;color:var(--navy);display:block;margin-bottom:0.75rem;">Quick Theme Presets</label>
+            <div style="display:flex;gap:0.6rem;flex-wrap:wrap;">
+              <button class="theme-btn" onclick="applyAdminTheme('default')"
+                style="background:linear-gradient(135deg,#0D1B3E,#162251);color:#C9A84C;border:2px solid #C9A84C;padding:0.5rem 1rem;border-radius:8px;cursor:pointer;font-family:inherit;font-size:0.82rem;font-weight:600;">
+                🌙 Default Navy
+              </button>
+              <button class="theme-btn" onclick="applyAdminTheme('dark')"
+                style="background:linear-gradient(135deg,#111827,#1f2937);color:#f9fafb;border:2px solid #374151;padding:0.5rem 1rem;border-radius:8px;cursor:pointer;font-family:inherit;font-size:0.82rem;font-weight:600;">
+                🖤 Dark Grey
+              </button>
+              <button class="theme-btn" onclick="applyAdminTheme('forest')"
+                style="background:linear-gradient(135deg,#064e3b,#065f46);color:#6ee7b7;border:2px solid #059669;padding:0.5rem 1rem;border-radius:8px;cursor:pointer;font-family:inherit;font-size:0.82rem;font-weight:600;">
+                🌿 Forest Green
+              </button>
+              <button class="theme-btn" onclick="applyAdminTheme('midnight')"
+                style="background:linear-gradient(135deg,#1e1b4b,#312e81);color:#c4b5fd;border:2px solid #6d28d9;padding:0.5rem 1rem;border-radius:8px;cursor:pointer;font-family:inherit;font-size:0.82rem;font-weight:600;">
+                🔮 Midnight Purple
+              </button>
+              <button class="theme-btn" onclick="applyAdminTheme('rose')"
+                style="background:linear-gradient(135deg,#4c0519,#881337);color:#fda4af;border:2px solid #e11d48;padding:0.5rem 1rem;border-radius:8px;cursor:pointer;font-family:inherit;font-size:0.82rem;font-weight:600;">
+                🌹 Deep Rose
+              </button>
+            </div>
+          </div>
+
+          <!-- Custom background upload -->
+          <div style="margin-bottom:1.5rem;">
+            <label style="font-size:0.8rem;font-weight:600;color:var(--navy);display:block;margin-bottom:0.5rem;">Or upload your own background photo</label>
+            <p style="font-size:0.78rem;color:#9ca3af;margin-bottom:0.75rem;">Tap/click the box below — your camera roll will open on mobile. Image is saved to your browser only.</p>
+          </div>
+
+          <!-- Current admin bg preview -->
+          <h4 style="font-size:0.875rem;font-weight:700;color:var(--navy);margin-bottom:0.75rem;">Current Admin Background</h4>
+          <div id="bgImagesGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem;margin-bottom:1.5rem;">
+            <div class="empty-state" style="grid-column:1/-1;padding:2rem;"><div class="ei">🎨</div><p>Loading theme…</p></div>
+          </div>
+
+          <button class="btn-red" onclick="applyAdminTheme('default')" style="font-size:0.82rem;">↩ Reset to Default</button>
+
+          <div style="margin-top:1.5rem;background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:10px;padding:1.25rem;">
+            <h4 style="color:#1d4ed8;font-size:0.875rem;margin-bottom:0.5rem;">📱 How to change from your phone</h4>
+            <ol style="font-size:0.82rem;color:#374151;line-height:2;padding-left:1.25rem;">
+              <li>Open admin panel on your phone</li>
+              <li>Go to <strong>Settings → Admin Panel Appearance</strong></li>
+              <li>Tap a <strong>Quick Theme Preset</strong> — applies instantly</li>
+              <li>Or tap <strong>"Tap to choose photos"</strong> to use your own image</li>
+              <li>Changes save to your browser automatically</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Firebase Status -->
         <div class="table-card" style="padding:2rem;">
           <h3 style="color:var(--navy);margin-bottom:0.5rem;">🔥 Firebase Status</h3>
           <p style="color:#666;font-size:0.875rem;">Project: <strong>maringlobal-scholars</strong></p>
-          <p style="color:var(--green);font-size:0.875rem;margin-top:0.4rem;" id="fbStatus">Checking connection…</p>
+          <p style="font-size:0.875rem;margin-top:0.4rem;" id="fbStatus">Checking connection…</p>
         </div>
+
       </div>
 
     </div><!-- /admin-content -->
@@ -718,7 +837,7 @@ window.doLogin = async function() {
 
 window.doLogout = async function() {
   if (auth) await signOut(auth);
-  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('loginScreen').classList.add('show');
   document.getElementById('adminLayout').classList.remove('visible');
   document.getElementById('loginBtn').textContent = 'Sign In';
   document.getElementById('loginBtn').disabled = false;
@@ -726,13 +845,26 @@ window.doLogout = async function() {
 
 if (auth) {
   onAuthStateChanged(auth, user => {
+    const loader = document.getElementById('initLoader');
     if (user) {
-      document.getElementById('loginScreen').style.display = 'none';
+      // Already logged in — skip login screen entirely
       document.getElementById('adminLayout').classList.add('visible');
       document.getElementById('adminEmail').textContent = user.email;
+      if (loader) { loader.classList.add('hide'); setTimeout(()=>loader.remove(), 600); }
       loadData();
+    } else {
+      // Not logged in — show login screen
+      const ls = document.getElementById('loginScreen');
+      ls.classList.add('show');
+      if (loader) { loader.classList.add('hide'); setTimeout(()=>loader.remove(), 600); }
     }
   });
+} else {
+  // Firebase not configured — show login with error
+  const loader = document.getElementById('initLoader');
+  const ls = document.getElementById('loginScreen');
+  ls.classList.add('show');
+  if (loader) { loader.classList.add('hide'); setTimeout(()=>loader.remove(), 400); }
 }
 
 /* ── LOAD DATA ── */
@@ -1023,23 +1155,43 @@ window.viewInquiry = function(id) {
   const notes = (i.notes||[]);
   document.getElementById('inquiryModalTitle').textContent = (i.firstName||'') + ' ' + (i.lastName||'');
   document.getElementById('inquiryDetail').innerHTML = `
+    <div style="display:flex;justify-content:flex-end;margin-bottom:1rem;gap:0.5rem;flex-wrap:wrap;">
+      ${i.phone ? `<button class='btn-green' onclick='waOpen("${esc(i.phone||'')}")'>💬 WhatsApp</button>` : ''}
+      <button class='btn-primary' onclick='saveInquiryEdits("${i.id}")'>💾 Save Changes</button>
+    </div>
     <div class="detail-grid">
-      <div class="detail-cell"><h5>Full Name</h5><p>${esc(i.firstName||'')} ${esc(i.lastName||'')}</p></div>
-      <div class="detail-cell"><h5>Email</h5><p><a href="mailto:${esc(i.email||'')}" style="color:var(--navy)">${esc(i.email||'—')}</a></p></div>
-      <div class="detail-cell"><h5>Phone / WhatsApp</h5><p>${esc(i.phone||'—')} ${i.phone?`<button onclick="waOpen('${esc(i.phone)}')" style="background:#16a34a;color:white;border:none;padding:0.2rem 0.6rem;border-radius:4px;cursor:pointer;font-size:0.75rem;margin-left:0.4rem;">💬 WhatsApp</button>`:''}</p></div>
+      <div class="detail-cell"><h5>First Name</h5>
+        <input class="inq-edit" data-field="firstName" value="${esc(i.firstName||'')}" placeholder="First name"/></div>
+      <div class="detail-cell"><h5>Last Name</h5>
+        <input class="inq-edit" data-field="lastName" value="${esc(i.lastName||'')}" placeholder="Last name"/></div>
+      <div class="detail-cell"><h5>Email</h5>
+        <input class="inq-edit" data-field="email" value="${esc(i.email||'')}" placeholder="email@example.com"/></div>
+      <div class="detail-cell"><h5>Phone / WhatsApp</h5>
+        <input class="inq-edit" data-field="phone" value="${esc(i.phone||'')}" placeholder="+255 712 345 678"/></div>
       <div class="detail-cell"><h5>Status</h5>
-        <select class="status-sel" onchange="updateStatus('${i.id}',this.value)" style="font-size:0.875rem;">
-          ${['new','contacted','docs_received','enrolled','closed'].map(s=>`<option value="${s}"${i.status===s?' selected':''}>${s.replace('_',' ')}</option>`).join('')}
+        <select class="inq-edit" data-field="status">
+          ${['new','contacted','docs_received','enrolled','closed'].map(s=>'<option value="'+s+'"'+(i.status===s?' selected':'')+'>'+s.replace('_',' ')+'</option>').join('')}
         </select>
       </div>
-      <div class="detail-cell"><h5>Origin Country</h5><p>${esc(i.country||'—')}</p></div>
-      <div class="detail-cell"><h5>Destination</h5><p>${esc(i.destination||'—')}</p></div>
-      <div class="detail-cell"><h5>Field of Interest</h5><p>${esc(i.field||'—')}</p></div>
-      <div class="detail-cell"><h5>Date Received</h5><p>${fmtDate(i.createdAt)}</p></div>
+      <div class="detail-cell"><h5>Origin Country</h5>
+        <input class="inq-edit" data-field="country" value="${esc(i.country||'')}" placeholder="Tanzania"/></div>
+      <div class="detail-cell"><h5>Destination</h5>
+        <select class="inq-edit" data-field="destination">
+          ${['Latvia','Lithuania','Estonia','Any / Undecided'].map(d=>'<option value="'+d+'"'+(i.destination===d?' selected':'')+'>'+d+'</option>').join('')}
+        </select>
+      </div>
+      <div class="detail-cell"><h5>Field of Interest</h5>
+        <input class="inq-edit" data-field="field" value="${esc(i.field||'')}" placeholder="e.g. Medicine"/></div>
+      <div class="detail-cell"><h5>Intake Target</h5>
+        <select class="inq-edit" data-field="intake">
+          ${['sep2025','feb2026','sep2026'].map(v=>'<option value="'+v+'"'+(i.intake===v?' selected':'')+'>'+v.replace('sep','Sep ').replace('feb','Feb ')+'</option>').join('')}
+        </select>
+      </div>
+      <div class="detail-cell"><h5>Date Received</h5><p style="padding:0.5rem 0;font-size:0.875rem;">${fmtDate(i.createdAt)}</p></div>
     </div>
-    <div class="detail-cell" style="margin-bottom:1rem;background:#f9fafb;border-radius:8px;padding:1rem;">
+    <div style="margin-bottom:1rem;">
       <h5 style="font-size:0.7rem;text-transform:uppercase;letter-spacing:0.08em;color:#9ca3af;font-family:'Space Mono',monospace;margin-bottom:0.5rem;">Message</h5>
-      <p style="font-size:0.875rem;white-space:pre-wrap;color:#374151;">${esc(i.message||'—')}</p>
+      <textarea class="inq-edit" data-field="message" rows="4" style="width:100%;resize:vertical;">${esc(i.message||'')}</textarea>
     </div>
     <div>
       <h5 style="font-size:0.78rem;font-weight:700;color:var(--navy);margin-bottom:0.6rem;">📋 Internal Notes (${notes.length})</h5>
@@ -1052,6 +1204,26 @@ window.viewInquiry = function(id) {
       </div>
     </div>`;
   document.getElementById('inquiryModal').classList.add('open');
+};
+
+
+window.saveInquiryEdits = async function(id) {
+  if (!db) return;
+  const F = window._fs;
+  const updates = {};
+  document.querySelectorAll('.inq-edit').forEach(el => {
+    updates[el.dataset.field] = el.value;
+  });
+  try {
+    await updateDoc(doc(db,'inquiries',id), { ...updates, updatedAt: serverTimestamp() });
+    const inq = (window._inqs||[]).find(x=>x.id===id);
+    if (inq) Object.assign(inq, updates);
+    renderInquiriesTable(window._inqs||[]);
+    renderPipeline(window._inqs||[]);
+    closeModal('inquiryModal');
+    logActivity('Inquiry updated: '+(updates.firstName||'')+' '+(updates.lastName||''), 'green');
+    toast('Inquiry saved ✓', 'success');
+  } catch(e) { toast('Error: '+e.message, 'error'); }
 };
 
 window.addNote = async function(id) {
@@ -1321,6 +1493,131 @@ window.handleSearchClick = function(kind, id) {
 };
 
 /* ── HELPERS ── */
+
+/* ══════════════════════════════════════════════
+   BACKGROUND IMAGE MANAGER
+   Uploads to Firebase Storage, saves URLs to
+   Firestore /settings/heroImages document,
+   and updates index.html hero slides live
+══════════════════════════════════════════════ */
+
+let _selectedSlot = 1;
+
+window.selectBgSlot = function(slot, btn) {
+  _selectedSlot = slot;
+  document.querySelectorAll('.bg-slot-btn').forEach(b => b.classList.remove('active-slot'));
+  btn.classList.add('active-slot');
+};
+
+// Load existing images from Firestore on settings panel open
+window.loadBgImages = function() {
+  // Load current admin theme from localStorage
+  const saved = localStorage.getItem('mg_admin_theme') || 'default';
+  const savedBg = localStorage.getItem('mg_admin_bg_url') || '';
+  renderAdminThemePreview(saved, savedBg);
+  applyAdminThemeSilent(saved, savedBg);
+};
+
+function renderAdminThemePreview(theme, bgUrl) {
+  const grid = document.getElementById('bgImagesGrid');
+  if (!grid) return;
+  const themes = {
+    default:  { label:'Default Navy',    bg:'linear-gradient(135deg,#0D1B3E,#162251)', color:'#C9A84C' },
+    dark:     { label:'Dark Grey',       bg:'linear-gradient(135deg,#111827,#1f2937)', color:'#f9fafb' },
+    forest:   { label:'Forest Green',    bg:'linear-gradient(135deg,#064e3b,#065f46)', color:'#6ee7b7' },
+    midnight: { label:'Midnight Purple', bg:'linear-gradient(135deg,#1e1b4b,#312e81)', color:'#c4b5fd' },
+    rose:     { label:'Deep Rose',       bg:'linear-gradient(135deg,#4c0519,#881337)', color:'#fda4af' },
+    custom:   { label:'Custom Photo',    bg: bgUrl ? 'url('+bgUrl+') center/cover' : '#333', color:'white' }
+  };
+  const current = themes[theme] || themes.default;
+  grid.innerHTML = '<div style="border-radius:12px;overflow:hidden;height:120px;background:' + current.bg + ';display:flex;align-items:center;justify-content:center;position:relative;">'
+    + '<span style="color:' + current.color + ';font-weight:700;font-size:1rem;text-shadow:0 1px 4px rgba(0,0,0,0.5);">&#x2714; ' + current.label + '</span>'
+    + '</div>';
+}
+
+window.applyAdminTheme = function(theme) {
+  const themes = {
+    default:  { sidebar:'#0D1B3E', body:'#f0f2f5', topbar:'white' },
+    dark:     { sidebar:'#111827', body:'#1f2937', topbar:'#111827' },
+    forest:   { sidebar:'#064e3b', body:'#f0fdf4', topbar:'white' },
+    midnight: { sidebar:'#1e1b4b', body:'#ede9fe', topbar:'white' },
+    rose:     { sidebar:'#4c0519', body:'#fff1f2', topbar:'white' }
+  };
+  const t = themes[theme] || themes.default;
+  document.querySelector('.sidebar').style.background = t.sidebar;
+  document.body.style.background = t.body;
+  document.querySelectorAll('.topbar').forEach(el => el.style.background = t.topbar);
+  localStorage.setItem('mg_admin_theme', theme);
+  localStorage.removeItem('mg_admin_bg_url');
+  renderAdminThemePreview(theme, '');
+  toast('Theme applied: ' + theme, 'success');
+  logActivity('Admin theme changed to ' + theme, 'gold');
+};
+
+function applyAdminThemeSilent(theme, bgUrl) {
+  if (theme === 'custom' && bgUrl) {
+    document.querySelector('.sidebar').style.backgroundImage = 'url(' + bgUrl + ')';
+    document.querySelector('.sidebar').style.backgroundSize = 'cover';
+    return;
+  }
+  const themes = {
+    default:  { sidebar:'#0D1B3E', body:'#f0f2f5' },
+    dark:     { sidebar:'#111827', body:'#1f2937' },
+    forest:   { sidebar:'#064e3b', body:'#f0fdf4' },
+    midnight: { sidebar:'#1e1b4b', body:'#ede9fe' },
+    rose:     { sidebar:'#4c0519', body:'#fff1f2' }
+  };
+  const t = themes[theme] || themes.default;
+  if (document.querySelector('.sidebar')) document.querySelector('.sidebar').style.background = t.sidebar;
+  document.body.style.background = t.body;
+}
+
+window.handleBgUpload = function(files) {
+  if (!files || !files.length) return;
+  const file = files[0];
+  if (!file.type.startsWith('image/')) { toast('Please select an image file', 'error'); return; }
+  if (file.size > 8 * 1024 * 1024)    { toast('Image must be under 8MB', 'error'); return; }
+
+  const reader = new FileReader();
+  const progress = document.getElementById('bgUploadProgress');
+  const bar      = document.getElementById('bgProgressBar');
+  const pct      = document.getElementById('bgProgressPct');
+  const lbl      = document.getElementById('bgProgressLabel');
+
+  if (progress) { progress.style.display = 'block'; lbl.textContent = 'Processing image…'; }
+
+  reader.onprogress = function(e) {
+    if (e.lengthComputable && bar) {
+      const p = Math.round(e.loaded / e.total * 100);
+      bar.style.width = p + '%';
+      if (pct) pct.textContent = p + '%';
+    }
+  };
+  reader.onload = function(e) {
+    const dataUrl = e.target.result;
+    // Apply to sidebar
+    const sidebar = document.querySelector('.sidebar');
+    sidebar.style.backgroundImage = 'url(' + dataUrl + ')';
+    sidebar.style.backgroundSize  = 'cover';
+    sidebar.style.backgroundPosition = 'center';
+    // Save to localStorage (persists across sessions)
+    try { localStorage.setItem('mg_admin_bg_url', dataUrl); localStorage.setItem('mg_admin_theme', 'custom'); } catch(e) { /* too large for storage */ }
+    renderAdminThemePreview('custom', dataUrl);
+    if (progress) { progress.style.display = 'none'; bar.style.width = '0%'; }
+    toast('Admin background updated! ✓', 'success');
+    logActivity('Custom admin background uploaded', 'gold');
+  };
+  reader.readAsDataURL(file);
+};
+
+window.handleBgDrop = function(event) {
+  const files = event.dataTransfer.files;
+  if (files.length) handleBgUpload(files);
+};
+
+/* /* Auto-load bg images when settings panel is opened */
+const _origShowPanel = window.showPanel;
+
 window.fmtDate = function(ts) {
   if (!ts) return '—';
   try { return new Date(ts.seconds?ts.seconds*1000:ts).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}); }
@@ -1334,6 +1631,7 @@ window.esc = function(s) {
 <!-- NON-MODULE SCRIPT -->
 <script>
 function showPanel(name, el) {
+  if (name === 'settings') { setTimeout(() => window.loadBgImages && loadBgImages(), 100); }
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
   const panel = document.getElementById('panel-'+name);
