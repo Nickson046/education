@@ -1,29 +1,38 @@
 {
   "name": "MarinGlobal Admin",
   "short_name": "MG Admin",
-  "description": "MarinGlobal Scholars — Admin Management Portal",
-  "start_url": "./pages/admin.html",
-  "id": "./pages/admin.html",
+  "description": "MarinGlobal Scholars — Admin Portal",
+  "start_url": "/education/pages/admin.html",
+  "id": "/education/pages/admin.html",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#0D1B3E",
   "theme_color": "#0D1B3E",
   "categories": ["business", "productivity"],
   "lang": "en",
-  "scope": "./",
+  "scope": "/education/",
   "prefer_related_applications": false,
   "icons": [
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='32' fill='%230D1B3E'/%3E%3Ccircle cx='96' cy='96' r='60' fill='%23C9A84C'/%3E%3Cpolygon points='96,44 130,64 130,104 96,124 62,104 62,64' fill='none' stroke='%230D1B3E' stroke-width='5'/%3E%3C/svg%3E",
+      "src": "/education/icon-192.png",
       "sizes": "192x192",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='80' fill='%230D1B3E'/%3E%3Ccircle cx='256' cy='256' r='160' fill='%23C9A84C'/%3E%3Cpolygon points='256,112 346,164 346,268 256,320 166,268 166,164' fill='none' stroke='%230D1B3E' stroke-width='12'/%3E%3C/svg%3E",
+      "src": "/education/icon-512.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "label": "Dashboard",
+      "form_factor": "narrow",
+      "src": "/education/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ]
 }

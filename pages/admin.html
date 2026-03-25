@@ -9,8 +9,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
   <meta name="apple-mobile-web-app-title" content="MG Admin"/>
   <meta name="theme-color" content="#0D1B3E"/>
-  <link rel="manifest" href="../admin-manifest.json"/>
-  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='30' fill='%230D1B3E'/%3E%3Ccircle cx='90' cy='90' r='56' fill='%23C9A84C'/%3E%3Cpolygon points='90,42 124,62 124,102 90,122 56,102 56,62' fill='none' stroke='%230D1B3E' stroke-width='5'/%3E%3C/svg%3E"/>
+  <link rel="manifest" href="../admin-manifest.json" crossorigin="use-credentials"/>
+  <link rel="apple-touch-icon" href="../icon-180.png"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet"/>
   <!-- Chart.js -->
@@ -710,14 +710,25 @@ body{font-family:'DM Sans',sans-serif;background:#f0f2f5;color:#1a1a2e;overflow-
             No App Store needed. Opens in full screen, works offline.
           </p>
 
-          <!-- Android / Desktop install button (shown when browser supports it) -->
+          <!-- Android / Desktop install button (shows automatically when available) -->
           <div id="pwaInstallSection" style="display:none;margin-bottom:1.25rem;">
             <button id="pwaInstallBtn" class="btn-primary" style="font-size:0.95rem;padding:0.75rem 1.5rem;width:100%;max-width:300px;">
-              📲 Install App Now
+              📲 Tap to Install App
             </button>
             <p style="font-size:0.75rem;color:#9ca3af;margin-top:0.5rem;">
-              One tap — installs instantly, no download required.
+              One tap — no App Store needed.
             </p>
+          </div>
+
+          <!-- Direct link to open admin (useful for adding to homescreen) -->
+          <div style="background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;padding:1.25rem;margin-bottom:1.25rem;">
+            <p style="font-size:0.82rem;font-weight:700;color:var(--navy);margin-bottom:0.5rem;">🔗 Admin Panel URL (copy this)</p>
+            <div style="display:flex;gap:0.5rem;align-items:center;">
+              <input id="adminUrlInput" type="text" value="https://nickson046.github.io/education/pages/admin.html"
+                style="flex:1;padding:0.6rem 0.75rem;border:1.5px solid #e5e7eb;border-radius:7px;font-family:'Space Mono',monospace;font-size:0.72rem;outline:none;background:#f9fafb;"/>
+              <button class="btn-primary" onclick="copyAdminUrl()" style="padding:0.6rem 1rem;white-space:nowrap;">Copy 📋</button>
+            </div>
+            <p style="font-size:0.72rem;color:#9ca3af;margin-top:0.5rem;">Share this link with your team or bookmark it on your phone.</p>
           </div>
 
           <!-- Already installed message -->
@@ -1723,6 +1734,14 @@ document.addEventListener('click', e => {
 });
 function openSidebar()  { document.getElementById('sidebar').classList.add('open'); document.getElementById('sidebarOverlay').classList.add('show'); }
 function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sidebarOverlay').classList.remove('show'); }
+function copyAdminUrl() {
+  const input = document.getElementById('adminUrlInput');
+  input.select();
+  navigator.clipboard.writeText(input.value)
+    .then(() => toast('URL copied! Open it on your phone and use "Add to Home Screen"', 'success'))
+    .catch(() => { input.select(); document.execCommand('copy'); toast('URL copied ✓', 'success'); });
+}
+
 function filterTable(tbodyId, q) {
   q = q.toLowerCase();
   document.querySelectorAll('#'+tbodyId+' tr').forEach(row=>{
@@ -1746,8 +1765,9 @@ if ('serviceWorker' in navigator) {
   const isHosted = location.protocol === 'https:' && !location.hostname.includes('claudeusercontent');
   if (isHosted) {
     window.addEventListener('load', () => {
-      navigator.serviceWorker.register('../admin-sw.js', { scope: '../' })
+      navigator.serviceWorker.register('../admin-sw.js')
         .then(reg => {
+          console.log('MG Admin SW ready');
           if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) {
             const msg = document.getElementById('pwaInstalledMsg');
             if (msg) msg.style.display = 'block';
