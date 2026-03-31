@@ -528,5 +528,69 @@
       filterPrograms();
     }
   </script>
+  <script src="../js/firebase-config.js"></script>
+  <script type="module">
+    import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, where, orderBy }
+      from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+    const COUNTRY_GRADIENTS = {
+      latvia:    'linear-gradient(135deg,#0D1B3E,#1a3070)',
+      lithuania: 'linear-gradient(135deg,#145A32,#1E8449)',
+      estonia:   'linear-gradient(135deg,#003366,#004E98)'
+    };
+    const COUNTRY_FLAG = { latvia:'LV', lithuania:'LT', estonia:'EE' };
+
+    const cfg = window.FIREBASE_CONFIG;
+    if (cfg && cfg.apiKey !== 'YOUR_API_KEY') {
+      const app = getApps().length ? getApps()[0] : initializeApp(cfg);
+      const db  = getFirestore(app);
+      getDocs(query(collection(db,'programs'), where('published','==',true), orderBy('country','asc'), orderBy('createdAt','asc')))
+        .then(snap => {
+          const programs = snap.docs.map(d => d.data());
+          if (!programs.length) return; // keep static fallback
+          const grid = document.getElementById('programs-grid');
+          const noResults = document.getElementById('no-results');
+          // Remove static cards
+          grid.querySelectorAll('.program-card[data-country]').forEach(c => c.remove());
+          // Build new cards from Firestore data
+          const cards = programs.map(p => {
+            const bg  = COUNTRY_GRADIENTS[p.country] || COUNTRY_GRADIENTS.latvia;
+            const flag = COUNTRY_FLAG[p.country] || '';
+            const levelBadges = (p.level||'bachelor').split(' ').map(l => {
+              const labels = {bachelor:"Bachelor's", master:"Master's", phd:"PhD"};
+              return `<span class="badge badge-navy">${labels[l]||l}</span>`;
+            }).join('');
+            const langBadge = (p.language||'english')==='english' ? '<span class="badge badge-green">English Programs</span>' : '';
+            const div = document.createElement('div');
+            div.className = 'program-card';
+            div.dataset.country = p.country||'';
+            div.dataset.field   = p.field||'';
+            div.dataset.level   = p.level||'bachelor';
+            div.dataset.lang    = p.language||'';
+            div.innerHTML = `
+              <div class="prog-header" style="background:${bg}">
+                <div class="prog-abbr">${p.abbr||p.university.slice(0,4).toUpperCase()}</div>
+                <div class="prog-country">${flag} ${p.university}, ${p.country.charAt(0).toUpperCase()+p.country.slice(1)}</div>
+              </div>
+              <div class="prog-body">
+                <h4>${p.name||''}</h4>
+                <p class="prog-desc">${p.description||''}</p>
+                <div class="prog-tags">${levelBadges}${langBadge}</div>
+                <div class="prog-meta">
+                  <div class="prog-fee">${p.fee ? 'Tuition from <strong>€'+p.fee+'/yr</strong>' : 'Contact for fees'}</div>
+                  <a href="contact.html" class="btn btn-primary" style="padding:.5rem 1rem;font-size:.8rem">Apply Now</a>
+                </div>
+              </div>`;
+            return div;
+          });
+          cards.forEach(c => grid.insertBefore(c, noResults));
+          document.getElementById('results-count').textContent = programs.length;
+          // re-run active filters
+          if (typeof filterPrograms === 'function') filterPrograms();
+        })
+        .catch(() => {}); // keep static fallback on error
+    }
+  </script>
 </body>
 </html>

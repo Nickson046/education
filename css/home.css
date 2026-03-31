@@ -379,7 +379,8 @@
 }
 .feature-card:hover { border-color: var(--border); box-shadow: var(--shadow); transform: translateY(-4px); }
 .feature-card:hover::before { transform: scaleX(1); }
-.feature-icon { font-size: 2rem; margin-bottom: 1.2rem; display: block; }
+.feature-icon { width: 52px; height: 52px; background: rgba(201,168,76,.1); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 1.2rem; color: var(--gold); }
+.feature-icon svg { stroke: var(--gold); }
 .feature-card h3 { font-size: 1.3rem; margin-bottom: .7rem; }
 
 /* ── University Tabs ── */
@@ -540,7 +541,8 @@
   transition: var(--transition);
 }
 .mini-scholarship-card:hover { background: rgba(255,255,255,0.1); border-color: rgba(201,168,76,0.4); }
-.msc-icon { font-size: 1.6rem; flex-shrink: 0; }
+.msc-icon { width: 40px; height: 40px; background: rgba(201,168,76,.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--gold); }
+.msc-icon svg { stroke: var(--gold); }
 .mini-scholarship-card strong { display: block; color: var(--white); font-size: .95rem; }
 .mini-scholarship-card p { color: rgba(255,255,255,.5); font-size: .82rem; margin: 0; }
 

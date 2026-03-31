@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Scholarships & Funding — MarinGlobal Scholars</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=DM+Sans:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Space+Mono&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../css/style.css" />
   <style>
     .schol-hero {
@@ -256,5 +256,90 @@
   <div id="footer-placeholder"></div>
   <script src="../js/components.js"></script>
   <script src="../js/main.js"></script>
+  <script src="../js/firebase-config.js"></script>
+  <script type="module">
+    import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, where, orderBy }
+      from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+
+    const TYPE_COLORS = {
+      government: '',
+      university:  'green',
+      eu:          'blue',
+      private:     'purple'
+    };
+
+    const cfg = window.FIREBASE_CONFIG;
+    if (!cfg || cfg.apiKey === 'YOUR_API_KEY') return;
+
+    const app = getApps().length ? getApps()[0] : initializeApp(cfg);
+    const db  = getFirestore(app);
+
+    getDocs(query(collection(db,'scholarships'), where('published','==',true), orderBy('createdAt','asc')))
+      .then(snap => {
+        const scholarships = snap.docs.map(d => d.data());
+
+        // Find the static scholarship sections and replace them if we have data
+        const staticSections = document.querySelectorAll('.schol-section');
+        if (!scholarships.length) {
+          // Show "coming soon" message — replace first section content
+          if (staticSections.length) {
+            staticSections.forEach((s, i) => { if (i > 0) s.remove(); });
+            const first = staticSections[0];
+            first.innerHTML = `
+              <div class="container" style="text-align:center;padding:2rem 0">
+                <div style="width:72px;height:72px;background:rgba(201,168,76,.12);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+                </div>
+                <h2 style="font-family:var(--font-serif);color:var(--navy);font-size:2rem;margin-bottom:.75rem">Scholarships Coming Soon</h2>
+                <p style="max-width:480px;margin:0 auto 1.5rem;color:#666">We are currently compiling the latest scholarship opportunities for East African students. Check back shortly, or get in touch and we will notify you when new funding becomes available.</p>
+                <a href="contact.html" class="btn-navy" style="display:inline-block;background:var(--navy);color:var(--gold);padding:.85rem 2rem;border-radius:8px;text-decoration:none;font-weight:600">Notify Me</a>
+              </div>`;
+          }
+          return;
+        }
+
+        // Group by type
+        const govSchols  = scholarships.filter(s => s.type === 'government');
+        const uniSchols  = scholarships.filter(s => s.type === 'university');
+        const otherSchols = scholarships.filter(s => s.type !== 'government' && s.type !== 'university');
+
+        function buildCards(list) {
+          return list.map(s => {
+            const colorClass = TYPE_COLORS[s.type] || '';
+            const deadlineOpen = (s.deadline||'').toLowerCase().includes('open') || (s.deadline||'').toLowerCase().includes('rolling');
+            return `<div class="schol-card ${colorClass}">
+              <p class="schol-type">${s.type ? s.type.charAt(0).toUpperCase()+s.type.slice(1)+' Scholarship' : 'Scholarship'}</p>
+              <h3 class="schol-name">${s.name||''}</h3>
+              <p class="schol-org">${s.org||''}</p>
+              ${s.amount ? `<div class="schol-amount"><span class="amt">${s.amount}</span></div>` : ''}
+              ${s.eligibility ? `<div class="schol-details"><div class="schol-detail"><span class="dk">Eligibility</span><span class="dv">${s.eligibility}</span></div></div>` : ''}
+              ${s.description ? `<p style="font-size:.85rem;color:#555;line-height:1.6;margin-bottom:1rem">${s.description}</p>` : ''}
+              ${s.deadline ? `<span class="deadline-badge ${deadlineOpen ? 'open' : ''}">&bull; ${s.deadline}</span><br>` : ''}
+              <a href="contact.html" class="learn-more">Apply via MarinGlobal &rarr;</a>
+            </div>`;
+          }).join('');
+        }
+
+        // Replace static sections
+        if (staticSections.length >= 2) {
+          if (govSchols.length) {
+            staticSections[0].querySelector('.schol-grid').innerHTML = buildCards(govSchols);
+          }
+          if (uniSchols.length) {
+            staticSections[1].querySelector('.schol-grid').innerHTML = buildCards(uniSchols);
+          }
+          if (otherSchols.length) {
+            const extra = document.createElement('section');
+            extra.className = 'schol-section';
+            extra.style.background = '#fff';
+            extra.style.paddingBottom = '80px';
+            extra.innerHTML = `<div class="container"><div class="section-header"><p class="label">Additional Funding</p><h2>Other Scholarships</h2></div><div class="schol-grid">${buildCards(otherSchols)}</div></div>`;
+            staticSections[1].after(extra);
+          }
+        }
+      })
+      .catch(() => {}); // keep static content on error
+  </script>
 </body>
 </html>

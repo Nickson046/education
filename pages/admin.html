@@ -291,12 +291,12 @@ body{font-family:'DM Sans',sans-serif;background:#f0f2f5;color:#1a1a2e;overflow-
 <body>
 
 <!-- INIT LOADER -->
-<div id="initLoader"><div class="il-logo">🌍</div><div class="il-text">Loading…</div></div>
+<div id="initLoader"><div class="il-logo" style="font-family:'Space Mono',monospace;font-size:1.1rem;letter-spacing:.3em;color:var(--gold)">MG</div><div class="il-text">Loading…</div></div>
 
 <!-- LOGIN -->
 <div class="login-screen" id="loginScreen">
   <div class="login-card">
-    <div class="login-logo">🌍</div>
+    <div class="login-logo" style="font-family:'Space Mono',monospace;font-size:1.4rem;letter-spacing:.2em;color:var(--navy)">MG</div>
     <h1>MarinGlobal Admin</h1>
     <p>Secure management portal</p>
     <input class="login-input" type="email" id="loginEmail" placeholder="Email address" autocomplete="email"/>
@@ -321,20 +321,24 @@ body{font-family:'DM Sans',sans-serif;background:#f0f2f5;color:#1a1a2e;overflow-
     </div>
     <nav class="sidebar-nav">
       <div class="nav-section">Overview</div>
-      <div class="nav-item active" onclick="showPanel('dashboard',this)"><span class="ni">📊</span> Dashboard</div>
+      <div class="nav-item active" onclick="showPanel('dashboard',this)"><span class="ni">D</span> Dashboard</div>
       <div class="nav-section">Admissions</div>
-      <div class="nav-item" onclick="showPanel('pipeline',this)"><span class="ni">🗂️</span> Pipeline <span class="nav-badge" id="nb-new">0</span></div>
-      <div class="nav-item" onclick="showPanel('inquiries',this)"><span class="ni">📨</span> All Inquiries</div>
+      <div class="nav-item" onclick="showPanel('pipeline',this)"><span class="ni">K</span> Pipeline <span class="nav-badge" id="nb-new">0</span></div>
+      <div class="nav-item" onclick="showPanel('inquiries',this)"><span class="ni">I</span> All Inquiries</div>
       <div class="nav-section">Content</div>
-      <div class="nav-item" onclick="showPanel('posts',this)"><span class="ni">📝</span> Blog Posts</div>
-      <div class="nav-item" onclick="showPanel('testimonials',this)"><span class="ni">💬</span> Testimonials</div>
+      <div class="nav-item" onclick="showPanel('posts',this)"><span class="ni">B</span> Blog Posts</div>
+      <div class="nav-item" onclick="showPanel('testimonials',this)"><span class="ni">T</span> Testimonials</div>
+      <div class="nav-item" onclick="showPanel('team',this)"><span class="ni">U</span> Team</div>
+      <div class="nav-item" onclick="showPanel('partners',this)"><span class="ni">L</span> Partner Institutions</div>
+      <div class="nav-item" onclick="showPanel('programs',this)"><span class="ni">P</span> Programs</div>
+      <div class="nav-item" onclick="showPanel('scholarships',this)"><span class="ni">S</span> Scholarships</div>
       <div class="nav-section">Analytics</div>
-      <div class="nav-item" onclick="showPanel('analytics',this)"><span class="ni">📈</span> Charts & Stats</div>
-      <div class="nav-item" onclick="showPanel('intake',this)"><span class="ni">🎓</span> Intake Tracker</div>
+      <div class="nav-item" onclick="showPanel('analytics',this)"><span class="ni">A</span> Charts & Stats</div>
+      <div class="nav-item" onclick="showPanel('intake',this)"><span class="ni">N</span> Intake Tracker</div>
       <div class="nav-section">Tools</div>
-      <div class="nav-item" onclick="showPanel('activity',this)"><span class="ni">🕐</span> Activity Log</div>
-      <div class="nav-item" onclick="showPanel('export',this)"><span class="ni">📤</span> Export Data</div>
-      <div class="nav-item" onclick="showPanel('settings',this)"><span class="ni">⚙️</span> Settings</div>
+      <div class="nav-item" onclick="showPanel('activity',this)"><span class="ni">G</span> Activity Log</div>
+      <div class="nav-item" onclick="showPanel('export',this)"><span class="ni">E</span> Export Data</div>
+      <div class="nav-item" onclick="showPanel('settings',this)"><span class="ni">X</span> Settings</div>
     </nav>
     <div class="sidebar-footer">
       <div class="admin-email" id="adminEmail">—</div>
@@ -400,7 +404,7 @@ body{font-family:'DM Sans',sans-serif;background:#f0f2f5;color:#1a1a2e;overflow-
 
         <div class="table-card">
           <div class="tc-header">
-            <h3>🔥 New Inquiries</h3>
+            <h3>New Inquiries</h3>
             <button class="btn-primary" onclick="showPanel('inquiries',document.querySelector('[onclick*=inquiries]'))">View All →</button>
           </div>
           <table class="tbl">
@@ -502,6 +506,74 @@ body{font-family:'DM Sans',sans-serif;background:#f0f2f5;color:#1a1a2e;overflow-
         </div>
       </div>
 
+      <!-- ═══ TEAM ═══ -->
+      <div class="panel" id="panel-team">
+        <div class="table-card">
+          <div class="tc-header">
+            <h3>Team Members</h3>
+            <div class="tc-actions">
+              <input class="tbl-search" type="text" placeholder="Search team…" oninput="filterTable('teamTable',this.value)"/>
+              <button class="btn-primary" onclick="openTeamModal()">+ Add Member</button>
+            </div>
+          </div>
+          <table class="tbl">
+            <thead><tr><th>Name</th><th>Role</th><th>Location</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="teamTable"><tr><td colspan="5"><div class="empty-state"><p>No team members yet.</p></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ PARTNERS ═══ -->
+      <div class="panel" id="panel-partners">
+        <div class="table-card">
+          <div class="tc-header">
+            <h3>Partner Institutions</h3>
+            <div class="tc-actions">
+              <input class="tbl-search" type="text" placeholder="Search partners…" oninput="filterTable('partnersTable',this.value)"/>
+              <button class="btn-primary" onclick="openPartnerModal()">+ Add Partner</button>
+            </div>
+          </div>
+          <table class="tbl">
+            <thead><tr><th>Abbreviation</th><th>University Name</th><th>Country</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="partnersTable"><tr><td colspan="5"><div class="empty-state"><p>No partner institutions yet.</p></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ PROGRAMS ═══ -->
+      <div class="panel" id="panel-programs">
+        <div class="table-card">
+          <div class="tc-header">
+            <h3>Programs</h3>
+            <div class="tc-actions">
+              <input class="tbl-search" type="text" placeholder="Search programs…" oninput="filterTable('programsTable',this.value)"/>
+              <button class="btn-primary" onclick="openProgramModal()">+ Add Program</button>
+            </div>
+          </div>
+          <table class="tbl">
+            <thead><tr><th>University</th><th>Program</th><th>Field</th><th>Country</th><th>Level</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="programsTable"><tr><td colspan="7"><div class="empty-state"><p>No programs yet.</p></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ═══ SCHOLARSHIPS ═══ -->
+      <div class="panel" id="panel-scholarships">
+        <div class="table-card">
+          <div class="tc-header">
+            <h3>Scholarships</h3>
+            <div class="tc-actions">
+              <input class="tbl-search" type="text" placeholder="Search scholarships…" oninput="filterTable('scholarshipsTable',this.value)"/>
+              <button class="btn-primary" onclick="openScholarshipModal()">+ Add Scholarship</button>
+            </div>
+          </div>
+          <table class="tbl">
+            <thead><tr><th>Name</th><th>Organisation</th><th>Amount</th><th>Deadline</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="scholarshipsTable"><tr><td colspan="6"><div class="empty-state"><p>No scholarships yet.</p></div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
       <!-- ═══ ANALYTICS ═══ -->
       <div class="panel" id="panel-analytics">
         <div class="stats-row" style="grid-template-columns:repeat(5,1fr);">
@@ -568,7 +640,7 @@ body{font-family:'DM Sans',sans-serif;background:#f0f2f5;color:#1a1a2e;overflow-
       <!-- ═══ EXPORT ═══ -->
       <div class="panel" id="panel-export">
         <div class="table-card" style="padding:2rem;">
-          <h3 style="color:var(--navy);margin-bottom:0.5rem;">📤 Export Data</h3>
+          <h3 style="color:var(--navy);margin-bottom:0.5rem;">Export Data</h3>
           <p style="color:#666;font-size:0.875rem;margin-bottom:2rem;">Download as CSV and open in Excel or import into Google Sheets.</p>
           <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:2rem;">
             <div style="border:1.5px solid #e5e7eb;border-radius:10px;padding:1.5rem;text-align:center;">
@@ -609,7 +681,7 @@ body{font-family:'DM Sans',sans-serif;background:#f0f2f5;color:#1a1a2e;overflow-
 
         <!-- Site Settings -->
         <div class="table-card" style="padding:2rem;margin-bottom:1.5rem;">
-          <h3 style="color:var(--navy);margin-bottom:1.25rem;">⚙️ Site Settings</h3>
+          <h3 style="color:var(--navy);margin-bottom:1.25rem;">Site Settings</h3>
           <div class="form-row">
             <div class="form-group"><label>WhatsApp Number</label><input type="text" id="cfg-wa" placeholder="255712345678"/></div>
             <div class="form-group"><label>Contact Email</label><input type="text" id="cfg-email" placeholder="info@maringlobalscholars.com"/></div>
@@ -620,7 +692,7 @@ body{font-family:'DM Sans',sans-serif;background:#f0f2f5;color:#1a1a2e;overflow-
 
         <!-- 🖼️ BACKGROUND IMAGE MANAGER -->
         <div class="table-card" style="padding:2rem;margin-bottom:1.5rem;">
-          <h3 style="color:var(--navy);margin-bottom:0.4rem;">🎨 Admin Panel Appearance</h3>
+          <h3 style="color:var(--navy);margin-bottom:0.4rem;">Admin Panel Appearance</h3>
           <p style="color:#666;font-size:0.855rem;margin-bottom:1.5rem;line-height:1.6;">
             Personalise how the admin panel looks. Choose a background theme or upload your own image.
             Changes apply instantly and are saved to your browser.
@@ -704,7 +776,7 @@ body{font-family:'DM Sans',sans-serif;background:#f0f2f5;color:#1a1a2e;overflow-
 
         <!-- Install App -->
         <div class="table-card" style="padding:2rem;margin-bottom:1.5rem;" id="installCard">
-          <h3 style="color:var(--navy);margin-bottom:0.5rem;">📲 Install as Phone App</h3>
+          <h3 style="color:var(--navy);margin-bottom:0.5rem;">Install as Phone App</h3>
           <p style="color:#666;font-size:0.875rem;margin-bottom:1.25rem;line-height:1.7;">
             Install the admin panel as a native app on your phone — works like WhatsApp or any other app.
             No App Store needed. Opens in full screen, works offline.
@@ -780,7 +852,7 @@ body{font-family:'DM Sans',sans-serif;background:#f0f2f5;color:#1a1a2e;overflow-
 
         <!-- Firebase Status -->
         <div class="table-card" style="padding:2rem;">
-          <h3 style="color:var(--navy);margin-bottom:0.5rem;">🔥 Firebase Status</h3>
+          <h3 style="color:var(--navy);margin-bottom:0.5rem;">Firebase Status</h3>
           <p style="color:#666;font-size:0.875rem;">Project: <strong>maringlobal-scholars</strong></p>
           <p style="font-size:0.875rem;margin-top:0.4rem;" id="fbStatus">Checking connection…</p>
         </div>
@@ -862,6 +934,165 @@ body{font-family:'DM Sans',sans-serif;background:#f0f2f5;color:#1a1a2e;overflow-
     <h2 id="inquiryModalTitle">Inquiry Details</h2>
     <div id="inquiryDetail"></div>
     <div class="modal-actions"><button class="btn-ghost" onclick="closeModal('inquiryModal')">Close</button></div>
+  </div>
+</div>
+
+<!-- ════ TEAM MODAL ════ -->
+<div class="modal-overlay" id="teamModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('teamModal')">&#x2715;</button>
+    <h2 id="teamModalTitle">Add Team Member</h2>
+    <input type="hidden" id="editTeamId"/>
+    <div class="form-row">
+      <div class="form-group"><label>Full Name *</label><input type="text" id="tm-name" placeholder="Jane Doe"/></div>
+      <div class="form-group"><label>Initials</label><input type="text" id="tm-initials" maxlength="3" placeholder="JD"/></div>
+    </div>
+    <div class="form-group"><label>Role / Title *</label><input type="text" id="tm-role" placeholder="Head of Admissions"/></div>
+    <div class="form-row">
+      <div class="form-group"><label>Location</label><input type="text" id="tm-location" placeholder="Riga, Latvia"/></div>
+      <div class="form-group"><label>Avatar Colour</label>
+        <select id="tm-color">
+          <option value="navy">Navy</option>
+          <option value="gold">Gold</option>
+          <option value="green">Green</option>
+          <option value="purple">Purple</option>
+          <option value="blue">Blue</option>
+          <option value="red">Red</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label>Bio</label><textarea id="tm-bio" rows="3" placeholder="Short biography…"></textarea></div>
+    <div class="form-group"><label>Visibility</label>
+      <select id="tm-published"><option value="true">Published</option><option value="false">Hidden</option></select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('teamModal')">Cancel</button>
+      <button class="btn-primary" id="saveTeamBtn" onclick="saveTeamMember()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ PARTNER MODAL ════ -->
+<div class="modal-overlay" id="partnerModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('partnerModal')">&#x2715;</button>
+    <h2 id="partnerModalTitle">Add Partner Institution</h2>
+    <input type="hidden" id="editPartnerId"/>
+    <div class="form-row">
+      <div class="form-group"><label>Abbreviation *</label><input type="text" id="pt-abbr" placeholder="RTU"/></div>
+      <div class="form-group"><label>Country *</label>
+        <select id="pt-country">
+          <option value="latvia">Latvia</option>
+          <option value="lithuania">Lithuania</option>
+          <option value="estonia">Estonia</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label>Full University Name *</label><input type="text" id="pt-name" placeholder="Riga Technical University"/></div>
+    <div class="form-group"><label>Fields / Programs Offered</label><input type="text" id="pt-fields" placeholder="Engineering, IT, Architecture"/></div>
+    <div class="form-group"><label>Website URL</label><input type="url" id="pt-url" placeholder="https://www.rtu.lv"/></div>
+    <div class="form-group"><label>Visibility</label>
+      <select id="pt-published"><option value="true">Published</option><option value="false">Hidden</option></select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('partnerModal')">Cancel</button>
+      <button class="btn-primary" id="savePartnerBtn" onclick="savePartner()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ PROGRAM MODAL ════ -->
+<div class="modal-overlay" id="programModal">
+  <div class="modal-box wide">
+    <button class="modal-close" onclick="closeModal('programModal')">&#x2715;</button>
+    <h2 id="programModalTitle">Add Program</h2>
+    <input type="hidden" id="editProgramId"/>
+    <div class="form-row">
+      <div class="form-group"><label>University *</label><input type="text" id="pg-university" placeholder="Riga Technical University"/></div>
+      <div class="form-group"><label>Abbreviation</label><input type="text" id="pg-abbr" placeholder="RTU"/></div>
+    </div>
+    <div class="form-group"><label>Program Name *</label><input type="text" id="pg-name" placeholder="BSc Computer Science"/></div>
+    <div class="form-row">
+      <div class="form-group"><label>Field</label>
+        <select id="pg-field">
+          <option value="medicine">Medicine &amp; Health</option>
+          <option value="engineering">Engineering &amp; Tech</option>
+          <option value="business">Business &amp; Management</option>
+          <option value="law">Law &amp; Social Sciences</option>
+          <option value="arts">Arts &amp; Humanities</option>
+          <option value="sciences">Natural Sciences</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Country</label>
+        <select id="pg-country">
+          <option value="latvia">Latvia</option>
+          <option value="lithuania">Lithuania</option>
+          <option value="estonia">Estonia</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Degree Level</label>
+        <select id="pg-level">
+          <option value="bachelor">Bachelor's</option>
+          <option value="master">Master's</option>
+          <option value="phd">PhD / Doctoral</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Language</label>
+        <select id="pg-lang">
+          <option value="english">English</option>
+          <option value="local">Local Language</option>
+          <option value="both">Both</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Annual Tuition (EUR)</label><input type="text" id="pg-fee" placeholder="6,000"/></div>
+      <div class="form-group"><label>Duration</label><input type="text" id="pg-duration" placeholder="4 years"/></div>
+    </div>
+    <div class="form-group"><label>Description</label><textarea id="pg-desc" rows="2" placeholder="Brief program description…"></textarea></div>
+    <div class="form-group"><label>Status</label>
+      <select id="pg-published"><option value="true">Published</option><option value="false">Hidden</option></select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('programModal')">Cancel</button>
+      <button class="btn-primary" id="saveProgramBtn" onclick="saveProgram()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ SCHOLARSHIP MODAL ════ -->
+<div class="modal-overlay" id="scholarshipModal">
+  <div class="modal-box wide">
+    <button class="modal-close" onclick="closeModal('scholarshipModal')">&#x2715;</button>
+    <h2 id="scholarshipModalTitle">Add Scholarship</h2>
+    <input type="hidden" id="editScholarshipId"/>
+    <div class="form-row">
+      <div class="form-group"><label>Scholarship Name *</label><input type="text" id="sc-name" placeholder="Latvian State Scholarship"/></div>
+      <div class="form-group"><label>Type</label>
+        <select id="sc-type">
+          <option value="government">Government Scholarship</option>
+          <option value="university">University Merit Award</option>
+          <option value="eu">EU Programme</option>
+          <option value="private">Private / NGO</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group"><label>Organisation *</label><input type="text" id="sc-org" placeholder="Ministry of Education, Latvia"/></div>
+    <div class="form-row">
+      <div class="form-group"><label>Amount / Award</label><input type="text" id="sc-amount" placeholder="€140/month"/></div>
+      <div class="form-group"><label>Deadline</label><input type="text" id="sc-deadline" placeholder="March 15 / Rolling"/></div>
+    </div>
+    <div class="form-group"><label>Eligibility</label><textarea id="sc-eligibility" rows="2" placeholder="Who can apply…"></textarea></div>
+    <div class="form-group"><label>Description</label><textarea id="sc-desc" rows="2" placeholder="Details about the scholarship…"></textarea></div>
+    <div class="form-group"><label>Status</label>
+      <select id="sc-published"><option value="true">Published</option><option value="false">Hidden</option></select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('scholarshipModal')">Cancel</button>
+      <button class="btn-primary" id="saveScholarshipBtn" onclick="saveScholarship()">Save</button>
+    </div>
   </div>
 </div>
 
@@ -951,14 +1182,22 @@ window.loadData = async function() {
   if (!db) return;
   const F = window._fs;
   try {
-    const [pSnap, tSnap, iSnap] = await Promise.all([
+    const [pSnap, tSnap, iSnap, tmSnap, ptSnap, pgSnap, scSnap] = await Promise.all([
       getDocs(query(collection(db,'posts'),        orderBy('createdAt','desc'), limit(200))),
       getDocs(query(collection(db,'testimonials'), orderBy('createdAt','desc'), limit(200))),
-      getDocs(query(collection(db,'inquiries'),    orderBy('createdAt','desc'), limit(500)))
+      getDocs(query(collection(db,'inquiries'),    orderBy('createdAt','desc'), limit(500))),
+      getDocs(query(collection(db,'team'),         orderBy('createdAt','desc'), limit(100))),
+      getDocs(query(collection(db,'partners'),     orderBy('createdAt','desc'), limit(100))),
+      getDocs(query(collection(db,'programs'),     orderBy('createdAt','desc'), limit(200))),
+      getDocs(query(collection(db,'scholarships'), orderBy('createdAt','desc'), limit(100)))
     ]);
-    window._posts = pSnap.docs.map(d=>({id:d.id,...d.data()}));
-    window._tests = tSnap.docs.map(d=>({id:d.id,...d.data()}));
-    window._inqs  = iSnap.docs.map(d=>({id:d.id,...d.data()}));
+    window._posts        = pSnap.docs.map(d=>({id:d.id,...d.data()}));
+    window._tests        = tSnap.docs.map(d=>({id:d.id,...d.data()}));
+    window._inqs         = iSnap.docs.map(d=>({id:d.id,...d.data()}));
+    window._team         = tmSnap.docs.map(d=>({id:d.id,...d.data()}));
+    window._partners     = ptSnap.docs.map(d=>({id:d.id,...d.data()}));
+    window._programs     = pgSnap.docs.map(d=>({id:d.id,...d.data()}));
+    window._scholarships = scSnap.docs.map(d=>({id:d.id,...d.data()}));
     renderAll();
     logActivity('Data loaded', 'blue');
     toast('Refreshed ✓', 'success');
@@ -1001,6 +1240,10 @@ function renderAll() {
   renderCharts(posts, tests, inqs);
   renderIntake(inqs);
   renderActivity();
+  renderTeamTable(window._team||[]);
+  renderPartnersTable(window._partners||[]);
+  renderProgramsTable(window._programs||[]);
+  renderScholarshipsTable(window._scholarships||[]);
 }
 
 /* ── RECENT INQUIRIES (dashboard) ── */
@@ -1501,6 +1744,304 @@ window.deleteTestimonial = async function(id) {
   catch(e) { toast('Error: '+e.message,'error'); }
 };
 
+/* ── TEAM CRUD ── */
+const TM_COLORS = {
+  navy:'linear-gradient(135deg,#0D1B3E,#162251)',
+  gold:'linear-gradient(135deg,#C9A84C,#D4A017)',
+  green:'linear-gradient(135deg,#2D8C6E,#1A7A5E)',
+  purple:'linear-gradient(135deg,#7B1FA2,#4A148C)',
+  blue:'linear-gradient(135deg,#1565C0,#0D47A1)',
+  red:'linear-gradient(135deg,#C0392B,#922B21)'
+};
+window.openTeamModal = function() {
+  document.getElementById('teamModalTitle').textContent = 'Add Team Member';
+  document.getElementById('editTeamId').value = '';
+  ['tm-name','tm-initials','tm-role','tm-location','tm-bio'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('tm-color').value = 'navy';
+  document.getElementById('tm-published').value = 'true';
+  document.getElementById('teamModal').classList.add('open');
+};
+window.editTeamMember = function(id) {
+  const m = (window._team||[]).find(x=>x.id===id);
+  if (!m) return;
+  document.getElementById('teamModalTitle').textContent = 'Edit Team Member';
+  document.getElementById('editTeamId').value = id;
+  document.getElementById('tm-name').value      = m.name     ||'';
+  document.getElementById('tm-initials').value  = m.initials ||'';
+  document.getElementById('tm-role').value      = m.role     ||'';
+  document.getElementById('tm-location').value  = m.location ||'';
+  document.getElementById('tm-bio').value       = m.bio      ||'';
+  document.getElementById('tm-color').value     = m.color    ||'navy';
+  document.getElementById('tm-published').value = m.published?'true':'false';
+  document.getElementById('teamModal').classList.add('open');
+};
+window.saveTeamMember = async function() {
+  const name = document.getElementById('tm-name').value.trim();
+  const role = document.getElementById('tm-role').value.trim();
+  if (!name||!role) { toast('Name and role required','error'); return; }
+  const btn = document.getElementById('saveTeamBtn');
+  btn.textContent='Saving…'; btn.disabled=true;
+  const data = { name, role,
+    initials: document.getElementById('tm-initials').value || name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2),
+    location: document.getElementById('tm-location').value,
+    bio:      document.getElementById('tm-bio').value,
+    color:    document.getElementById('tm-color').value,
+    published:document.getElementById('tm-published').value==='true',
+    updatedAt:serverTimestamp() };
+  try {
+    const id = document.getElementById('editTeamId').value;
+    if (id) await updateDoc(doc(db,'team',id), data);
+    else    { data.createdAt=serverTimestamp(); await addDoc(collection(db,'team'),data); }
+    await loadData();
+    closeModal('teamModal');
+    logActivity((id?'Edited':'Added')+' team member: '+name,'green');
+    toast('Saved ✓','success');
+  } catch(e) { toast('Error: '+e.message,'error'); }
+  btn.textContent='Save'; btn.disabled=false;
+};
+window.deleteTeamMember = async function(id) {
+  if (!confirm('Remove this team member?')) return;
+  try { await deleteDoc(doc(db,'team',id)); await loadData(); toast('Removed ✓','success'); }
+  catch(e) { toast('Error: '+e.message,'error'); }
+};
+function renderTeamTable(team) {
+  const tbody = document.getElementById('teamTable');
+  if (!tbody) return;
+  tbody.innerHTML = team.length ? team.map(m=>`
+    <tr>
+      <td>${esc(m.name||'')}</td>
+      <td>${esc(m.role||'')}</td>
+      <td>${esc(m.location||'—')}</td>
+      <td><span class="badge ${m.published?'badge-published':'badge-draft'}">${m.published?'Published':'Hidden'}</span></td>
+      <td>
+        <button class="act-btn" onclick="editTeamMember('${m.id}')">&#9998;</button>
+        <button class="act-btn danger" onclick="deleteTeamMember('${m.id}')">&#x1F5D1;</button>
+      </td>
+    </tr>`).join('')
+  : '<tr><td colspan="5"><div class="empty-state"><p>No team members yet.</p></div></td></tr>';
+}
+
+/* ── PARTNERS CRUD ── */
+window.openPartnerModal = function() {
+  document.getElementById('partnerModalTitle').textContent = 'Add Partner Institution';
+  document.getElementById('editPartnerId').value = '';
+  ['pt-abbr','pt-name','pt-fields','pt-url'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('pt-country').value   = 'latvia';
+  document.getElementById('pt-published').value = 'true';
+  document.getElementById('partnerModal').classList.add('open');
+};
+window.editPartner = function(id) {
+  const p = (window._partners||[]).find(x=>x.id===id);
+  if (!p) return;
+  document.getElementById('partnerModalTitle').textContent = 'Edit Partner';
+  document.getElementById('editPartnerId').value = id;
+  document.getElementById('pt-abbr').value    = p.abbr    ||'';
+  document.getElementById('pt-name').value    = p.name    ||'';
+  document.getElementById('pt-fields').value  = p.fields  ||'';
+  document.getElementById('pt-url').value     = p.url     ||'';
+  document.getElementById('pt-country').value = p.country ||'latvia';
+  document.getElementById('pt-published').value = p.published?'true':'false';
+  document.getElementById('partnerModal').classList.add('open');
+};
+window.savePartner = async function() {
+  const abbr = document.getElementById('pt-abbr').value.trim();
+  const name = document.getElementById('pt-name').value.trim();
+  if (!abbr||!name) { toast('Abbreviation and name required','error'); return; }
+  const btn = document.getElementById('savePartnerBtn');
+  btn.textContent='Saving…'; btn.disabled=true;
+  const data = { abbr, name,
+    fields:   document.getElementById('pt-fields').value,
+    url:      document.getElementById('pt-url').value,
+    country:  document.getElementById('pt-country').value,
+    published:document.getElementById('pt-published').value==='true',
+    updatedAt:serverTimestamp() };
+  try {
+    const id = document.getElementById('editPartnerId').value;
+    if (id) await updateDoc(doc(db,'partners',id), data);
+    else    { data.createdAt=serverTimestamp(); await addDoc(collection(db,'partners'),data); }
+    await loadData();
+    closeModal('partnerModal');
+    logActivity((id?'Edited':'Added')+' partner: '+abbr,'green');
+    toast('Saved ✓','success');
+  } catch(e) { toast('Error: '+e.message,'error'); }
+  btn.textContent='Save'; btn.disabled=false;
+};
+window.deletePartner = async function(id) {
+  if (!confirm('Remove this partner institution?')) return;
+  try { await deleteDoc(doc(db,'partners',id)); await loadData(); toast('Removed ✓','success'); }
+  catch(e) { toast('Error: '+e.message,'error'); }
+};
+function renderPartnersTable(partners) {
+  const tbody = document.getElementById('partnersTable');
+  if (!tbody) return;
+  tbody.innerHTML = partners.length ? partners.map(p=>`
+    <tr>
+      <td><strong>${esc(p.abbr||'')}</strong></td>
+      <td class="td-clip">${esc(p.name||'')}</td>
+      <td>${esc(p.country||'')}</td>
+      <td><span class="badge ${p.published?'badge-published':'badge-draft'}">${p.published?'Published':'Hidden'}</span></td>
+      <td>
+        <button class="act-btn" onclick="editPartner('${p.id}')">&#9998;</button>
+        <button class="act-btn danger" onclick="deletePartner('${p.id}')">&#x1F5D1;</button>
+      </td>
+    </tr>`).join('')
+  : '<tr><td colspan="5"><div class="empty-state"><p>No partner institutions yet.</p></div></td></tr>';
+}
+
+/* ── PROGRAMS CRUD ── */
+window.openProgramModal = function() {
+  document.getElementById('programModalTitle').textContent = 'Add Program';
+  document.getElementById('editProgramId').value = '';
+  ['pg-university','pg-abbr','pg-name','pg-fee','pg-duration','pg-desc'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('pg-field').value   = 'engineering';
+  document.getElementById('pg-country').value = 'latvia';
+  document.getElementById('pg-level').value   = 'bachelor';
+  document.getElementById('pg-lang').value    = 'english';
+  document.getElementById('pg-published').value = 'true';
+  document.getElementById('programModal').classList.add('open');
+};
+window.editProgram = function(id) {
+  const p = (window._programs||[]).find(x=>x.id===id);
+  if (!p) return;
+  document.getElementById('programModalTitle').textContent = 'Edit Program';
+  document.getElementById('editProgramId').value   = id;
+  document.getElementById('pg-university').value   = p.university ||'';
+  document.getElementById('pg-abbr').value         = p.abbr       ||'';
+  document.getElementById('pg-name').value         = p.name       ||'';
+  document.getElementById('pg-field').value        = p.field      ||'engineering';
+  document.getElementById('pg-country').value      = p.country    ||'latvia';
+  document.getElementById('pg-level').value        = p.level      ||'bachelor';
+  document.getElementById('pg-lang').value         = p.language   ||'english';
+  document.getElementById('pg-fee').value          = p.fee        ||'';
+  document.getElementById('pg-duration').value     = p.duration   ||'';
+  document.getElementById('pg-desc').value         = p.description||'';
+  document.getElementById('pg-published').value    = p.published?'true':'false';
+  document.getElementById('programModal').classList.add('open');
+};
+window.saveProgram = async function() {
+  const university = document.getElementById('pg-university').value.trim();
+  const name       = document.getElementById('pg-name').value.trim();
+  if (!university||!name) { toast('University and program name required','error'); return; }
+  const btn = document.getElementById('saveProgramBtn');
+  btn.textContent='Saving…'; btn.disabled=true;
+  const data = { university, name,
+    abbr:       document.getElementById('pg-abbr').value,
+    field:      document.getElementById('pg-field').value,
+    country:    document.getElementById('pg-country').value,
+    level:      document.getElementById('pg-level').value,
+    language:   document.getElementById('pg-lang').value,
+    fee:        document.getElementById('pg-fee').value,
+    duration:   document.getElementById('pg-duration').value,
+    description:document.getElementById('pg-desc').value,
+    published:  document.getElementById('pg-published').value==='true',
+    updatedAt:  serverTimestamp() };
+  try {
+    const id = document.getElementById('editProgramId').value;
+    if (id) await updateDoc(doc(db,'programs',id), data);
+    else    { data.createdAt=serverTimestamp(); await addDoc(collection(db,'programs'),data); }
+    await loadData();
+    closeModal('programModal');
+    logActivity((id?'Edited':'Added')+' program: '+name,'green');
+    toast('Saved ✓','success');
+  } catch(e) { toast('Error: '+e.message,'error'); }
+  btn.textContent='Save'; btn.disabled=false;
+};
+window.deleteProgram = async function(id) {
+  if (!confirm('Delete this program?')) return;
+  try { await deleteDoc(doc(db,'programs',id)); await loadData(); toast('Deleted ✓','success'); }
+  catch(e) { toast('Error: '+e.message,'error'); }
+};
+function renderProgramsTable(programs) {
+  const tbody = document.getElementById('programsTable');
+  if (!tbody) return;
+  tbody.innerHTML = programs.length ? programs.map(p=>`
+    <tr>
+      <td>${esc(p.university||'')}</td>
+      <td class="td-clip">${esc(p.name||'')}</td>
+      <td>${esc(p.field||'')}</td>
+      <td>${esc(p.country||'')}</td>
+      <td>${esc(p.level||'')}</td>
+      <td><span class="badge ${p.published?'badge-published':'badge-draft'}">${p.published?'Published':'Hidden'}</span></td>
+      <td>
+        <button class="act-btn" onclick="editProgram('${p.id}')">&#9998;</button>
+        <button class="act-btn danger" onclick="deleteProgram('${p.id}')">&#x1F5D1;</button>
+      </td>
+    </tr>`).join('')
+  : '<tr><td colspan="7"><div class="empty-state"><p>No programs yet.</p></div></td></tr>';
+}
+
+/* ── SCHOLARSHIPS CRUD ── */
+window.openScholarshipModal = function() {
+  document.getElementById('scholarshipModalTitle').textContent = 'Add Scholarship';
+  document.getElementById('editScholarshipId').value = '';
+  ['sc-name','sc-org','sc-amount','sc-deadline','sc-eligibility','sc-desc'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('sc-type').value      = 'government';
+  document.getElementById('sc-published').value = 'true';
+  document.getElementById('scholarshipModal').classList.add('open');
+};
+window.editScholarship = function(id) {
+  const s = (window._scholarships||[]).find(x=>x.id===id);
+  if (!s) return;
+  document.getElementById('scholarshipModalTitle').textContent = 'Edit Scholarship';
+  document.getElementById('editScholarshipId').value = id;
+  document.getElementById('sc-name').value        = s.name        ||'';
+  document.getElementById('sc-org').value         = s.org         ||'';
+  document.getElementById('sc-type').value        = s.type        ||'government';
+  document.getElementById('sc-amount').value      = s.amount      ||'';
+  document.getElementById('sc-deadline').value    = s.deadline    ||'';
+  document.getElementById('sc-eligibility').value = s.eligibility ||'';
+  document.getElementById('sc-desc').value        = s.description ||'';
+  document.getElementById('sc-published').value   = s.published?'true':'false';
+  document.getElementById('scholarshipModal').classList.add('open');
+};
+window.saveScholarship = async function() {
+  const name = document.getElementById('sc-name').value.trim();
+  const org  = document.getElementById('sc-org').value.trim();
+  if (!name||!org) { toast('Name and organisation required','error'); return; }
+  const btn = document.getElementById('saveScholarshipBtn');
+  btn.textContent='Saving…'; btn.disabled=true;
+  const data = { name, org,
+    type:        document.getElementById('sc-type').value,
+    amount:      document.getElementById('sc-amount').value,
+    deadline:    document.getElementById('sc-deadline').value,
+    eligibility: document.getElementById('sc-eligibility').value,
+    description: document.getElementById('sc-desc').value,
+    published:   document.getElementById('sc-published').value==='true',
+    updatedAt:   serverTimestamp() };
+  try {
+    const id = document.getElementById('editScholarshipId').value;
+    if (id) await updateDoc(doc(db,'scholarships',id), data);
+    else    { data.createdAt=serverTimestamp(); await addDoc(collection(db,'scholarships'),data); }
+    await loadData();
+    closeModal('scholarshipModal');
+    logActivity((id?'Edited':'Added')+' scholarship: '+name,'green');
+    toast('Saved ✓','success');
+  } catch(e) { toast('Error: '+e.message,'error'); }
+  btn.textContent='Save'; btn.disabled=false;
+};
+window.deleteScholarship = async function(id) {
+  if (!confirm('Delete this scholarship?')) return;
+  try { await deleteDoc(doc(db,'scholarships',id)); await loadData(); toast('Deleted ✓','success'); }
+  catch(e) { toast('Error: '+e.message,'error'); }
+};
+function renderScholarshipsTable(scholarships) {
+  const tbody = document.getElementById('scholarshipsTable');
+  if (!tbody) return;
+  tbody.innerHTML = scholarships.length ? scholarships.map(s=>`
+    <tr>
+      <td class="td-clip">${esc(s.name||'')}</td>
+      <td class="td-clip">${esc(s.org||'')}</td>
+      <td>${esc(s.amount||'—')}</td>
+      <td>${esc(s.deadline||'—')}</td>
+      <td><span class="badge ${s.published?'badge-published':'badge-draft'}">${s.published?'Published':'Hidden'}</span></td>
+      <td>
+        <button class="act-btn" onclick="editScholarship('${s.id}')">&#9998;</button>
+        <button class="act-btn danger" onclick="deleteScholarship('${s.id}')">&#x1F5D1;</button>
+      </td>
+    </tr>`).join('')
+  : '<tr><td colspan="6"><div class="empty-state"><p>No scholarships yet.</p></div></td></tr>';
+}
+
 /* ── WHATSAPP ── */
 window.waOpen = function(phone) {
   if (!phone) { toast('No phone number on record','error'); return; }
@@ -1716,17 +2257,22 @@ function showPanel(name, el) {
   const panel = document.getElementById('panel-'+name);
   if (panel) panel.classList.add('active');
   if (el) el.classList.add('active');
-  const titles={dashboard:'Dashboard',pipeline:'Pipeline',inquiries:'All Inquiries',posts:'Blog Posts',testimonials:'Testimonials',analytics:'Analytics',intake:'Intake Tracker',activity:'Activity Log',export:'Export Data',settings:'Settings'};
+  const titles={dashboard:'Dashboard',pipeline:'Pipeline',inquiries:'All Inquiries',posts:'Blog Posts',testimonials:'Testimonials',team:'Team',partners:'Partner Institutions',programs:'Programs',scholarships:'Scholarships',analytics:'Analytics',intake:'Intake Tracker',activity:'Activity Log',export:'Export Data',settings:'Settings'};
   document.getElementById('topbarTitle').textContent = titles[name]||name;
   const addBtn = document.getElementById('topbarAddBtn');
-  addBtn.style.display = ['posts','testimonials'].includes(name)?'inline-block':'none';
-  addBtn.textContent = name==='posts'?'+ New Post':'+ Add Testimonial';
+  const addLabels={posts:'+ New Post',testimonials:'+ Add Testimonial',team:'+ Add Member',partners:'+ Add Partner',programs:'+ Add Program',scholarships:'+ Add Scholarship'};
+  addBtn.style.display = addLabels[name]?'inline-block':'none';
+  addBtn.textContent = addLabels[name]||'+ Add New';
   closeSidebar();
 }
 function handleAdd() {
   const id = document.querySelector('.panel.active')?.id;
-  if (id==='panel-posts') openPostModal && openPostModal();
-  if (id==='panel-testimonials') openTestimonialModal && openTestimonialModal();
+  if (id==='panel-posts')         openPostModal         && openPostModal();
+  if (id==='panel-testimonials')  openTestimonialModal  && openTestimonialModal();
+  if (id==='panel-team')          openTeamModal         && openTeamModal();
+  if (id==='panel-partners')      openPartnerModal      && openPartnerModal();
+  if (id==='panel-programs')      openProgramModal      && openProgramModal();
+  if (id==='panel-scholarships')  openScholarshipModal  && openScholarshipModal();
 }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 document.addEventListener('click', e => {
