@@ -1178,26 +1178,29 @@ if (auth) {
 }
 
 /* ── LOAD DATA ── */
+async function safeGet(q) {
+  try { return (await getDocs(q)).docs.map(d=>({id:d.id,...d.data()})); }
+  catch(e) { console.warn('Collection read failed:', e.message); return []; }
+}
 window.loadData = async function() {
   if (!db) return;
-  const F = window._fs;
   try {
-    const [pSnap, tSnap, iSnap, tmSnap, ptSnap, pgSnap, scSnap] = await Promise.all([
-      getDocs(query(collection(db,'posts'),        orderBy('createdAt','desc'), limit(200))),
-      getDocs(query(collection(db,'testimonials'), orderBy('createdAt','desc'), limit(200))),
-      getDocs(query(collection(db,'inquiries'),    orderBy('createdAt','desc'), limit(500))),
-      getDocs(query(collection(db,'team'),         orderBy('createdAt','desc'), limit(100))),
-      getDocs(query(collection(db,'partners'),     orderBy('createdAt','desc'), limit(100))),
-      getDocs(query(collection(db,'programs'),     orderBy('createdAt','desc'), limit(200))),
-      getDocs(query(collection(db,'scholarships'), orderBy('createdAt','desc'), limit(100)))
+    const [posts, tests, inqs, team, partners, programs, scholarships] = await Promise.all([
+      safeGet(query(collection(db,'posts'),        orderBy('createdAt','desc'), limit(200))),
+      safeGet(query(collection(db,'testimonials'), orderBy('createdAt','desc'), limit(200))),
+      safeGet(query(collection(db,'inquiries'),    orderBy('createdAt','desc'), limit(500))),
+      safeGet(query(collection(db,'team'),         orderBy('createdAt','desc'), limit(100))),
+      safeGet(query(collection(db,'partners'),     orderBy('createdAt','desc'), limit(100))),
+      safeGet(query(collection(db,'programs'),     orderBy('createdAt','desc'), limit(200))),
+      safeGet(query(collection(db,'scholarships'), orderBy('createdAt','desc'), limit(100)))
     ]);
-    window._posts        = pSnap.docs.map(d=>({id:d.id,...d.data()}));
-    window._tests        = tSnap.docs.map(d=>({id:d.id,...d.data()}));
-    window._inqs         = iSnap.docs.map(d=>({id:d.id,...d.data()}));
-    window._team         = tmSnap.docs.map(d=>({id:d.id,...d.data()}));
-    window._partners     = ptSnap.docs.map(d=>({id:d.id,...d.data()}));
-    window._programs     = pgSnap.docs.map(d=>({id:d.id,...d.data()}));
-    window._scholarships = scSnap.docs.map(d=>({id:d.id,...d.data()}));
+    window._posts        = posts;
+    window._tests        = tests;
+    window._inqs         = inqs;
+    window._team         = team;
+    window._partners     = partners;
+    window._programs     = programs;
+    window._scholarships = scholarships;
     renderAll();
     logActivity('Data loaded', 'blue');
     toast('Refreshed ✓', 'success');

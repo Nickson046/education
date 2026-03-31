@@ -49,19 +49,37 @@
   );
 }
 
-/* Fallback gradient when no image is set */
+/* Fallback gradient — shown only when images fail to load (z-index:-1 by default) */
 .hero-slide--fallback {
   background: linear-gradient(135deg, #0D1B3E 0%, #162251 50%, #0a1428 100%);
   opacity: 1;
+  z-index: -1;
 }
 
-/* ── Image Slot Classes ──
-   In your index.html, set class="hero-slide hero-slide--1" etc.
-   Then fill in the URLs below with your own images. */
-.hero-slide--1 { background-image: url('../images/hero-1.jpg'); }
-.hero-slide--2 { background-image: url('../images/hero-2.jpg'); }
-.hero-slide--3 { background-image: url('../images/hero-3.jpg'); }
-.hero-slide--4 { background-image: url('../images/hero-4.jpg'); }
+/* ── Hero Background Images ──
+   Using Unsplash for high-quality, license-free photos.
+   Replace any URL with a local path (../images/hero-1.jpg) whenever
+   you have your own photos ready. */
+
+/* Slide 1 — Diverse students walking on a bright modern campus */
+.hero-slide--1 {
+  background-image: url('../images/image1.jpeg');
+}
+
+/* Slide 2 — Beautiful European university architecture / grand hall */
+.hero-slide--2 {
+  background-image: url('../images/image2.jpeg');
+}
+
+/* Slide 3 — Students collaborating in a modern library / study space */
+.hero-slide--3 {
+  background-image: url('https://images.unsplash.com/photo-1541339907198-e08756dedf3f?w=1920&q=80&auto=format&fit=crop');
+}
+
+/* Slide 4 — Aerial view of a vibrant European city skyline */
+.hero-slide--4 {
+  background-image: url('https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=1920&q=80&auto=format&fit=crop');
+}
 
 /* Gold orb accents ON TOP of the image */
 .hero-orb {
