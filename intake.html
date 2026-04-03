@@ -346,6 +346,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--light);color:var(--text);
       </div>
 
       <!-- HIDDEN SCORING FIELDS — sent in email, never shown to student -->
+      <input type="hidden" name="Reference Number" id="sc_ref" value=""/>
       <input type="hidden" name="--- CONSULTANT SCORE REPORT ---" value="============================="/>
       <input type="hidden" name="Score: English Proficiency" id="sc_eng" value="0 / 4"/>
       <input type="hidden" name="Score: Financial Readiness" id="sc_fin" value="0 / 4"/>
@@ -474,6 +475,9 @@ function toggleVisa(el){
 document.getElementById('intakeForm').addEventListener('submit',async function(e){
   e.preventDefault();
   calcScore();
+  // Generate ref BEFORE submitting so it appears in both the email and the thank you screen
+  const ref='MGS-'+Date.now().toString(36).toUpperCase();
+  document.getElementById('sc_ref').value=ref;
   const btn=document.getElementById('submitBtn');
   btn.textContent='Submitting...';
   btn.disabled=true;
@@ -482,7 +486,7 @@ document.getElementById('intakeForm').addEventListener('submit',async function(e
     const res=await fetch('https://formspree.io/f/meeprqnk',{method:'POST',body:fd,headers:{'Accept':'application/json'}});
     if(res.ok){
       document.getElementById('formContainer').style.display='none';
-      document.getElementById('refNumber').textContent='MGS-'+Date.now().toString(36).toUpperCase();
+      document.getElementById('refNumber').textContent=ref;
       document.getElementById('successScreen').classList.add('show');
       window.scrollTo({top:0,behavior:'smooth'});
     } else {
